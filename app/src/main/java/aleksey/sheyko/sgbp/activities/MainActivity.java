@@ -15,8 +15,6 @@ import aleksey.sheyko.sgbp.fragments.NearestFragment;
 
 public class MainActivity extends FragmentActivity {
 
-    private OnNavigationListener mOnNavigationListener;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +27,7 @@ public class MainActivity extends FragmentActivity {
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.action_list, android.R.layout.simple_spinner_dropdown_item);
 
-        mOnNavigationListener = new OnNavigationListener() {
+        OnNavigationListener mOnNavigationListener = new OnNavigationListener() {
             // Get the same strings provided for the drop-down's ArrayAdapter
             String[] strings = getResources().getStringArray(R.array.action_list);
 
@@ -46,7 +44,7 @@ public class MainActivity extends FragmentActivity {
                 // selected
                 switch (position) {
                     case 0:
-                    ft.replace(R.id.fragment_container, firstFragment, strings[position]);
+                        ft.replace(R.id.fragment_container, firstFragment, strings[position]);
                         break;
                     case 1:
                         ft.replace(R.id.fragment_container, secondFragment, strings[position]);
