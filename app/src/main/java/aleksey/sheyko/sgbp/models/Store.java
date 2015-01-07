@@ -1,82 +1,82 @@
 package aleksey.sheyko.sgbp.models;
 
-import java.io.Serializable;
+import com.orm.SugarRecord;
 
-public class Store implements Serializable {
-    private int mId = -1;
-    private String mName;
-    private String mAddress;
-    private String mPhone;
-    private String mLatitude;
-    private String mLongitude;
-    private String mCategory;
+public class Store extends SugarRecord<Store> {
+    int storeid = -1;
+    String name;
+    String address;
+    String phone;
+    String latitude;
+    String longitude;
+    String category;
 
     public Store() {
     }
-    public Store(int id, String name, String address, String phone, String latitude, String longitude, String category) {
-        mId = id;
-        mName = name;
-        mAddress = address;
-        mPhone = phone;
-        mLatitude = latitude;
-        mLongitude = longitude;
-        mCategory = category;
+
+    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category) {
+        this.storeid = storeid;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.category = category;
     }
 
-    public int getId() {
-        return mId;
+    public int getStoreid() {
+        return storeid;
     }
 
-    public void setId(int id) {
-        mId = id;
+    public void setStoreid(int storeid) {
+        this.storeid = storeid;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 
     public String getAddress() {
-        return mAddress;
+        return address;
     }
 
     public void setAddress(String address) {
-        mAddress = address;
+        this.address = address;
     }
 
     public String getPhone() {
-        return mPhone;
+        return phone;
     }
 
     public void setPhone(String phone) {
-        mPhone = phone;
+        this.phone = phone;
     }
 
     public String getLatitude() {
-        return mLatitude;
+        return latitude;
     }
 
     public void setLatitude(String latitude) {
-        mLatitude = latitude;
+        this.latitude = latitude;
     }
 
     public String getLongitude() {
-        return mLongitude;
+        return longitude;
     }
 
     public void setLongitude(String longitude) {
-        mLongitude = longitude;
+        this.longitude = longitude;
     }
 
     public String getCategory() {
-        return mCategory;
+        return category;
     }
 
     public void setCategory(String category) {
-        mCategory = category;
+        this.category = category;
     }
-
 }

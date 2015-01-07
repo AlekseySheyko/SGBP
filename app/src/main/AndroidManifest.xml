@@ -14,7 +14,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name="com.orm.SugarApp" >
         <activity
             android:name=".ui.activities.MainActivity"
             android:label="@string/title_activity_main" >
@@ -24,6 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data android:name="DATABASE" android:value="stores.db" />
+        <meta-data android:name="VERSION" android:value="1" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="aleksey.sheyko" />
     </application>
 
 </manifest>
