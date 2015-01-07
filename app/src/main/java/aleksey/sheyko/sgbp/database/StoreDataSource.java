@@ -14,7 +14,7 @@ public class StoreDataSource {
 
     public StoreDataSource(Context context) {
         mDbHelper = new StoreSqliteHelper(context);
-        SQLiteDatabase database = mDbHelper.getReadableDatabase();
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
         database.close();
     }
 

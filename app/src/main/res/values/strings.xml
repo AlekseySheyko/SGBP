@@ -8,5 +8,7 @@
     <string name="title_activity_main">Places</string>
     <string name="categories">Categories</string>
     <string name="nearby">Nearby</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search</string>
 
 </resources>

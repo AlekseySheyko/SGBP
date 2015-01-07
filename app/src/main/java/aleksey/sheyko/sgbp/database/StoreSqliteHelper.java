@@ -9,7 +9,7 @@ import aleksey.sheyko.sgbp.database.StoreContract.StoreEntry;
 public class StoreSqliteHelper extends SQLiteOpenHelper {
     // Top-level database info
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "StoreReader.db";
+    public static final String DATABASE_NAME = "StoreList.db";
     // Main table functionality
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";

@@ -2,9 +2,6 @@ package aleksey.sheyko.sgbp.ui.fragments;
 
 import android.app.ListFragment;
 
-import aleksey.sheyko.sgbp.database.StoreDataSource;
-import aleksey.sheyko.sgbp.models.Store;
-
 public class NearestFragment extends ListFragment {
 
     public NearestFragment() {
@@ -16,7 +13,7 @@ public class NearestFragment extends ListFragment {
         String longitude = "-121.364239";
         String category = "Audio equipment";
 
-        StoreDataSource dataSource = new StoreDataSource(this.getActivity());
-        dataSource.create(new Store(id, name, address, phone, latitude, longitude, category));
+        // StoreDataSource dataSource = new StoreDataSource(this.getActivity());
+        // dataSource.create(new Store(id, name, address, phone, latitude, longitude, category));
     }
 }
