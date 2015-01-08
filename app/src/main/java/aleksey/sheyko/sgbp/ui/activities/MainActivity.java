@@ -56,7 +56,7 @@ public class MainActivity extends FragmentActivity {
         actionBar.setListNavigationCallbacks(
                 new ActionbarSpinnerAdapter(this,
                         R.layout.actionbar_spinner,
-                        new String[]{"a", "b"}),
+                        getResources().getStringArray(R.array.action_list)),
                 mOnNavigationListener);
     }
 }
