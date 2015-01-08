@@ -10,18 +10,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.models.Item;
+import aleksey.sheyko.sgbp.models.Store;
 
-public class ItemAdapter extends ArrayAdapter<Item> {
+public class ItemAdapter extends ArrayAdapter<Store> {
 
     // declaring our ArrayList of items
-    private ArrayList<Item> objects;
+    private ArrayList<Store> objects;
 
     /* here we must override the constructor for ArrayAdapter
     * the only variable we care about now is ArrayList<Item> objects,
     * because it is the list of objects we want to display.
     */
-    public ItemAdapter(Context context, int textViewResourceId, ArrayList<Item> objects) {
+    public ItemAdapter(Context context, int textViewResourceId, ArrayList<Store> objects) {
         super(context, textViewResourceId, objects);
         this.objects = objects;
     }
@@ -49,7 +49,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
 		 *
 		 * Therefore, i refers to the current Item object.
 		 */
-        Item i = objects.get(position);
+        Store i = objects.get(position);
 
 
         if (i != null) {

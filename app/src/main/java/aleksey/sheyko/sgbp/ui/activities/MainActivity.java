@@ -5,10 +5,9 @@ import android.app.ActionBar.OnNavigationListener;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.adapters.ActionbarSpinnerAdapter;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.NearestFragment;
 
@@ -22,10 +21,8 @@ public class MainActivity extends FragmentActivity {
 
         // setup action bar for tabs
         ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-        SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.action_list, android.R.layout.simple_spinner_dropdown_item);
 
         OnNavigationListener mOnNavigationListener = new OnNavigationListener() {
             // Get the same strings provided for the drop-down's ArrayAdapter
@@ -56,6 +53,10 @@ public class MainActivity extends FragmentActivity {
             }
         };
 
-        actionBar.setListNavigationCallbacks(mSpinnerAdapter, mOnNavigationListener);
+        actionBar.setListNavigationCallbacks(
+                new ActionbarSpinnerAdapter(this,
+                        R.layout.actionbar_spinner,
+                        new String[]{"a", "b"}),
+                mOnNavigationListener);
     }
 }
