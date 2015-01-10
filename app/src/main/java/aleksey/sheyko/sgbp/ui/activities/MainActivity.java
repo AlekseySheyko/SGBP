@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.adapters.ActionbarSpinnerAdapter;
+import aleksey.sheyko.sgbp.adapters.SpinnerAdapter;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.NearestFragment;
 
@@ -54,7 +54,7 @@ public class MainActivity extends FragmentActivity {
         };
 
         actionBar.setListNavigationCallbacks(
-                new ActionbarSpinnerAdapter(this,
+                new SpinnerAdapter(this,
                         R.layout.actionbar_spinner,
                         getResources().getStringArray(R.array.action_list)),
                 mOnNavigationListener);

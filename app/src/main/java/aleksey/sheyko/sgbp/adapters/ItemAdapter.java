@@ -67,7 +67,7 @@ public class ItemAdapter extends ArrayAdapter<Store> {
                 ttd.setText(i.getName());
             }
             if (mtd != null) {
-                mtd.setText("$" + i.getAddress());
+                mtd.setText(i.getAddress());
 
                 //            if (btd != null){
                 //                btd.setText(i.getDetails());

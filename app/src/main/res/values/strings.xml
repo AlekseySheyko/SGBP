@@ -10,5 +10,7 @@
     <string name="nearby">Nearby</string>
     <string name="search_title">Search</string>
     <string name="search_hint">Search</string>
+    <string name="menu_item_map_label">Show on map</string>
+    <string name="title_activity_map">Map</string>
 
 </resources>

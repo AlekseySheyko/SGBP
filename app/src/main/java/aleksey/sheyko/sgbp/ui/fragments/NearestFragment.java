@@ -1,10 +1,17 @@
 package aleksey.sheyko.sgbp.ui.fragments;
 
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,26 +19,27 @@ import java.util.List;
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.adapters.ItemAdapter;
 import aleksey.sheyko.sgbp.models.Store;
+import aleksey.sheyko.sgbp.ui.activities.MapPane;
+import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
 
 public class NearestFragment extends ListFragment {
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-//        for (int i = 1; i <= 5; i++) {
-//            Store store = new Store(i,
-//                    "Name #" + i,
-//                    "Address #" + i,
-//                    "Phone #" + i,
-//                    "Latitude #" + i,
-//                    "Longitude #" + i,
-//                    "Category #" + i);
-//            store.save();
-//        }
-
         List<Store> stores = Store.listAll(Store.class);
+
+        if (stores.size() == 0)
+            new UpdateStoreList().execute();
+
         for (Store store : stores) {
             mStoreList.add(new Store(
                     store.getStoreid(),
@@ -48,5 +56,23 @@ public class NearestFragment extends ListFragment {
 
         setListAdapter(mAdapter);
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity())
+            == ConnectionResult.SUCCESS)
+        inflater.inflate(R.menu.nearest, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_map:
+                startActivity(new Intent(this.getActivity(), MapPane.class));
+                return true;
+        }
+        return false;
     }
 }
