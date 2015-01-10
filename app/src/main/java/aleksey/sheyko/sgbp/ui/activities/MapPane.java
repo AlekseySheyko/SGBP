@@ -5,12 +5,20 @@ import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.models.Store;
+import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
 
 public class MapPane extends Activity implements OnMapReadyCallback {
 
@@ -22,18 +30,43 @@ public class MapPane extends Activity implements OnMapReadyCallback {
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
-        LatLng sydney = new LatLng(-33.867, 151.206);
+    public void onMapReady(final GoogleMap map) {
+        List<Store> stores = Store.listAll(Store.class);
+        if (stores.size() == 0)
+            new UpdateStoreList().execute();
+
+        final LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (Store store : stores) {
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .position(new LatLng(
+                            Double.parseDouble(store.getLatitude()),
+                            Double.parseDouble(store.getLongitude())))
+                    .title(store.getName()));
+
+            builder.include(marker.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        final int padding = 100; // offset from edges of the map in pixels
 
         map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
 
-        map.addMarker(new MarkerOptions()
-                .title("Sydney")
-                .snippet("The most populous city in Australia.")
-                .position(sydney));
+        map.setOnCameraChangeListener(new OnCameraChangeListener() {
+
+            @Override
+            public void onCameraChange(CameraPosition arg0) {
+                // Move camera.
+                map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), padding));
+                // Remove listener to prevent position reset on camera move.
+                map.setOnCameraChangeListener(null);
+            }
+        });
     }
+
+
 }
