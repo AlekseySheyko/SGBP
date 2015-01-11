@@ -2,16 +2,11 @@ package aleksey.sheyko.sgbp.ui.tasks;
 
 import android.os.AsyncTask;
 
+import aleksey.sheyko.sgbp.helpers.Constants;
 import aleksey.sheyko.sgbp.models.Store;
 
 public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
     public static final String TAG = UpdateStoreList.class.getSimpleName();
-
-    private static final String CATEGORY_FOOD = "Food & drinks";
-    private static final String CATEGORY_AUTO = "Auto services";
-    private static final String CATEGORY_SOUND = "Sound systems";
-    private static final String CATEGORY_BODY_CARE = "Body care";
-    private static final String CATEGORY_HOTELS = "Hotels";
 
     @Override
     protected Void doInBackground(Void... params) {
@@ -25,7 +20,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 714-5277",
                 "38.410609",
                 "-121.364239",
-                CATEGORY_SOUND);
+                Constants.CATEGORY_SOUND);
         store1.save();
 
         Store store2 = new Store(
@@ -35,7 +30,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 686-2610",
                 "38.398914",
                 "-121.354938",
-                CATEGORY_AUTO);
+                Constants.CATEGORY_AUTO);
         store2.save();
 
         Store store3 = new Store(
@@ -45,7 +40,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 682-2140",
                 "38.423125",
                 "-121.373509",
-                CATEGORY_FOOD);
+                Constants.CATEGORY_FOOD);
         store3.save();
 
         Store store4 = new Store(
@@ -55,7 +50,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 714-3519",
                 "38.407893",
                 "-121.381385",
-                CATEGORY_FOOD);
+                Constants.CATEGORY_FOOD);
         store4.save();
 
         Store store5 = new Store(
@@ -65,7 +60,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "",
                 "38.409744",
                 "-121.371114",
-                CATEGORY_FOOD);
+                Constants.CATEGORY_FOOD);
         store5.save();
 
         Store store6 = new Store(
@@ -75,7 +70,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "",
                 "38.408924",
                 "-121.369121",
-                CATEGORY_SOUND);
+                Constants.CATEGORY_SOUND);
         store6.save();
 
         Store store7 = new Store(
@@ -85,7 +80,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 293-9894",
                 "38.425857",
                 "-121.392306",
-                CATEGORY_FOOD);
+                Constants.CATEGORY_FOOD);
         store7.save();
 
         Store store8 = new Store(
@@ -95,7 +90,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 685-0503",
                 "38.407338",
                 "-121.384356",
-                CATEGORY_HOTELS);
+                Constants.CATEGORY_HOTELS);
         store8.save();
 
         Store store17 = new Store(
@@ -105,7 +100,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 685-1575",
                 "38.409751",
                 "-121.378927",
-                CATEGORY_AUTO);
+                Constants.CATEGORY_AUTO);
         store17.save();
 
         Store store18 = new Store(
@@ -115,7 +110,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 714-8001",
                 "38.423478",
                 "-121.392038",
-                CATEGORY_AUTO);
+                Constants.CATEGORY_AUTO);
         store18.save();
 
         Store store19 = new Store(
@@ -125,7 +120,7 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
                 "(916) 422-1564",
                 "38.50766",
                 "-121.467333",
-                CATEGORY_BODY_CARE);
+                Constants.CATEGORY_BODY_CARE);
         store19.save();
 
         //        HttpURLConnection urlConnection = null;

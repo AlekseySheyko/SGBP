@@ -8,9 +8,8 @@ import android.support.v4.app.FragmentActivity;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.adapters.SpinnerAdapter;
-import aleksey.sheyko.sgbp.models.Store;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
-import aleksey.sheyko.sgbp.ui.fragments.NearestFragment;
+import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 
 
 public class MainActivity extends FragmentActivity {
@@ -35,7 +34,7 @@ public class MainActivity extends FragmentActivity {
             public boolean onNavigationItemSelected(int position, long itemId) {
                 // Create new fragment from our own Fragment class
                 CategoriesFragment firstFragment = new CategoriesFragment();
-                NearestFragment secondFragment = new NearestFragment();
+                StoreListFragment secondFragment = new StoreListFragment();
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 

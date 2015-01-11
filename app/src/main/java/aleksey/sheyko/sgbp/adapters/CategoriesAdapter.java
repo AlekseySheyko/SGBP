@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.helpers.Constants;
 
 public class CategoriesAdapter extends BaseAdapter {
     private List<Item> items = new ArrayList<Item>();
@@ -20,11 +21,11 @@ public class CategoriesAdapter extends BaseAdapter {
     public CategoriesAdapter(Context context) {
         inflater = LayoutInflater.from(context);
 
-                items.add(new Item("Food & drinks", R.drawable.running));
-                items.add(new Item("Auto services", R.drawable.running));
-                items.add(new Item("Sound systems", R.drawable.running));
-                items.add(new Item("Body care", R.drawable.running));
-                items.add(new Item("Hotels", R.drawable.running));
+                items.add(new Item(Constants.CATEGORY_FOOD, R.drawable.running));
+                items.add(new Item(Constants.CATEGORY_AUTO, R.drawable.running));
+                items.add(new Item(Constants.CATEGORY_SOUND, R.drawable.running));
+                items.add(new Item(Constants.CATEGORY_BODY_CARE, R.drawable.running));
+                items.add(new Item(Constants.CATEGORY_HOTELS, R.drawable.running));
                 items.add(new Item("Masquerade", R.drawable.running));
     }
 

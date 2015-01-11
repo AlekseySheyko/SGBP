@@ -22,16 +22,27 @@ import aleksey.sheyko.sgbp.models.Store;
 import aleksey.sheyko.sgbp.ui.activities.MapPane;
 import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
 
-public class NearestFragment extends ListFragment {
+public class StoreListFragment extends ListFragment {
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
+    private String mCategory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        List<Store> stores = Store.listAll(Store.class);
+        if (getActivity().getIntent() != null &&
+                getActivity().getIntent().hasExtra("category")) {
+            mCategory = getActivity().getIntent().getStringExtra("category");
+        }
+
+        List<Store> stores;
+        if (mCategory == null) {
+            stores = Store.listAll(Store.class);
+        } else {
+            stores = Store.find(Store.class, "category = ?", mCategory);
+        }
 
         if (stores.size() == 0)
             new UpdateStoreList().execute();
@@ -61,8 +72,8 @@ public class NearestFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity())
-            == ConnectionResult.SUCCESS)
-        inflater.inflate(R.menu.nearest, menu);
+                == ConnectionResult.SUCCESS)
+            inflater.inflate(R.menu.nearest, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
