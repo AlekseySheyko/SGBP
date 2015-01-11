@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.models.Store;
 
-public class ItemAdapter extends ArrayAdapter<Store> {
+public class StoresAdapter extends ArrayAdapter<Store> {
 
     // declaring our ArrayList of items
     private ArrayList<Store> objects;
@@ -21,7 +21,7 @@ public class ItemAdapter extends ArrayAdapter<Store> {
     * the only variable we care about now is ArrayList<Item> objects,
     * because it is the list of objects we want to display.
     */
-    public ItemAdapter(Context context, int textViewResourceId, ArrayList<Store> objects) {
+    public StoresAdapter(Context context, int textViewResourceId, ArrayList<Store> objects) {
         super(context, textViewResourceId, objects);
         this.objects = objects;
     }

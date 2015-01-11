@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.adapters.ItemAdapter;
+import aleksey.sheyko.sgbp.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.models.Store;
 import aleksey.sheyko.sgbp.ui.activities.MapPane;
 import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
@@ -30,10 +30,6 @@ public class NearestFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         List<Store> stores = Store.listAll(Store.class);
 
@@ -50,8 +46,12 @@ public class NearestFragment extends ListFragment {
                     store.getLongitude(),
                     store.getCategory()));
         }
+    }
 
-        ItemAdapter mAdapter = new ItemAdapter(getActivity(),
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        StoresAdapter mAdapter = new StoresAdapter(getActivity(),
                 R.layout.list_item_store, mStoreList);
 
         setListAdapter(mAdapter);

@@ -36,6 +36,8 @@ public class MapPane extends Activity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(final GoogleMap map) {
+        map.setMyLocationEnabled(true);
+
         List<Store> stores = Store.listAll(Store.class);
         if (stores.size() == 0)
             new UpdateStoreList().execute();
@@ -50,19 +52,14 @@ public class MapPane extends Activity implements OnMapReadyCallback {
 
             builder.include(marker.getPosition());
         }
-        LatLngBounds bounds = builder.build();
-
-        final int padding = 100; // offset from edges of the map in pixels
-
-        map.setMyLocationEnabled(true);
-
+        final int PADDING = 100; // offset from edges of the map in pixels
         map.setOnCameraChangeListener(new OnCameraChangeListener() {
 
             @Override
             public void onCameraChange(CameraPosition arg0) {
-                // Move camera.
-                map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), padding));
-                // Remove listener to prevent position reset on camera move.
+                // Move camera
+                map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), PADDING));
+                // Remove listener to prevent position reset on camera move
                 map.setOnCameraChangeListener(null);
             }
         });
