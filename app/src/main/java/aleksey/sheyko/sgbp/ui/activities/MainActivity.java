@@ -8,11 +8,14 @@ import android.support.v4.app.FragmentActivity;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.adapters.SpinnerAdapter;
+import aleksey.sheyko.sgbp.models.Store;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.NearestFragment;
 
 
 public class MainActivity extends FragmentActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

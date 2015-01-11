@@ -20,11 +20,11 @@ public class CategoriesAdapter extends BaseAdapter {
     public CategoriesAdapter(Context context) {
         inflater = LayoutInflater.from(context);
 
-                items.add(new Item("Sunflower", R.drawable.running));
-                items.add(new Item("Sunrise", R.drawable.running));
-                items.add(new Item("Balloons", R.drawable.running));
-                items.add(new Item("Heart", R.drawable.running));
-                items.add(new Item("Music", R.drawable.running));
+                items.add(new Item("Food & drinks", R.drawable.running));
+                items.add(new Item("Auto services", R.drawable.running));
+                items.add(new Item("Sound systems", R.drawable.running));
+                items.add(new Item("Body care", R.drawable.running));
+                items.add(new Item("Hotels", R.drawable.running));
                 items.add(new Item("Masquerade", R.drawable.running));
     }
 
