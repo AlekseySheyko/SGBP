@@ -14,9 +14,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SearchView;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.adapters.CategoriesAdapter;
 import aleksey.sheyko.sgbp.helpers.Constants;
@@ -43,15 +40,8 @@ public class CategoriesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Map<String, String> categories = new HashMap<>();
-                categories.put("0", Constants.CATEGORY_FOOD);
-                categories.put("1", Constants.CATEGORY_AUTO);
-                categories.put("2", Constants.CATEGORY_SOUND);
-                categories.put("3", Constants.CATEGORY_BODY_CARE);
-                categories.put("4", Constants.CATEGORY_HOTELS);
-
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
-                intent.putExtra("category", categories.get(position + ""));
+                intent.putExtra("category", new Constants().categories.get(position + ""));
                 startActivity(intent);
             }
         });

@@ -1,17 +1,26 @@
 package aleksey.sheyko.sgbp.ui.activities;
 
-import android.app.ListActivity;
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ListView;
+
+import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 
 
-public class SearchActivity extends ListActivity {
+public class SearchActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_containter);
         handleIntent(getIntent());
+
+        StoreListFragment storeListFragment = new StoreListFragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        ft.replace(R.id.fragment_container, storeListFragment, null);
+        ft.commit();
     }
 
     public void onNewIntent(Intent intent) {
@@ -19,20 +28,14 @@ public class SearchActivity extends ListActivity {
         handleIntent(intent);
     }
 
-    public void onListItemClick(ListView l,
-                                View v, int position, long id) {
-        // call detail activity for clicked entry
-    }
-
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query =
-                    intent.getStringExtra(SearchManager.QUERY);
+            String query = intent.getStringExtra(SearchManager.QUERY);
             doSearch(query);
         }
     }
 
-    private void doSearch(String queryStr) {
+    private void doSearch(String query) {
         // get a Cursor, prepare the ListAdapter
         // and set it
     }

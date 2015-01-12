@@ -1,6 +1,7 @@
 package aleksey.sheyko.sgbp.ui.activities;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,6 +24,7 @@ import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
 public class MapPane extends Activity implements OnMapReadyCallback {
 
     private String mCategory;
+    private String mSearchQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +41,25 @@ public class MapPane extends Activity implements OnMapReadyCallback {
     public void onMapReady(final GoogleMap map) {
         map.setMyLocationEnabled(true);
 
-        if (getIntent() != null &&
-                getIntent().hasExtra("category")) {
-            mCategory = getIntent().getStringExtra("category");
+        if (getIntent() != null) {
+            if (getIntent().hasExtra("category")) {
+                mCategory = getIntent().getStringExtra("category");
+            } else if (getIntent().hasExtra(SearchManager.QUERY)) {
+                mSearchQuery = getIntent().getStringExtra(SearchManager.QUERY);
+            }
         }
 
         List<Store> stores;
-        if (mCategory == null) {
-            stores = Store.listAll(Store.class);
-        } else {
+        if (mCategory != null) {
             stores = Store.find(Store.class, "category = ?", mCategory);
+        } else if (mSearchQuery != null) {
+            stores = Store.findWithQuery(Store.class,
+                    "Select * from Store where name like '%" + mSearchQuery + "%'");
+        } else {
+            stores = Store.listAll(Store.class);
         }
 
-        if (stores.size() == 0)
+        if (stores.size() == 0 && mSearchQuery == null)
             new UpdateStoreList().execute();
 
         final LatLngBounds.Builder builder = new LatLngBounds.Builder();

@@ -1,6 +1,7 @@
 package aleksey.sheyko.sgbp.ui.fragments;
 
 import android.app.ListFragment;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,25 +27,32 @@ public class StoreListFragment extends ListFragment {
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
     private String mCategory;
+    private String mSearchQuery;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        if (getActivity().getIntent() != null &&
-                getActivity().getIntent().hasExtra("category")) {
-            mCategory = getActivity().getIntent().getStringExtra("category");
+        if (getActivity().getIntent() != null) {
+            if (getActivity().getIntent().hasExtra("category")) {
+                mCategory = getActivity().getIntent().getStringExtra("category");
+            } else if (getActivity().getIntent().hasExtra(SearchManager.QUERY)) {
+                mSearchQuery = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
+            }
         }
 
         List<Store> stores;
-        if (mCategory == null) {
-            stores = Store.listAll(Store.class);
-        } else {
+        if (mCategory != null) {
             stores = Store.find(Store.class, "category = ?", mCategory);
+        } else if (mSearchQuery != null) {
+            stores = Store.findWithQuery(Store.class,
+                    "Select * from Store where name like '%" + mSearchQuery + "%'");
+        } else {
+            stores = Store.listAll(Store.class);
         }
 
-        if (stores.size() == 0)
+        if (stores.size() == 0 && mSearchQuery == null)
             new UpdateStoreList().execute();
 
         for (Store store : stores) {
@@ -82,7 +90,10 @@ public class StoreListFragment extends ListFragment {
         switch (item.getItemId()) {
             case R.id.action_map:
                 Intent intent = new Intent(this.getActivity(), MapPane.class);
-                intent.putExtra("category", mCategory);
+                if (mCategory != null)
+                    intent.putExtra("category", mCategory);
+                if (mSearchQuery != null)
+                    intent.putExtra(SearchManager.QUERY, mSearchQuery);
                 startActivity(intent);
                 return true;
         }
