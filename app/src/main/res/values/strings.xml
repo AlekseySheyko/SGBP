@@ -16,5 +16,6 @@
     <string name="title_activity_searchable">SearchableActivity</string>
     <string name="search_label">Search stores</string>
     <string name="title_activity_search">Results</string>
+    <string name="widget_empty">Sorry, no stores found</string>
 
 </resources>

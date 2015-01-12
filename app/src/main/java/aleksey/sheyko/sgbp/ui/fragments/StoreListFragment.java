@@ -4,12 +4,15 @@ import android.app.ListFragment;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -26,8 +29,16 @@ import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
 public class StoreListFragment extends ListFragment {
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
+    private List<Store> stores;
     private String mCategory;
     private String mSearchQuery;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getListView().setEmptyView(
+                noItems(getResources().getString(R.string.widget_empty)));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +53,6 @@ public class StoreListFragment extends ListFragment {
             }
         }
 
-        List<Store> stores;
         if (mCategory != null) {
             stores = Store.find(Store.class, "category = ?", mCategory);
         } else if (mSearchQuery != null) {
@@ -80,7 +90,7 @@ public class StoreListFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity())
-                == ConnectionResult.SUCCESS)
+                == ConnectionResult.SUCCESS && stores.size() != 0)
             inflater.inflate(R.menu.store_list_fragment, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -98,5 +108,27 @@ public class StoreListFragment extends ListFragment {
                 return true;
         }
         return false;
+    }
+
+    private TextView noItems(String text) {
+        TextView emptyView = new TextView(getActivity());
+        //Make sure you import android.widget.LinearLayout.LayoutParams;
+        LayoutParams mLayoutParams = new LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT);
+        emptyView.setLayoutParams(mLayoutParams);
+        //Instead of passing resource id here I passed resolved color
+        //That is, getResources().getColor((R.color.gray_dark))
+        emptyView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        emptyView.setText(text);
+        emptyView.setPadding(0, 60, 0, 0);
+        emptyView.setTextSize(18);
+        emptyView.setVisibility(View.GONE);
+        emptyView.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        //Add the view to the list view. This might be what you are missing
+        ((ViewGroup) getListView().getParent()).addView(emptyView);
+
+        return emptyView;
     }
 }
