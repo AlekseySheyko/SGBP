@@ -63,7 +63,7 @@ public class StoreListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         StoresAdapter mAdapter = new StoresAdapter(getActivity(),
-                R.layout.list_item_store, mStoreList);
+                R.layout.store_list_item, mStoreList);
 
         setListAdapter(mAdapter);
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -73,7 +73,7 @@ public class StoreListFragment extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity())
                 == ConnectionResult.SUCCESS)
-            inflater.inflate(R.menu.nearest, menu);
+            inflater.inflate(R.menu.store_list_fragment, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -81,7 +81,9 @@ public class StoreListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_map:
-                startActivity(new Intent(this.getActivity(), MapPane.class));
+                Intent intent = new Intent(this.getActivity(), MapPane.class);
+                intent.putExtra("category", mCategory);
+                startActivity(intent);
                 return true;
         }
         return false;

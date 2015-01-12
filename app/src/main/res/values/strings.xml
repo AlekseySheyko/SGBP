@@ -8,10 +8,14 @@
     <string name="title_activity_main">Places</string>
     <string name="categories">Categories</string>
     <string name="nearby">Nearby</string>
-    <string name="search_title">Search</string>
-    <string name="search_hint">Search</string>
+    <string name="search_hint">Search stores</string>
     <string name="menu_item_map_label">Show on map</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_category">CategoryActivity</string>
+    <string name="search_title">Search stores</string>
+    <string name="app_label">SGBP</string>
+    <string name="title_activity_searchable">SearchableActivity</string>
+    <string name="search_label">Search stores</string>
+    <string name="title_activity_search">Search</string>
 
 </resources>

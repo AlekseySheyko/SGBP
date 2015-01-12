@@ -22,6 +22,8 @@ import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
 
 public class MapPane extends Activity implements OnMapReadyCallback {
 
+    private String mCategory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,14 +33,24 @@ public class MapPane extends Activity implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
     }
 
     @Override
     public void onMapReady(final GoogleMap map) {
         map.setMyLocationEnabled(true);
 
-        List<Store> stores = Store.listAll(Store.class);
+        if (getIntent() != null &&
+                getIntent().hasExtra("category")) {
+            mCategory = getIntent().getStringExtra("category");
+        }
+
+        List<Store> stores;
+        if (mCategory == null) {
+            stores = Store.listAll(Store.class);
+        } else {
+            stores = Store.find(Store.class, "category = ?", mCategory);
+        }
+
         if (stores.size() == 0)
             new UpdateStoreList().execute();
 

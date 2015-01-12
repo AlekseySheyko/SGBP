@@ -51,7 +51,7 @@ public class CategoriesAdapter extends BaseAdapter {
         TextView name;
 
         if (v == null) {
-            v = inflater.inflate(R.layout.grid_item_category, viewGroup, false);
+            v = inflater.inflate(R.layout.category_grid_item, viewGroup, false);
             v.setTag(R.id.picture, v.findViewById(R.id.picture));
             v.setTag(R.id.text, v.findViewById(R.id.text));
         }

@@ -39,7 +39,7 @@ public class StoresAdapter extends ArrayAdapter<Store> {
         // to inflate it basically means to render, or show, the view.
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.list_item_store, null);
+            v = inflater.inflate(R.layout.store_list_item, null);
         }
 
 		/*

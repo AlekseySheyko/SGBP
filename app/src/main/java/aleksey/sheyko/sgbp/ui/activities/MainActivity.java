@@ -14,8 +14,6 @@ import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 
 public class MainActivity extends FragmentActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +26,7 @@ public class MainActivity extends FragmentActivity {
 
         OnNavigationListener mOnNavigationListener = new OnNavigationListener() {
             // Get the same strings provided for the drop-down's ArrayAdapter
-            String[] strings = getResources().getStringArray(R.array.action_list);
+            String[] strings = getResources().getStringArray(R.array.actionbar_spinner_actions);
 
             @Override
             public boolean onNavigationItemSelected(int position, long itemId) {
@@ -58,7 +56,8 @@ public class MainActivity extends FragmentActivity {
         actionBar.setListNavigationCallbacks(
                 new SpinnerAdapter(this,
                         R.layout.actionbar_spinner,
-                        getResources().getStringArray(R.array.action_list)),
+                        getResources().getStringArray(R.array.actionbar_spinner_actions)),
                 mOnNavigationListener);
     }
+
 }
