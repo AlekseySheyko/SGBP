@@ -21,12 +21,12 @@ public class CategoriesAdapter extends BaseAdapter {
     public CategoriesAdapter(Context context) {
         inflater = LayoutInflater.from(context);
 
-                items.add(new Item(Constants.CATEGORY_FOOD, R.drawable.running));
-                items.add(new Item(Constants.CATEGORY_AUTO, R.drawable.running));
-                items.add(new Item(Constants.CATEGORY_SOUND, R.drawable.running));
-                items.add(new Item(Constants.CATEGORY_BODY_CARE, R.drawable.running));
-                items.add(new Item(Constants.CATEGORY_HOTELS, R.drawable.running));
-                items.add(new Item("Masquerade", R.drawable.running));
+                items.add(new Item(Constants.CATEGORY_FOOD, R.drawable.category_preview));
+                items.add(new Item(Constants.CATEGORY_AUTO, R.drawable.category_preview));
+                items.add(new Item(Constants.CATEGORY_SOUND, R.drawable.category_preview));
+                items.add(new Item(Constants.CATEGORY_BODY_CARE, R.drawable.category_preview));
+                items.add(new Item(Constants.CATEGORY_HOTELS, R.drawable.category_preview));
+                items.add(new Item("Masquerade", R.drawable.category_preview));
     }
 
     @Override
