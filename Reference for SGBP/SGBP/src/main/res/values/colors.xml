@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="white">#ffffff</drawable>
+    <drawable name="black">#000000</drawable>
+    <color name="BackgroundColor">#E7E7E7</color>
+    <color name="dark_gray">#202120</color>
+	<color name="gray_view">#A0A0A0</color>
+	<color name="blue_background">#DEE5EA</color>
+	<color name="gray_act_row_txt">#5F5F5F</color>
+		<color name="gray_light">#D8D8D8</color>
+	<color name="gray_verylight">#A4A4A4</color>
+	<color name="gray_verylight2">#BFBFBF</color>
+	<color name="gray_verydark">#4C4C4C</color>
+	<color name="gray_mid">#909390</color>
+	<color name="gray_heading_mobi_snap">#3B4958</color>
+	<color name="blue_dark">#0054FD</color>
+	<color name="red">#E70606</color>
+	<color name="splash_background">#073E8F</color>
+	<color name="home_brown">#CFCFCF</color>
+	<color name="cancel_btn_text_color">#064287</color>
+	<color name="link_color">#3399FF</color>
+	<color name="listitlecolor">#ACB4B9</color>
+	<color name="transparent">#00000000</color>
+	<color name="transparent_panel">#99000000</color>
+	<color name="topbgcolor">#646265</color>
+	<color name="dialog_blue_color">#244E91</color>
+    <color name="solid_white">#ffffffff</color>
+    <color name="secondary_text">#ff999999</color>
+    <color name="feeds_bg_blue_color">#0d448e</color>
+    <color name="placentia_green">#9EAB72</color>
+    <color name="facebook_color">#3B5998</color>
+    <color name="twitter_color">#4099FF</color>
+    <color name="rss_color">#FF6200</color>
+    
+    
+    <color name="tabMedium">#1A4766</color>
+	<color name="tabDark">#1A4766</color>
+    <color name="tabTransparent">#10ffffff</color>
+    <color name="red_base">#ef4444</color>
+    <color name="red_stroke">#992F2F</color>
+    <color name="red_gradientS">#ef4444</color>
+    <color name="red_gradientE">#992F2F</color>
+    <color name="blue_base">#449def</color>
+    <color name="blue_stroke">#2F6699</color>
+    <color name="blue_gradientS">#00a2e2</color>
+    <color name="blue_gradientE">#0767a4</color>
+    <color name="def_blue_base">#449def</color>
+    <color name="def_blue_stroke">#2F6699</color>
+    <color name="def_blue_gradientS">#449def</color>
+    <color name="def_blue_gradientE">#2F6699</color>
+    <color name="menu_text_color">#FFFFFF</color>
+    <color name="menu_shadow_color">#000000</color>
+    
+        
+</resources>

@@ -1,0 +1,10 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <gradient
+        android:angle="270"
+        android:endColor="#E8E9EC"
+        android:startColor="#E8E9EC" />
+
+    <corners android:radius="20dp" />
+
+</shape><!-- From: file:/D:/Android/Projects/BackProgram/SGBP/src/main/res/drawable/background_gradient.xml -->

@@ -57,7 +57,11 @@ public class StoreListFragment extends ListFragment {
             stores = Store.find(Store.class, "category = ?", mCategory);
         } else if (mSearchQuery != null) {
             stores = Store.findWithQuery(Store.class,
-                    "Select * from Store where name like '%" + mSearchQuery + "%'");
+                    "Select * from Store where " +
+                            "name like '%" + mSearchQuery + "%' or " +
+                            "address like '%" + mSearchQuery + "%' or " +
+                            "phone like '%" + mSearchQuery + "%' or " +
+                            "category like '%" + mSearchQuery + "%'");
         } else {
             stores = Store.listAll(Store.class);
         }
@@ -90,8 +94,10 @@ public class StoreListFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity())
-                == ConnectionResult.SUCCESS && stores.size() != 0)
-            inflater.inflate(R.menu.store_list_fragment, menu);
+                == ConnectionResult.SUCCESS) {
+            if ((stores != null && stores.size() != 0) || stores == null)
+                inflater.inflate(R.menu.store_list_fragment, menu);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

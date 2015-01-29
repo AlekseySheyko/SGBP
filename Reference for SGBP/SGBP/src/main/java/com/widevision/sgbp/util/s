@@ -1,0 +1,16 @@
+Can you get me contact from previous developer?
+
+As I sad earlier, I can browse the menu (i.e. tap on button to get to another screen), but what about the actual functionally (i.e. get list of businesses, fill out profile, etc.) — it just throwing bunch of errors in logs and crashes.
+
+I check out the actual code to fount out the reason. For now app just makes call to, for example (without any parameters) and, of course, crashes. Also
+
+
+
+So I would like to get in touch with the person who wrote this code, to find out Google Cloud auth data, server query examples and so on (for now app just making request to, for example, http://sgbp.info/sgbpwsjson.svc/ GetParticipatingBusinessInfo (without any parameters) and, of course, crashes.
+
+
+
+So I would like to get in touch with the person who wrote this code, to find out Google Cloud auth data, server query examples and so on (for now app just making request to, for example, http://sgbp.info/sgbpwsjson.svc/ GetParticipatingBusinessInfo (without any parameters) and, of course, crashes.
+
+
+Then I will be able to make it from beginning for 300 $.

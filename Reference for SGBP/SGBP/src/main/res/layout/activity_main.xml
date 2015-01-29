@@ -1,0 +1,109 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlyt"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/homebg"
+    android:orientation="vertical"
+    android:weightSum="6.3" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6.4" >
+
+        <include
+            android:id="@+id/include1"
+            android:layout_height="0dp"
+            android:layout_weight="6.4"
+            layout="@layout/title" />
+
+        <LinearLayout
+            android:id="@+id/mainlyt123"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/include1"
+            android:layout_margin="20dp"
+            android:gravity="top"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/mainlyt1235"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.1"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/clickheretoparticipate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/clickhere" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mainlyt1234"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.1"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/findparticipatingbusiness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/find" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mainlyt1123"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.1"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/notificationncoupans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/notification" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mainlyt1233"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.1"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/regnmanageaccnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/registeraccount" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mainlyt1223"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.1"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/aboutparogram"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/about" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/prgLoading"
+            style="@android:style/Widget.ProgressBar.Inverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</LinearLayout>

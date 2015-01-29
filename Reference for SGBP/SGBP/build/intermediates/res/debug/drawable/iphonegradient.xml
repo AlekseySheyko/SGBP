@@ -1,0 +1,17 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    
+        
+       <gradient
+            
+        	android:startColor="#456184"
+        	android:centerColor="#456184"
+        	android:endColor="#456184"
+        	android:angle="270"/>
+       
+        <corners
+           android:radius="5dp"/>
+       
+			
+</shape>
+
+<!-- From: file:/D:/Android/Projects/BackProgram/SGBP/src/main/res/drawable/iphonegradient.xml -->
