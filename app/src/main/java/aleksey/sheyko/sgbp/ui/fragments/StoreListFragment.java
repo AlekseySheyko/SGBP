@@ -29,7 +29,7 @@ import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 public class StoreListFragment extends ListFragment {
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
-    private List<Store> stores;
+    private List<Store> mStores;
     private String mCategory;
     private String mSearchQuery;
 
@@ -54,22 +54,22 @@ public class StoreListFragment extends ListFragment {
         }
 
         if (mCategory != null) {
-            stores = Store.find(Store.class, "category = ?", mCategory);
+            mStores = Store.find(Store.class, "category = ?", mCategory);
         } else if (mSearchQuery != null) {
-            stores = Store.findWithQuery(Store.class,
+            mStores = Store.findWithQuery(Store.class,
                     "Select * from Store where " +
                             "name like '%" + mSearchQuery + "%' or " +
                             "address like '%" + mSearchQuery + "%' or " +
                             "phone like '%" + mSearchQuery + "%' or " +
                             "category like '%" + mSearchQuery + "%'");
         } else {
-            stores = Store.listAll(Store.class);
+            mStores = Store.listAll(Store.class);
         }
 
-        if (stores.size() == 0 && mSearchQuery == null)
+        if (mStores.size() == 0 && mSearchQuery == null)
             new UpdateStoreList().execute();
 
-        for (Store store : stores) {
+        for (Store store : mStores) {
             mStoreList.add(new Store(
                     store.getStoreid(),
                     store.getName(),
@@ -95,7 +95,7 @@ public class StoreListFragment extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity())
                 == ConnectionResult.SUCCESS) {
-            if ((stores != null && stores.size() != 0) || stores == null)
+            if ((mStores != null && mStores.size() != 0) || mStores == null)
                 inflater.inflate(R.menu.store_list_fragment, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);

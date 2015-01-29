@@ -10,6 +10,7 @@ public class Store extends SugarRecord<Store> {
     private String latitude;
     private String longitude;
     private String category;
+    private String geofenceId;
 
     public Store() {
     }
@@ -22,6 +23,7 @@ public class Store extends SugarRecord<Store> {
         this.latitude = latitude;
         this.longitude = longitude;
         this.category = category;
+        this.geofenceId = geofenceId;
     }
 
     public int getStoreid() {
@@ -78,5 +80,13 @@ public class Store extends SugarRecord<Store> {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getGeofenceId() {
+        return geofenceId;
+    }
+
+    public void setGeofenceId(String category) {
+        this.geofenceId = geofenceId;
     }
 }

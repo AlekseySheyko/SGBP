@@ -9,9 +9,15 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.Geofence.Builder;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
+import java.util.List;
+
+import aleksey.sheyko.sgbp.model.Store;
 
 public class LocationService extends Service
         implements LocationListener, ConnectionCallbacks {
@@ -20,6 +26,8 @@ public class LocationService extends Service
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+
+    private List<Store> mStores;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -37,7 +45,26 @@ public class LocationService extends Service
 
     @Override
     public void onConnected(Bundle connectionHint) {
-            startLocationUpdates();
+        startLocationUpdates();
+        mStores = Store.listAll(Store.class);
+
+        List<Geofence> mListGeofence = null;
+        for (Store store : mStores) {
+            if (store.getGeofenceId() == null) {
+                Geofence geofence = new Builder()
+                        .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                        .setCircularRegion(
+                                Double.parseDouble(store.getLatitude()),
+                                Double.parseDouble(store.getLongitude()),
+                                300
+                        )
+                        .build();
+                mListGeofence.add(geofence);
+                String id = geofence.getRequestId();
+                store.setGeofenceId(id);
+                store.save();
+            }
+        }
     }
 
     protected void startLocationUpdates() {
