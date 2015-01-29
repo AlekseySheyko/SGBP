@@ -2,7 +2,7 @@ package aleksey.sheyko.sgbp.ui.tasks;
 
 import android.os.AsyncTask;
 
-import aleksey.sheyko.sgbp.helpers.Constants;
+import aleksey.sheyko.sgbp.utils.helpers.Constants;
 import aleksey.sheyko.sgbp.models.Store;
 
 public class UpdateStoreList extends AsyncTask<Void, Void, Void> {

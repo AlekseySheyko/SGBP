@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.adapters;
+package aleksey.sheyko.sgbp.ui.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp;
+package aleksey.sheyko.sgbp.ui.recievers;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -11,6 +11,7 @@ import android.util.Log;
 import com.littlefluffytoys.littlefluffylocationlibrary.LocationInfo;
 import com.littlefluffytoys.littlefluffylocationlibrary.LocationLibraryConstants;
 
+import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.ui.activities.MainActivity;
 
 public class TestBroadcastReceiver extends BroadcastReceiver {

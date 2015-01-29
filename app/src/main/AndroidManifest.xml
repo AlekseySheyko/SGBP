@@ -56,7 +56,7 @@
         <activity
             android:name=".ui.activities.MainActivity"
             android:label="@string/title_activity_main">
-            <intent-filter>
+            <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -108,7 +108,7 @@
             </intent-filter>
         </receiver>
         <receiver android:name="com.littlefluffytoys.littlefluffylocationlibrary.PassiveLocationChangedReceiver" android:exported="true" />
-        <receiver android:name=".TestBroadcastReceiver">
+        <receiver android:name=".ui.recievers.TestBroadcastReceiver">
             <intent-filter>
                 <action android:name="aleksey.sheyko.sgbp.littlefluffylocationlibrary.LOCATION_CHANGED" android:exported="false"/>
             </intent-filter>

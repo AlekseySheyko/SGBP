@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.adapters.StoresAdapter;
+import aleksey.sheyko.sgbp.ui.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.models.Store;
 import aleksey.sheyko.sgbp.ui.activities.MapPane;
 import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
