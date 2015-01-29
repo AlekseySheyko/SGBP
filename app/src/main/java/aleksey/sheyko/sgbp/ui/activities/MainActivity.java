@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.ui.adapters.SpinnerAdapter;
+import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 

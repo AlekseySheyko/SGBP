@@ -3,14 +3,7 @@
           package="aleksey.sheyko.sgbp">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!--
-         The following two permissions are not required to use
-         Google Maps Android API v2, but are recommended.
-    -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-feature
@@ -98,22 +91,5 @@
                 android:value="aleksey.sheyko.sgbp.ui.activities.MainActivity"/>
         </activity>
 
-        <service android:name="com.littlefluffytoys.littlefluffylocationlibrary.LocationBroadcastService"/>
-
-        <receiver
-            android:name="com.littlefluffytoys.littlefluffylocationlibrary.StartupBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.littlefluffytoys.littlefluffylocationlibrary.PassiveLocationChangedReceiver" android:exported="true" />
-        <receiver android:name=".ui.recievers.TestBroadcastReceiver">
-            <intent-filter>
-                <action android:name="aleksey.sheyko.sgbp.littlefluffylocationlibrary.LOCATION_CHANGED" android:exported="false"/>
-            </intent-filter>
-        </receiver>
-
     </application>
-
 </manifest>

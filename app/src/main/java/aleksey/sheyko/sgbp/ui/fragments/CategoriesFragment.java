@@ -15,7 +15,7 @@ import android.widget.GridView;
 import android.widget.SearchView;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.ui.adapters.CategoriesAdapter;
+import aleksey.sheyko.sgbp.utils.helpers.adapters.CategoriesAdapter;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
 import aleksey.sheyko.sgbp.ui.activities.CategoryActivity;
 

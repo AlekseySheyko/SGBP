@@ -18,8 +18,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.models.Store;
-import aleksey.sheyko.sgbp.ui.tasks.UpdateStoreList;
+import aleksey.sheyko.sgbp.model.Store;
+import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 
 public class MapPane extends Activity implements OnMapReadyCallback {
 
