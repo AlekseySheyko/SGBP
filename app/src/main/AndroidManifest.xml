@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="aleksey.sheyko.sgbp">
+          android:installLocation="internalOnly"
+          package="aleksey.sheyko.sgbp"
+    >
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature
         android:name="android.hardware.location"
@@ -90,6 +93,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="aleksey.sheyko.sgbp.ui.activities.MainActivity"/>
         </activity>
+
+        <service
+            android:name=".service.LocationService"
+            android:enabled="true"/>
+        <receiver android:name="aleksey.sheyko.sgbp.service.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>

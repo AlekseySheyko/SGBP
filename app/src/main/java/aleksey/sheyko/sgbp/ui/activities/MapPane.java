@@ -8,7 +8,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -21,10 +20,11 @@ import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 
-public class MapPane extends Activity implements OnMapReadyCallback {
+public class MapPane extends Activity {
 
     private String mCategory;
     private String mSearchQuery;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +33,8 @@ public class MapPane extends Activity implements OnMapReadyCallback {
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-    }
-
-    @Override
-    public void onMapReady(final GoogleMap map) {
-        map.setMyLocationEnabled(true);
+        mMap = mapFragment.getMap();
+        mMap.setMyLocationEnabled(true);
 
         if (getIntent() != null) {
             if (getIntent().hasExtra("category")) {
@@ -64,7 +59,7 @@ public class MapPane extends Activity implements OnMapReadyCallback {
 
         final LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Store store : stores) {
-            Marker marker = map.addMarker(new MarkerOptions()
+            Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(
                             Double.parseDouble(store.getLatitude()),
                             Double.parseDouble(store.getLongitude())))
@@ -73,17 +68,15 @@ public class MapPane extends Activity implements OnMapReadyCallback {
             builder.include(marker.getPosition());
         }
         final int PADDING = 100; // offset from edges of the map in pixels
-        map.setOnCameraChangeListener(new OnCameraChangeListener() {
+        mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
 
             @Override
             public void onCameraChange(CameraPosition arg0) {
                 // Move camera
-                map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), PADDING));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), PADDING));
                 // Remove listener to prevent position reset on camera move
-                map.setOnCameraChangeListener(null);
+                mMap.setOnCameraChangeListener(null);
             }
         });
     }
-
-
 }
