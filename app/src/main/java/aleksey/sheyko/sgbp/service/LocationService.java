@@ -49,13 +49,13 @@ public class LocationService extends Service
     @Override
     public void onConnected(Bundle connectionHint) {
         startLocationUpdates();
+        List<Geofence> mGeofenceList = new ArrayList<>();
 
         List<Store> stores = Store.listAll(Store.class);
-        List<Geofence> mGeofenceList = new ArrayList<>();
         for (Store store : stores) {
             if (store.getGeofenceId() == null) {
                 Geofence geofence = new Builder()
-                        .setRequestId()
+                        .setRequestId("aleksey.sheyko.sgbp.GEOFENCE_" + store.getId())
                         .setExpirationDuration(Geofence.NEVER_EXPIRE)
                         .setCircularRegion(
                                 Double.parseDouble(store.getLatitude()),
@@ -65,10 +65,21 @@ public class LocationService extends Service
                         .build();
                 mGeofenceList.add(geofence);
                 String id = geofence.getRequestId();
+                Log.i(TAG, "Geofence id: " + id);
                 store.setGeofenceId(id);
                 store.save();
             } else {
-                // TODO: Set geofence with existing id from database
+                Geofence geofence = new Builder()
+                        .setRequestId(store.getGeofenceId())
+                        .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                        .setCircularRegion(
+                                Double.parseDouble(store.getLatitude()),
+                                Double.parseDouble(store.getLongitude()),
+                                300
+                        )
+                        .build();
+                Log.i(TAG, "Geofence id: " + store.getGeofenceId());
+                mGeofenceList.add(geofence);
             }
         }
         // TODO: Set resolver for pending intent (as the third addGeofences() parameter)
@@ -76,7 +87,7 @@ public class LocationService extends Service
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        Log.i(TAG, "Geofencing status: " + status.getStatus());
+                        Log.i(TAG, "Add geofences status: " + status.getStatus());
                     }
                 });
     }
