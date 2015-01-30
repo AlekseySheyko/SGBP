@@ -24,9 +24,10 @@ import java.util.List;
 
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.reciever.GeofenceReceiver;
+import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 
 public class LocationService extends Service
-        implements LocationListener, ConnectionCallbacks {
+        implements LocationListener, ConnectionCallbacks, OnStoreListLoaded {
 
     protected static final String TAG = LocationService.class.getSimpleName();
 
@@ -51,6 +52,10 @@ public class LocationService extends Service
     @Override
     public void onConnected(Bundle connectionHint) {
         startLocationUpdates();
+        addGeofences();
+    }
+
+    private void addGeofences() {
         List<Geofence> mGeofenceList = new ArrayList<>();
 
         List<Store> stores = Store.listAll(Store.class);
@@ -133,5 +138,10 @@ public class LocationService extends Service
     @Override
     public void onLocationChanged(Location location) {
 
+    }
+
+    @Override
+    public void onStoreListUpdated() {
+        addGeofences();
     }
 }

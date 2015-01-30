@@ -25,10 +25,10 @@ import aleksey.sheyko.sgbp.utils.helpers.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.ui.activities.MapPane;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
-import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListUpdated;
+import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 
 public class StoreListFragment extends ListFragment
-        implements OnStoreListUpdated {
+        implements OnStoreListLoaded {
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
     private List<Store> mStores;

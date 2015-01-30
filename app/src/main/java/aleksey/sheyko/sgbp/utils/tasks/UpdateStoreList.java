@@ -8,16 +8,16 @@ import aleksey.sheyko.sgbp.utils.helpers.Constants;
 public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
     public static final String TAG = UpdateStoreList.class.getSimpleName();
 
-    protected OnStoreListUpdated mCallback;
+    protected OnStoreListLoaded mCallback;
 
-    public interface OnStoreListUpdated {
+    public interface OnStoreListLoaded {
         public void onStoreListUpdated();
     }
 
     public UpdateStoreList() {
     }
 
-    public UpdateStoreList(OnStoreListUpdated callback) {
+    public UpdateStoreList(OnStoreListLoaded callback) {
         mCallback = callback;
     }
 
