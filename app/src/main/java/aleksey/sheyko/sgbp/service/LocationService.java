@@ -24,6 +24,7 @@ import java.util.List;
 
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.reciever.GeofenceReceiver;
+import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 
 public class LocationService extends Service
@@ -59,7 +60,10 @@ public class LocationService extends Service
         List<Geofence> mGeofenceList = new ArrayList<>();
 
         List<Store> stores = Store.listAll(Store.class);
-        if (stores.size() == 0) return;
+        if (stores.size() == 0) {
+            new UpdateStoreList(this).execute();
+            return;
+        }
 
         for (Store store : stores) {
             if (store.getGeofenceId() == null) {
