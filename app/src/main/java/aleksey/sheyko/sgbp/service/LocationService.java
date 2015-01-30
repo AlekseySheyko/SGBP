@@ -100,7 +100,7 @@ public class LocationService extends Service
                 .setCircularRegion(
                         latitude,
                         longitude,
-                        10000 // radius in meters (150)
+                        300 // radius in meters (150)
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setLoiteringDelay(1000) // 10 min (10 * 60 * 1000)

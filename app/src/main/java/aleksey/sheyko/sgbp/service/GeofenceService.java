@@ -3,7 +3,11 @@ package aleksey.sheyko.sgbp.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingEvent;
+
+import java.util.List;
 
 public class GeofenceService extends IntentService {
     public static final String TAG = GeofenceService.class.getSimpleName();
@@ -14,7 +18,15 @@ public class GeofenceService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Toast.makeText(this, "Йобана! Зашел, засранец!", Toast.LENGTH_SHORT).show();
-        Log.i(TAG, "И в довершение хочется отметить");
+        Log.i(TAG, "Intent handle request caught.");
+
+        GeofencingEvent event = GeofencingEvent.fromIntent(intent);
+
+        int transitionType = event.getGeofenceTransition();
+        Log.i(TAG, "Transition type: " + transitionType);
+        List<Geofence> geofences = event.getTriggeringGeofences();
+        for (Geofence geofence : geofences) {
+            Log.i(TAG, "Geofence id: " + geofence.getRequestId());
+        }
     }
 }
