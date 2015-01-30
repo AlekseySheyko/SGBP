@@ -3,12 +3,12 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <aleksey.sheyko.sgbp.utils.SquareImageView
+    <aleksey.sheyko.sgbp.utils.helpers.SquareImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        class="aleksey.sheyko.sgbp.utils.SquareImageView"/>
+        class="aleksey.sheyko.sgbp.utils.helpers.SquareImageView"/>
 
     <TextView
         android:id="@+id/text"

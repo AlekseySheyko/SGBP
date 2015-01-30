@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.utils;
+package aleksey.sheyko.sgbp.utils.helpers;
 
 import android.content.Context;
 import android.util.AttributeSet;

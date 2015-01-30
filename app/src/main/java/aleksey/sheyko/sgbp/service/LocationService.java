@@ -54,34 +54,27 @@ public class LocationService extends Service
         List<Geofence> mGeofenceList = new ArrayList<>();
 
         List<Store> stores = Store.listAll(Store.class);
+        if (stores.size() == 0) return;
+
         for (Store store : stores) {
             if (store.getGeofenceId() == null) {
-                Geofence geofence = new Builder()
-                        .setRequestId("aleksey.sheyko.sgbp.GEOFENCE_" + store.getId())
-                        .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                        .setCircularRegion(
-                                Double.parseDouble(store.getLatitude()),
-                                Double.parseDouble(store.getLongitude()),
-                                300
-                        )
-                        .build();
+                Geofence geofence = createGeofence(
+                        "aleksey.sheyko.sgbp.GEOFENCE_" + store.getId(),
+                        Double.parseDouble(store.getLatitude()),
+                        Double.parseDouble(store.getLongitude())
+                );
                 mGeofenceList.add(geofence);
                 String id = geofence.getRequestId();
                 Log.i(TAG, "Geofence id: " + id);
                 store.setGeofenceId(id);
                 store.save();
             } else {
-                Geofence geofence = new Builder()
-                        .setRequestId(store.getGeofenceId())
-                        .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                        .setCircularRegion(
-                                Double.parseDouble(store.getLatitude()),
-                                Double.parseDouble(store.getLongitude()),
-                                300
-                        )
-                        .build();
-                Log.i(TAG, "Geofence id: " + store.getGeofenceId());
+                Geofence geofence = createGeofence(store.getGeofenceId(),
+                        Double.parseDouble(store.getLatitude()),
+                        Double.parseDouble(store.getLongitude())
+                );
                 mGeofenceList.add(geofence);
+                Log.i(TAG, "Geofence id: " + store.getGeofenceId());
             }
         }
         LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofenceList, getPendingIntent())
@@ -93,7 +86,23 @@ public class LocationService extends Service
                 });
     }
 
-    private PendingIntent getPendingIntent(){
+    private Geofence createGeofence(String id, double latitude, double longitude) {
+        Geofence geofence = new Builder()
+                .setRequestId(id)
+                .setCircularRegion(
+                        latitude,
+                        longitude,
+                        150 // radius in meters
+                )
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setLoiteringDelay(10 * 60 * 1000) // 10 min
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
+                .build();
+        return geofence;
+    }
+
+    private PendingIntent getPendingIntent() {
         Intent intent = new Intent().setClass(this, GeofenceReceiver.class);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
