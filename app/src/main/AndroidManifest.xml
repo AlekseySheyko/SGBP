@@ -103,6 +103,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".receiver.GeofenceReceiver"
+                  android:exported="false">
+            <intent-filter >
+                <action android:name="com.aol.android.geofence.ACTION_RECEIVE_GEOFENCE"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>

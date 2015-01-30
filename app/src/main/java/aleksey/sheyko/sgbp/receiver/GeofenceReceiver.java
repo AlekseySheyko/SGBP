@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.reciever;
+package aleksey.sheyko.sgbp.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,7 +19,7 @@ public class GeofenceReceiver extends BroadcastReceiver {
                 GeofencingEvent.fromIntent(intent).getTriggeringGeofences();
         for (Geofence geofence : geofences) {
             String id = geofence.getRequestId();
-            Log.i(TAG, "Geofence triggered. Id: " + id);
+            Log.i(TAG, "Triggered geofence id: " + id);
         }
     }
 }

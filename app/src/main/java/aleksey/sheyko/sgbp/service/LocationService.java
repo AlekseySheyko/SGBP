@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.reciever.GeofenceReceiver;
+import aleksey.sheyko.sgbp.receiver.GeofenceReceiver;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 
@@ -101,10 +101,10 @@ public class LocationService extends Service
                 .setCircularRegion(
                         latitude,
                         longitude,
-                        150 // radius in meters
+                        10000 // radius in meters (150)
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setLoiteringDelay(10 * 60 * 1000) // 10 min
+                .setLoiteringDelay(3000) // 10 min (10 * 60 * 1000)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
                 .build();
