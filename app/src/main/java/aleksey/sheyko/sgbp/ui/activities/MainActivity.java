@@ -2,22 +2,24 @@ package aleksey.sheyko.sgbp.ui.activities;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import java.util.List;
+
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.service.LocationService;
+import aleksey.sheyko.sgbp.model.Store;
+import aleksey.sheyko.sgbp.service.GeofenceService;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
+import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
+import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements OnStoreListLoaded {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +27,18 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
 
         setupActionBarDropdown();
-        if (!isServiceRunning(LocationService.class)) {
-            startService(new Intent(this, LocationService.class));
+
+        List<Store> stores = Store.listAll(Store.class);
+        if (stores.size() != 0) {
+            startService(new Intent(this, GeofenceService.class));
+        } else {
+            new UpdateStoreList(this).execute();
         }
+    }
+
+    @Override
+    public void onStoreListUpdated() {
+        startService(new Intent(this, GeofenceService.class));
     }
 
     private void setupActionBarDropdown() {
@@ -69,15 +80,5 @@ public class MainActivity extends FragmentActivity {
                         R.layout.actionbar_spinner,
                         getResources().getStringArray(R.array.actionbar_spinner_actions)),
                 mOnNavigationListener);
-    }
-
-    private boolean isServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

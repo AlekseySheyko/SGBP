@@ -1,6 +1,5 @@
 package aleksey.sheyko.sgbp.service;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
@@ -11,21 +10,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.Geofence.Builder;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
-import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
-
 public class LocationService extends Service
-        implements LocationListener, ConnectionCallbacks, OnStoreListLoaded {
+        implements LocationListener, ConnectionCallbacks {
 
     protected static final String TAG = LocationService.class.getSimpleName();
 
@@ -50,61 +40,6 @@ public class LocationService extends Service
     @Override
     public void onConnected(Bundle connectionHint) {
         startLocationUpdates();
-        addGeofences();
-    }
-
-    private void addGeofences() {
-        List<Geofence> mGeofenceList = new ArrayList<>();
-
-        List<Store> stores = Store.listAll(Store.class);
-        if (stores.size() == 0) {
-            new UpdateStoreList(this).execute();
-            return;
-        }
-
-        for (Store store : stores) {
-            if (store.getGeofenceId() == null) {
-                Geofence geofence = createGeofence(
-                        "aleksey.sheyko.sgbp.GEOFENCE_" + store.getId(),
-                        Double.parseDouble(store.getLatitude()),
-                        Double.parseDouble(store.getLongitude())
-                );
-                mGeofenceList.add(geofence);
-                String id = geofence.getRequestId();
-                store.setGeofenceId(id);
-                store.save();
-            } else {
-                Geofence geofence = createGeofence(store.getGeofenceId(),
-                        Double.parseDouble(store.getLatitude()),
-                        Double.parseDouble(store.getLongitude())
-                );
-                mGeofenceList.add(geofence);
-            }
-        }
-        LocationServices.GeofencingApi
-                .addGeofences(mGoogleApiClient, mGeofenceList, getPendingIntent());
-    }
-
-    private Geofence createGeofence(String id, double latitude, double longitude) {
-        Geofence geofence = new Builder()
-                .setRequestId(id)
-                .setCircularRegion(
-                        latitude,
-                        longitude,
-                        100 // radius in meters
-                )
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setLoiteringDelay(1000) // 10 min (10 * 60 * 1000)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build();
-        return geofence;
-    }
-
-    private PendingIntent getPendingIntent() {
-        Intent intent = new Intent().setClass(this, ResponseService.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     protected void startLocationUpdates() {
@@ -132,11 +67,5 @@ public class LocationService extends Service
 
     @Override
     public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStoreListUpdated() {
-        addGeofences();
     }
 }
