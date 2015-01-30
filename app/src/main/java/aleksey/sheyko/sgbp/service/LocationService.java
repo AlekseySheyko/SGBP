@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.Geofence.Builder;
 import com.google.android.gms.location.LocationListener;
@@ -73,7 +71,6 @@ public class LocationService extends Service
                 );
                 mGeofenceList.add(geofence);
                 String id = geofence.getRequestId();
-                Log.i(TAG, "Geofence id: " + id);
                 store.setGeofenceId(id);
                 store.save();
             } else {
@@ -82,16 +79,10 @@ public class LocationService extends Service
                         Double.parseDouble(store.getLongitude())
                 );
                 mGeofenceList.add(geofence);
-                Log.i(TAG, "Geofence id: " + store.getGeofenceId());
             }
         }
-        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofenceList, getPendingIntent())
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        Log.i(TAG, "Add geofences status: " + status.getStatus());
-                    }
-                });
+        LocationServices.GeofencingApi
+                .addGeofences(mGoogleApiClient, mGeofenceList, getPendingIntent());
     }
 
     private Geofence createGeofence(String id, double latitude, double longitude) {
@@ -100,18 +91,19 @@ public class LocationService extends Service
                 .setCircularRegion(
                         latitude,
                         longitude,
-                        300 // radius in meters (150)
+                        100 // radius in meters
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setLoiteringDelay(1000) // 10 min (10 * 60 * 1000)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
         return geofence;
     }
 
     private PendingIntent getPendingIntent() {
-        Intent intent = new Intent().setClass(this, GeofenceService.class);
+        Intent intent = new Intent().setClass(this, ResponseService.class);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

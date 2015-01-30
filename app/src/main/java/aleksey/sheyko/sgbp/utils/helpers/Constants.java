@@ -9,6 +9,7 @@ public class Constants {
     public static final String CATEGORY_SOUND = "Sound systems";
     public static final String CATEGORY_BODY_CARE = "Body care";
     public static final String CATEGORY_HOTELS = "Hotels";
+    public static final String CATEGORY_OTHER = "Other";
 
     public Map<String, String> categories;
 
@@ -19,5 +20,6 @@ public class Constants {
         categories.put("2", Constants.CATEGORY_SOUND);
         categories.put("3", Constants.CATEGORY_BODY_CARE);
         categories.put("4", Constants.CATEGORY_HOTELS);
+        categories.put("5", Constants.CATEGORY_OTHER);
     }
 }

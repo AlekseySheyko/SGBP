@@ -1,8 +1,10 @@
-package aleksey.sheyko.sgbp.service;
+package aleksey.sheyko.sgbp.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import aleksey.sheyko.sgbp.service.LocationService;
 
 public class BootReceiver extends BroadcastReceiver {
     @Override
