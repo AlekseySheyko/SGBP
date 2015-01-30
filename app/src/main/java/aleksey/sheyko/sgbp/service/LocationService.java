@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.receiver.GeofenceReceiver;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 
@@ -104,7 +103,7 @@ public class LocationService extends Service
                         10000 // radius in meters (150)
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setLoiteringDelay(3000) // 10 min (10 * 60 * 1000)
+                .setLoiteringDelay(1000) // 10 min (10 * 60 * 1000)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
                 .build();
@@ -112,7 +111,7 @@ public class LocationService extends Service
     }
 
     private PendingIntent getPendingIntent() {
-        Intent intent = new Intent().setClass(this, GeofenceReceiver.class);
+        Intent intent = new Intent().setClass(this, GeofenceService.class);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
