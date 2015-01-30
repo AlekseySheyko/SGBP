@@ -55,6 +55,7 @@ public class LocationService extends Service
         for (Store store : stores) {
             if (store.getGeofenceId() == null) {
                 Geofence geofence = new Builder()
+                        .setRequestId()
                         .setExpirationDuration(Geofence.NEVER_EXPIRE)
                         .setCircularRegion(
                                 Double.parseDouble(store.getLatitude()),
@@ -70,7 +71,7 @@ public class LocationService extends Service
                 // TODO: Set geofence with existing id from database
             }
         }
-        // TODO: Set resolver for pending intent (as the trip parameter)
+        // TODO: Set resolver for pending intent (as the third addGeofences() parameter)
         LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofenceList, null)
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
