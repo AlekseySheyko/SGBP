@@ -25,8 +25,10 @@ import aleksey.sheyko.sgbp.utils.helpers.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.ui.activities.MapPane;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
+import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListUpdated;
 
-public class StoreListFragment extends ListFragment {
+public class StoreListFragment extends ListFragment
+        implements OnStoreListUpdated {
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
     private List<Store> mStores;
@@ -66,8 +68,10 @@ public class StoreListFragment extends ListFragment {
             mStores = Store.listAll(Store.class);
         }
 
-        if (mStores.size() == 0 && mSearchQuery == null)
-            new UpdateStoreList().execute();
+        if (mStores.size() == 0 && mSearchQuery == null) {
+            new UpdateStoreList(this).execute();
+            return;
+        }
 
         for (Store store : mStores) {
             mStoreList.add(new Store(
@@ -136,5 +140,13 @@ public class StoreListFragment extends ListFragment {
         ((ViewGroup) getListView().getParent()).addView(emptyView);
 
         return emptyView;
+    }
+
+    @Override
+    public void onStoreListUpdated() {
+        StoresAdapter mAdapter = new StoresAdapter(getActivity(),
+                R.layout.store_list_item, mStoreList);
+
+        setListAdapter(mAdapter);
     }
 }

@@ -2,11 +2,24 @@ package aleksey.sheyko.sgbp.utils.tasks;
 
 import android.os.AsyncTask;
 
-import aleksey.sheyko.sgbp.utils.helpers.Constants;
 import aleksey.sheyko.sgbp.model.Store;
+import aleksey.sheyko.sgbp.utils.helpers.Constants;
 
 public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
     public static final String TAG = UpdateStoreList.class.getSimpleName();
+
+    protected OnStoreListUpdated mCallback;
+
+    public interface OnStoreListUpdated {
+        public void onStoreListUpdated();
+    }
+
+    public UpdateStoreList() {
+    }
+
+    public UpdateStoreList(OnStoreListUpdated callback) {
+        mCallback = callback;
+    }
 
     @Override
     protected Void doInBackground(Void... params) {
@@ -191,5 +204,11 @@ public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
         //            }
         //        }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        mCallback.onStoreListUpdated();
     }
 }
