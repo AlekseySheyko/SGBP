@@ -14,7 +14,7 @@
     </TextView>
 
     <TextView
-        android:id="@+id/phoneLabel"
+        android:id="@+id/secondaryLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

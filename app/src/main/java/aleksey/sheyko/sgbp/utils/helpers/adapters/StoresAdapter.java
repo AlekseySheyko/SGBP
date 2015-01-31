@@ -58,7 +58,7 @@ public class StoresAdapter extends ArrayAdapter<Store> {
             // These TextViews are created in the XML files we defined.
 
             TextView ttd = (TextView) v.findViewById(R.id.nameLabel);
-            TextView mtd = (TextView) v.findViewById(R.id.phoneLabel);
+            TextView mtd = (TextView) v.findViewById(R.id.secondaryLabel);
             //            TextView btd = (TextView) v.findViewById(R.id.desctext);
 
             // check to see if each individual textview is null.

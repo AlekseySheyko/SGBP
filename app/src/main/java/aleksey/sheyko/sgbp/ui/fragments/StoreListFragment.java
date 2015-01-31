@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.utils.helpers.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.ui.activities.MapPane;
+import aleksey.sheyko.sgbp.utils.helpers.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 
@@ -34,6 +34,7 @@ public class StoreListFragment extends ListFragment
     private List<Store> mStores;
     private String mCategory;
     private String mSearchQuery;
+    private int mViewMode;
 
     @Override
     public void onStart() {
@@ -45,7 +46,11 @@ public class StoreListFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        if (getArguments() != null) {
+            mViewMode = getArguments().getInt("view_mode", -1);
+        } else {
+            setHasOptionsMenu(true);
+        }
 
         if (getActivity().getIntent() != null) {
             if (getActivity().getIntent().hasExtra("category")) {

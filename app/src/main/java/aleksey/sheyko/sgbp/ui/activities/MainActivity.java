@@ -24,7 +24,6 @@ import android.widget.ListView;
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.service.LocationService;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
-import aleksey.sheyko.sgbp.ui.fragments.NotificationsFragment;
 import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
 
@@ -109,6 +108,8 @@ public class MainActivity extends FragmentActivity {
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
         Fragment fragment = null;
+        Bundle args = new Bundle();
+        args.putInt("view_mode", position);
         switch (position) {
             case 0:
                 fragment = new CategoriesFragment();
@@ -116,12 +117,14 @@ public class MainActivity extends FragmentActivity {
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
                 break;
             case 1:
-                fragment = new NotificationsFragment();
+                fragment = new StoreListFragment();
+                fragment.setArguments(args);
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
             case 2:
                 fragment = new StoreListFragment();
+                fragment.setArguments(args);
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
