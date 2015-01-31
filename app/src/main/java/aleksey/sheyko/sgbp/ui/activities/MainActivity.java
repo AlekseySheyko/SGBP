@@ -36,11 +36,17 @@ public class MainActivity extends FragmentActivity {
     private ListView mDrawerList;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // setup action bar for tabs
+        mActionBar = getActionBar();
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         mTitle = mDrawerTitle = getTitle();
         mPlanetTitles = getResources().getStringArray(R.array.navigation_items);
@@ -56,21 +62,21 @@ public class MainActivity extends FragmentActivity {
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-                getActionBar().setTitle(mTitle);
+                mActionBar.setTitle(mTitle);
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getActionBar().setTitle(mDrawerTitle);
+                mActionBar.setTitle(mDrawerTitle);
             }
         };
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setHomeButtonEnabled(true);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
@@ -99,12 +105,18 @@ public class MainActivity extends FragmentActivity {
         switch (position) {
             case 0:
                 fragment = new CategoriesFragment();
+                mActionBar.setDisplayShowTitleEnabled(false);
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
                 break;
             case 1:
                 fragment = new NotificationsFragment();
+                mActionBar.setDisplayShowTitleEnabled(true);
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
             case 2:
                 fragment = new StoreListFragment();
+                mActionBar.setDisplayShowTitleEnabled(true);
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
         }
         // Insert the fragment by replacing any existing fragment
@@ -122,7 +134,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getActionBar().setTitle(mTitle);
+        mActionBar.setTitle(mTitle);
     }
 
     @Override
@@ -151,11 +163,6 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setupActionBarDropdown() {
-        // setup action bar for tabs
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
         OnNavigationListener mOnNavigationListener = new OnNavigationListener() {
             // Get the same strings provided for the drop-down's ArrayAdapter
             String[] strings = getResources().getStringArray(R.array.actionbar_spinner_actions);
@@ -184,7 +191,7 @@ public class MainActivity extends FragmentActivity {
             }
         };
 
-        actionBar.setListNavigationCallbacks(
+        mActionBar.setListNavigationCallbacks(
                 new SpinnerAdapter(this,
                         R.layout.actionbar_spinner,
                         getResources().getStringArray(R.array.actionbar_spinner_actions)),
