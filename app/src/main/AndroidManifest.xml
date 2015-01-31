@@ -39,7 +39,7 @@
             android:value="1"/>
         <meta-data
             android:name="QUERY_LOG"
-            android:value="false"/>
+            android:value="true"/>
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="aleksey.sheyko"/>
@@ -99,7 +99,7 @@
             android:name=".service.LocationService"
             android:enabled="true"/>
         <service
-            android:name=".service.ResponseService"
+            android:name=".service.GeofenceService"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -107,7 +107,7 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".receiver.BootReceiver">
+        <receiver android:name="aleksey.sheyko.sgbp.service.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>

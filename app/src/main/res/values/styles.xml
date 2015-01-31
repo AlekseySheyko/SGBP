@@ -3,11 +3,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light">
         <!-- Customize your theme here. -->
-        <item name="android:actionBarWidgetTheme">@style/DropDownItem.Spinner</item>
-    </style>
-
-    <style name="DropDownItem.Spinner" parent="android:style/Widget.Holo.Light.Spinner">
-        <item name="android:minHeight">48dp</item>
     </style>
 
 </resources>
