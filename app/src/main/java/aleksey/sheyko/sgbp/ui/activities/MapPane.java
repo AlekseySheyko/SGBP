@@ -35,6 +35,7 @@ public class MapPane extends Activity {
                 .findFragmentById(R.id.map);
         mMap = mapFragment.getMap();
         mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
 
         if (getIntent() != null) {
             if (getIntent().hasExtra("category")) {
