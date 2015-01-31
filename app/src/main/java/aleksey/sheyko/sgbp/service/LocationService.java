@@ -103,7 +103,7 @@ public class LocationService extends Service
                         100 // radius in meters (150)
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setLoiteringDelay(20 * 1000) // 10 min (10 * 60 * 1000)
+                .setLoiteringDelay(12 * 1000) // 10 min (10 * 60 * 1000)
                 .setTransitionTypes(
                         Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_DWELL |
