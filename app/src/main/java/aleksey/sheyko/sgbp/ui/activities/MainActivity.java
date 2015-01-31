@@ -63,6 +63,13 @@ public class MainActivity extends FragmentActivity {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 mActionBar.setTitle(mTitle);
+                if (mTitle.equals("Places")) {
+                    mActionBar.setDisplayShowTitleEnabled(false);
+                    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                } else {
+                    mActionBar.setDisplayShowTitleEnabled(true);
+                    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                }
                 invalidateOptionsMenu();
             }
 
