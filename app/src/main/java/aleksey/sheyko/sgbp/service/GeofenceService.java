@@ -44,7 +44,8 @@ public class GeofenceService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("You have participated!");
+                        .setContentTitle("Thanks for visiting")
+                        .setContentText("Elk Grove participation accepted");
         mBuilder.setAutoCancel(true);
         // Sets an ID for the notification
         int mNotificationId = 123;
