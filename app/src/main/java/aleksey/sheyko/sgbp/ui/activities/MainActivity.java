@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -63,12 +64,16 @@ public class MainActivity extends FragmentActivity {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 mActionBar.setTitle(mTitle);
+                invalidateOptionsMenu();
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                mActionBar.setTitle(mDrawerTitle);
+                mActionBar.setDisplayShowTitleEnabled(true);
+                mActionBar.setTitle(getResources().getString(R.string.app_name));
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                invalidateOptionsMenu();
             }
         };
 
@@ -98,7 +103,9 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
-    /** Swaps fragments in the main content view */
+    /**
+     * Swaps fragments in the main content view
+     */
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
         Fragment fragment = null;
@@ -129,6 +136,19 @@ public class MainActivity extends FragmentActivity {
         mDrawerList.setItemChecked(position, true);
         setTitle(mPlanetTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    /* Called whenever we call invalidateOptionsMenu() */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If the nav drawer is open, hide action items related to the content view
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        if (menu.findItem(R.id.search) != null) {
+            menu.findItem(R.id.search).setVisible(!drawerOpen);
+        } else if (menu.findItem(R.id.action_map) != null) {
+            menu.findItem(R.id.action_map).setVisible(!drawerOpen);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
