@@ -17,5 +17,7 @@
     <string name="search_label">Search stores</string>
     <string name="title_activity_search">Results</string>
     <string name="widget_empty">Sorry, no stores found</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>
