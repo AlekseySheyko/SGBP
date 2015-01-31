@@ -100,10 +100,10 @@ public class LocationService extends Service
                 .setCircularRegion(
                         latitude,
                         longitude,
-                        150 // radius in meters (150)
+                        100 // radius in meters (150)
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setLoiteringDelay(0) // 10 min (10 * 60 * 1000)
+                .setLoiteringDelay(20 * 1000) // 10 min (10 * 60 * 1000)
                 .setTransitionTypes(
                         Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_DWELL |
@@ -125,7 +125,7 @@ public class LocationService extends Service
 
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
+        mLocationRequest.setInterval(5000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }

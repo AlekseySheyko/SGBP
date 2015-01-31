@@ -7,7 +7,7 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
-import java.util.List;
+import aleksey.sheyko.sgbp.utils.tasks.SubmitParticipationTask;
 
 public class GeofenceService extends IntentService {
     public static final String TAG = GeofenceService.class.getSimpleName();
@@ -21,10 +21,18 @@ public class GeofenceService extends IntentService {
         GeofencingEvent event = GeofencingEvent.fromIntent(intent);
 
         int transitionType = event.getGeofenceTransition();
-        Log.i(TAG, "Transition type: " + transitionType);
-        List<Geofence> geofences = event.getTriggeringGeofences();
-        for (Geofence geofence : geofences) {
-            Log.i(TAG, "Geofence id: " + geofence.getRequestId());
+        switch (transitionType) {
+            case Geofence.GEOFENCE_TRANSITION_ENTER:
+                Log.i(TAG, "Защоль");
+                break;
+            case Geofence.GEOFENCE_TRANSITION_DWELL:
+                Log.i(TAG, "Скупилься");
+                new SubmitParticipationTask().execute();
+                break;
+            case Geofence.GEOFENCE_TRANSITION_EXIT:
+                Log.i(TAG, "Прочь покатился");
+                break;
         }
+        // List<Geofence> geofences = event.getTriggeringGeofences();
     }
 }
