@@ -4,9 +4,9 @@
         <item>By category</item>
         <item>Nearest</item>
     </string-array>
-    <string-array name="navigation_drawer_actions">
-        <item>My profile</item>
+    <string-array name="navigation_items">
+        <item>Places</item>
+        <item>Notifications</item>
         <item>Coupons</item>
-        <item>About</item>
     </string-array>
 </resources>
