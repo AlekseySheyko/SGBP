@@ -9,8 +9,10 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -115,23 +117,23 @@ public class MainActivity extends FragmentActivity {
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
         Fragment fragment = null;
-        Bundle args = new Bundle();
-        args.putInt("view_mode", position);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         switch (position) {
             case 0:
                 fragment = new CategoriesFragment();
+                sharedPrefs.edit().putInt("view_mode", position).apply();
                 mActionBar.setDisplayShowTitleEnabled(false);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
                 break;
             case 1:
                 fragment = new StoreListFragment();
-                fragment.setArguments(args);
+                sharedPrefs.edit().putInt("view_mode", position).apply();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
             case 2:
                 fragment = new StoreListFragment();
-                fragment.setArguments(args);
+                sharedPrefs.edit().putInt("view_mode", position).apply();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;

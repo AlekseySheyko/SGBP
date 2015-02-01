@@ -1,6 +1,8 @@
 package aleksey.sheyko.sgbp.utils.helpers.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +13,15 @@ import java.util.ArrayList;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Store;
+import aleksey.sheyko.sgbp.utils.helpers.Constants;
 
 public class StoresAdapter extends ArrayAdapter<Store> {
 
+    private Context mContext;
     // declaring our ArrayList of items
-    private ArrayList<Store> objects;
+    private ArrayList<Store> mObjects;
+
+    private SharedPreferences mSharedPrefs;
 
     /* here we must override the constructor for ArrayAdapter
     * the only variable we care about now is ArrayList<Item> objects,
@@ -23,7 +29,9 @@ public class StoresAdapter extends ArrayAdapter<Store> {
     */
     public StoresAdapter(Context context, int textViewResourceId, ArrayList<Store> objects) {
         super(context, textViewResourceId, objects);
-        this.objects = objects;
+        mContext = context;
+        mObjects = objects;
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     /*
@@ -49,29 +57,29 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 		 *
 		 * Therefore, i refers to the current Item object.
 		 */
-        Store i = objects.get(position);
+        Store store = mObjects.get(position);
 
-
-        if (i != null) {
-
+        if (store != null) {
             // This is how you obtain a reference to the TextViews.
             // These TextViews are created in the XML files we defined.
-
             TextView ttd = (TextView) v.findViewById(R.id.nameLabel);
             TextView mtd = (TextView) v.findViewById(R.id.secondaryLabel);
-            //            TextView btd = (TextView) v.findViewById(R.id.desctext);
 
             // check to see if each individual textview is null.
             // if not, assign some text!
             if (ttd != null) {
-                ttd.setText(i.getName());
+                ttd.setText(store.getName());
             }
-            if (mtd != null) {
-                mtd.setText(i.getAddress());
+            if (mtd == null) return null;
 
-                //            if (btd != null){
-                //                btd.setText(i.getDetails());
-                //            }
+            int viewMode = mSharedPrefs.getInt("view_mode", -1);
+            if (viewMode == Constants.ARG_VIEW_NEAREST) {
+                float distance = mSharedPrefs.getFloat(store.getId() + "", -1);
+                mtd.setText(distance + "");
+            } else if (viewMode == Constants.ARG_VIEW_NOTIFICATIONS) {
+                mtd.setText("23 dec, 4:02 PM");
+            } else if (viewMode == -1) {
+                mtd.setText(store.getAddress());
             }
         }
         // the view must be returned to our activity

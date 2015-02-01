@@ -3,8 +3,10 @@ package aleksey.sheyko.sgbp.ui.fragments;
 import android.app.ListFragment;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,6 +47,7 @@ public class StoreListFragment extends ListFragment
     private String mSearchQuery;
     private int mViewMode;
     private GoogleApiClient mGoogleApiClient;
+    private SharedPreferences mSharedPrefs;
 
     @Override
     public void onStart() {
@@ -56,8 +59,9 @@ public class StoreListFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if (getArguments() != null) {
-            mViewMode = getArguments().getInt("view_mode", -1);
+            mViewMode = mSharedPrefs.getInt("view_mode", -1);
         } else {
             setHasOptionsMenu(true);
         }
@@ -133,7 +137,7 @@ public class StoreListFragment extends ListFragment
         }
         mStores = Select.from(Store.class).orderBy("distance").list();
         for (Store store : mStores) {
-            Log.i(TAG, "Distance: " + store.getDistance());
+            Log.i(TAG, store.getDistance() + "");
             mStoreList.add(new Store(
                     store.getStoreid(),
                     store.getName(),
@@ -142,10 +146,10 @@ public class StoreListFragment extends ListFragment
                     store.getLatitude(),
                     store.getLongitude(),
                     store.getCategory()));
+            mSharedPrefs.edit().putFloat(store.getId() + "", store.getDistance()).apply();
         }
         StoresAdapter mAdapter = new StoresAdapter(getActivity(),
                 R.layout.store_list_item, mStoreList);
-
         setListAdapter(mAdapter);
     }
 
@@ -155,10 +159,8 @@ public class StoreListFragment extends ListFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         StoresAdapter mAdapter = new StoresAdapter(getActivity(),
                 R.layout.store_list_item, mStoreList);
-
         setListAdapter(mAdapter);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
