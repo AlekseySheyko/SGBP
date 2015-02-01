@@ -42,7 +42,7 @@ public class LocationService extends Service
         return START_STICKY;
     }
 
-    private void createLocationClient() {
+    private synchronized void createLocationClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)

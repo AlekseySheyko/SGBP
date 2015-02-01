@@ -11,6 +11,7 @@ public class Store extends SugarRecord<Store> {
     private String longitude;
     private String category;
     private String geofenceId;
+    private float distance;
 
     public Store() {
     }
@@ -87,5 +88,13 @@ public class Store extends SugarRecord<Store> {
 
     public void setGeofenceId(String id) {
         this.geofenceId = id;
+    }
+
+    public float getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
     }
 }

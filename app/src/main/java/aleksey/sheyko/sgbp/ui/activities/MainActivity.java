@@ -221,11 +221,10 @@ public class MainActivity extends FragmentActivity {
             }
         };
 
-        mActionBar.setListNavigationCallbacks(
-                new SpinnerAdapter(this,
-                        R.layout.actionbar_spinner,
-                        getResources().getStringArray(R.array.actionbar_spinner_actions)),
-                mOnNavigationListener);
+        SpinnerAdapter adapter = new SpinnerAdapter(this,
+                R.layout.actionbar_spinner,
+                getResources().getStringArray(R.array.actionbar_spinner_actions));
+        mActionBar.setListNavigationCallbacks(adapter, mOnNavigationListener);
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {

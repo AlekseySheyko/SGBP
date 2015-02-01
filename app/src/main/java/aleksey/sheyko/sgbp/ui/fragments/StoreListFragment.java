@@ -3,7 +3,9 @@ package aleksey.sheyko.sgbp.ui.fragments;
 import android.app.ListFragment;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +18,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.location.LocationServices;
+import com.orm.query.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +29,22 @@ import java.util.List;
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.ui.activities.MapPane;
+import aleksey.sheyko.sgbp.utils.helpers.Constants;
 import aleksey.sheyko.sgbp.utils.helpers.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 
 public class StoreListFragment extends ListFragment
-        implements OnStoreListLoaded {
+        implements ConnectionCallbacks, OnStoreListLoaded {
+
+    public static final String TAG = StoreListFragment.class.getSimpleName();
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
     private List<Store> mStores;
     private String mCategory;
     private String mSearchQuery;
     private int mViewMode;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     public void onStart() {
@@ -69,8 +79,12 @@ public class StoreListFragment extends ListFragment
                             "address like '%" + mSearchQuery + "%' or " +
                             "phone like '%" + mSearchQuery + "%' or " +
                             "category like '%" + mSearchQuery + "%'");
-        } else {
+        } else if (mViewMode == Constants.ARG_VIEW_COUPONS) {
             mStores = Store.listAll(Store.class);
+        } else {
+            createLocationClient();
+            mGoogleApiClient.connect();
+            return;
         }
 
         if (mStores.size() == 0 && mSearchQuery == null) {
@@ -88,6 +102,55 @@ public class StoreListFragment extends ListFragment
                     store.getLongitude(),
                     store.getCategory()));
         }
+    }
+
+    private synchronized void createLocationClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        updateDistances();
+    }
+
+    private void updateDistances() {
+        mStores = Store.listAll(Store.class);
+        for (Store store : mStores) {
+            Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (myLocation == null) return;
+
+            Location storeLocation = new Location("store");
+            storeLocation.setLatitude(Double.parseDouble(store.getLatitude()));
+            storeLocation.setLongitude(Double.parseDouble(store.getLongitude()));
+
+            float distance = myLocation.distanceTo(storeLocation);
+            store.setDistance(distance);
+            store.save();
+        }
+        mStores = Select.from(Store.class).orderBy("distance").list();
+        for (Store store : mStores) {
+            Log.i(TAG, "Distance: " + store.getDistance());
+            mStoreList.add(new Store(
+                    store.getStoreid(),
+                    store.getName(),
+                    store.getAddress(),
+                    store.getPhone(),
+                    store.getLatitude(),
+                    store.getLongitude(),
+                    store.getCategory()));
+        }
+        StoresAdapter mAdapter = new StoresAdapter(getActivity(),
+                R.layout.store_list_item, mStoreList);
+
+        setListAdapter(mAdapter);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
     }
 
     @Override
