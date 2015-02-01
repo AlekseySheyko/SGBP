@@ -19,5 +19,7 @@
     <string name="widget_empty">Sorry, no stores found</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_profile">Profile</string>
+    <string name="action_about">About</string>
 
 </resources>

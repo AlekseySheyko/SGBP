@@ -60,9 +60,8 @@ public class StoreListFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (getArguments() != null) {
-            mViewMode = mSharedPrefs.getInt("view_mode", -1);
-        } else {
+        mViewMode = mSharedPrefs.getInt("view_mode", -1);
+        if (mViewMode == -1 || mViewMode == 0) {
             setHasOptionsMenu(true);
         }
 
