@@ -7,7 +7,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -37,7 +36,6 @@ public class LocationService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         createLocationClient();
-        Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
         mGoogleApiClient.connect();
         return START_STICKY;
     }

@@ -127,21 +127,7 @@ public class StoreListFragment extends ListFragment
         Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (myLocation == null) {
-            for (Store store : mStores) {
-                Log.i(TAG, store.getDistance() + "");
-                mStoreList.add(new Store(
-                        store.getStoreid(),
-                        store.getName(),
-                        store.getAddress(),
-                        store.getPhone(),
-                        store.getLatitude(),
-                        store.getLongitude(),
-                        store.getCategory()));
-                mSharedPrefs.edit().putFloat(store.getStoreid() + "", store.getDistance()).apply();
-            }
-            StoresAdapter mAdapter = new StoresAdapter(getActivity(),
-                    R.layout.store_list_item, mStoreList);
-            setListAdapter(mAdapter);
+            populateListAdapter();
             return;
         }
         for (Store store : mStores) {
@@ -154,6 +140,10 @@ public class StoreListFragment extends ListFragment
             store.save();
         }
         mStores = Select.from(Store.class).orderBy("distance").list();
+        populateListAdapter();
+    }
+
+    private void populateListAdapter() {
         for (Store store : mStores) {
             Log.i(TAG, store.getDistance() + "");
             mStoreList.add(new Store(

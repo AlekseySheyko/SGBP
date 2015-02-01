@@ -24,26 +24,6 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater =
-                (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, null);
-            holder = new ViewHolder();
-            holder.txt01 = (TextView) convertView.findViewById(android.R.id.text1);
-
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        holder.txt01.setText(mActionTitles[position]);
-
-        return convertView;
-    }
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater =
                 (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -66,11 +46,28 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         return convertView;
     }
 
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater =
+                (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.actionbar_spinner_dropdown, null);
+            holder = new ViewHolder();
+            holder.txt01 = (TextView) convertView.findViewById(R.id.text1);
+
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        holder.txt01.setText(mActionTitles[position]);
+
+        return convertView;
+    }
 
     class ViewHolder {
         TextView txt01;
         TextView txt02;
     }
-
-
 }
