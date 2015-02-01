@@ -131,7 +131,7 @@ public class StoreListFragment extends ListFragment
             storeLocation.setLatitude(Double.parseDouble(store.getLatitude()));
             storeLocation.setLongitude(Double.parseDouble(store.getLongitude()));
 
-            float distance = myLocation.distanceTo(storeLocation);
+            float distance = myLocation.distanceTo(storeLocation) * 0.000621371f;
             store.setDistance(distance);
             store.save();
         }
