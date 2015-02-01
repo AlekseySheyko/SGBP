@@ -9,6 +9,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,6 +27,7 @@ import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.service.LocationService;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
+import aleksey.sheyko.sgbp.utils.helpers.Constants;
 import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
 
 
@@ -123,6 +125,8 @@ public class MainActivity extends FragmentActivity {
                 fragment = new CategoriesFragment();
                 mActionBar.setDisplayShowTitleEnabled(false);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                PreferenceManager.getDefaultSharedPreferences(this)
+                        .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                 break;
             case 1:
                 fragment = new StoreListFragment();
@@ -210,14 +214,18 @@ public class MainActivity extends FragmentActivity {
                 StoreListFragment secondFragment = new StoreListFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
+                SharedPreferences sharedPrefs =
+                        PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 // Replace whatever is in the fragment container with this fragment and give
                 // the fragment a tag name equal to the string at the position selected
                 switch (position) {
                     case 0:
                         ft.replace(R.id.fragment_container, firstFragment, strings[position]);
+                        sharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                         break;
                     case 1:
                         ft.replace(R.id.fragment_container, secondFragment, strings[position]);
+                        sharedPrefs.edit().putInt("view_mode", Constants.VIEW_NEAREST).apply();
                         break;
                 }
                 // Apply changes

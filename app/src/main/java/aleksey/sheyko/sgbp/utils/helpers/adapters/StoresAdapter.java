@@ -41,13 +41,13 @@ public class StoresAdapter extends ArrayAdapter<Store> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // assign the view we are converting to a local variable
-        View v = convertView;
+        View view = convertView;
 
         // first check to see if the view is null. if so, we have to inflate it.
         // to inflate it basically means to render, or show, the view.
-        if (v == null) {
+        if (view == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.store_list_item, null);
+            view = inflater.inflate(R.layout.store_list_item, null);
         }
 
 		/*
@@ -55,18 +55,13 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 		 * The variable simply refers to the position of the current object in the list. (The ArrayAdapter
 		 * iterates through the list we sent it)
 		 *
-		 * Therefore, i refers to the current Item object.
+		 * Therefore, store refers to the current Store object.
 		 */
         Store store = mObjects.get(position);
 
         if (store != null) {
-            // This is how you obtain a reference to the TextViews.
-            // These TextViews are created in the XML files we defined.
-            TextView ttd = (TextView) v.findViewById(R.id.nameLabel);
-            TextView mtd = (TextView) v.findViewById(R.id.secondaryLabel);
-
-            // check to see if each individual textview is null.
-            // if not, assign some text!
+            TextView ttd = (TextView) view.findViewById(R.id.nameLabel);
+            TextView mtd = (TextView) view.findViewById(R.id.secondaryLabel);
             if (ttd != null) {
                 ttd.setText(store.getName());
             }
@@ -89,6 +84,6 @@ public class StoresAdapter extends ArrayAdapter<Store> {
                 // In case of «VIEW_COUPONS», show nothing in secondary
             }
         }
-        return v;
+        return view;
     }
 }

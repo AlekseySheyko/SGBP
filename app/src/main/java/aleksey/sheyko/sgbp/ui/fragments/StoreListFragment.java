@@ -84,7 +84,8 @@ public class StoreListFragment extends ListFragment
                             "address like '%" + mSearchQuery + "%' or " +
                             "phone like '%" + mSearchQuery + "%' or " +
                             "category like '%" + mSearchQuery + "%'");
-        } else if (mViewMode == Constants.VIEW_COUPONS) {
+        } else if (mViewMode == Constants.VIEW_COUPONS ||
+                mViewMode == Constants.VIEW_NOTIFICATIONS) {
             mStores = Store.listAll(Store.class);
         } else if (mViewMode == Constants.VIEW_NEAREST) {
             createLocationClient();
@@ -123,11 +124,27 @@ public class StoreListFragment extends ListFragment
 
     private void updateDistances() {
         mStores = Store.listAll(Store.class);
+        Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (myLocation == null) {
+            for (Store store : mStores) {
+                Log.i(TAG, store.getDistance() + "");
+                mStoreList.add(new Store(
+                        store.getStoreid(),
+                        store.getName(),
+                        store.getAddress(),
+                        store.getPhone(),
+                        store.getLatitude(),
+                        store.getLongitude(),
+                        store.getCategory()));
+                mSharedPrefs.edit().putFloat(store.getStoreid() + "", store.getDistance()).apply();
+            }
+            StoresAdapter mAdapter = new StoresAdapter(getActivity(),
+                    R.layout.store_list_item, mStoreList);
+            setListAdapter(mAdapter);
+            return;
+        }
         for (Store store : mStores) {
-            Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
-            if (myLocation == null) return;
-
             Location storeLocation = new Location("store");
             storeLocation.setLatitude(Double.parseDouble(store.getLatitude()));
             storeLocation.setLongitude(Double.parseDouble(store.getLongitude()));

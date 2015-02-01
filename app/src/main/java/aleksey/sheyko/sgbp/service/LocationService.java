@@ -73,7 +73,6 @@ public class LocationService extends Service
                 );
                 mGeofenceList.add(geofence);
                 String id = geofence.getRequestId();
-                Log.i(TAG, "Geofence id: " + id);
                 store.setGeofenceId(id);
                 store.save();
             } else {
@@ -82,7 +81,6 @@ public class LocationService extends Service
                         Double.parseDouble(store.getLongitude())
                 );
                 mGeofenceList.add(geofence);
-                Log.i(TAG, "Geofence id: " + store.getGeofenceId());
             }
         }
         LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofenceList, getPendingIntent())
