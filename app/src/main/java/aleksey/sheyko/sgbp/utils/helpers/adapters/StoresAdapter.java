@@ -10,8 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.model.Notification;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
 
@@ -58,28 +60,34 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 		 * Therefore, store refers to the current Store object.
 		 */
         Store store = mObjects.get(position);
-
         if (store != null) {
-            TextView ttd = (TextView) view.findViewById(R.id.nameLabel);
-            TextView mtd = (TextView) view.findViewById(R.id.secondaryLabel);
-            if (ttd != null) {
-                ttd.setText(store.getName());
+            TextView primaryTextView = (TextView) view.findViewById(R.id.nameLabel);
+            TextView secondaryTextView = (TextView) view.findViewById(R.id.secondaryLabel);
+            if (primaryTextView != null) {
+                primaryTextView.setText(store.getName());
             }
-            if (mtd == null) return null;
+            if (secondaryTextView == null) return null;
             int viewMode = mSharedPrefs.getInt(
                     "view_mode", Constants.VIEW_CATEGORIES);
             switch (viewMode) {
                 case Constants.VIEW_CATEGORIES:
-                    mtd.setText(store.getAddress());
+                    secondaryTextView.setText(store.getAddress());
                     break;
                 case Constants.VIEW_NEAREST:
                     String distance = String.format("%.1f%n",
                             mSharedPrefs.getFloat(store.getStoreid() + "", -1))
-                            .replace(".0", "") + "miles";
-                    mtd.setText(distance);
+                            .replace(".0", "") + "mi";
+                    secondaryTextView.setText(distance);
                     break;
                 case Constants.VIEW_NOTIFICATIONS:
-                    mtd.setText("23 dec, 4:02 PM");
+                    List<Notification> notifications = Notification.listAll(Notification.class);
+                    if (position < notifications.size()) {
+                        Notification notification = notifications.get(position);
+                        primaryTextView.setText(notification.getStoreName());
+                        secondaryTextView.setText(notification.getDate());
+                    } else {
+                        return view;
+                    }
                     break;
                 // In case of «VIEW_COUPONS», show nothing in secondary
             }
