@@ -9,7 +9,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -117,23 +116,21 @@ public class MainActivity extends FragmentActivity {
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
         Fragment fragment = null;
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit().putInt("view_mode", position).apply();
         switch (position) {
             case 0:
                 fragment = new CategoriesFragment();
-                sharedPrefs.edit().putInt("view_mode", position).apply();
                 mActionBar.setDisplayShowTitleEnabled(false);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
                 break;
             case 1:
                 fragment = new StoreListFragment();
-                sharedPrefs.edit().putInt("view_mode", position).apply();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
             case 2:
                 fragment = new StoreListFragment();
-                sharedPrefs.edit().putInt("view_mode", position).apply();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
@@ -211,7 +208,6 @@ public class MainActivity extends FragmentActivity {
                 // Create new fragment from our own Fragment class
                 CategoriesFragment firstFragment = new CategoriesFragment();
                 StoreListFragment secondFragment = new StoreListFragment();
-
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
                 // Replace whatever is in the fragment container with this fragment and give

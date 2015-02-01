@@ -60,8 +60,10 @@ public class StoreListFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mViewMode = mSharedPrefs.getInt("view_mode", -1);
-        if (mViewMode == -1 || mViewMode == 0) {
+        mViewMode = mSharedPrefs.getInt(
+                "view_mode", Constants.VIEW_CATEGORIES);
+        if (mViewMode == Constants.VIEW_CATEGORIES ||
+                mViewMode == Constants.VIEW_NEAREST) {
             setHasOptionsMenu(true);
         }
 
@@ -82,9 +84,9 @@ public class StoreListFragment extends ListFragment
                             "address like '%" + mSearchQuery + "%' or " +
                             "phone like '%" + mSearchQuery + "%' or " +
                             "category like '%" + mSearchQuery + "%'");
-        } else if (mViewMode == Constants.ARG_VIEW_COUPONS) {
+        } else if (mViewMode == Constants.VIEW_COUPONS) {
             mStores = Store.listAll(Store.class);
-        } else {
+        } else if (mViewMode == Constants.VIEW_NEAREST) {
             createLocationClient();
             mGoogleApiClient.connect();
             return;

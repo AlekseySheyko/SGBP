@@ -71,19 +71,24 @@ public class StoresAdapter extends ArrayAdapter<Store> {
                 ttd.setText(store.getName());
             }
             if (mtd == null) return null;
-
-            int viewMode = mSharedPrefs.getInt("view_mode", -1);
-            if (viewMode == Constants.ARG_VIEW_NEAREST) {
-                String distance = String.format("%.1f%n",
-                        mSharedPrefs.getFloat(store.getStoreid() + "", -1)).replace(".0", "") + "miles";
-                mtd.setText(distance);
-            } else if (viewMode == Constants.ARG_VIEW_NOTIFICATIONS) {
-                mtd.setText("23 dec, 4:02 PM");
-            } else if (viewMode == -1) {
-                mtd.setText(store.getAddress());
+            int viewMode = mSharedPrefs.getInt(
+                    "view_mode", Constants.VIEW_CATEGORIES);
+            switch (viewMode) {
+                case Constants.VIEW_CATEGORIES:
+                    mtd.setText(store.getAddress());
+                    break;
+                case Constants.VIEW_NEAREST:
+                    String distance = String.format("%.1f%n",
+                            mSharedPrefs.getFloat(store.getStoreid() + "", -1))
+                            .replace(".0", "") + "miles";
+                    mtd.setText(distance);
+                    break;
+                case Constants.VIEW_NOTIFICATIONS:
+                    mtd.setText("23 dec, 4:02 PM");
+                    break;
+                // In case of «VIEW_COUPONS», show nothing in secondary
             }
         }
-        // the view must be returned to our activity
         return v;
     }
 }

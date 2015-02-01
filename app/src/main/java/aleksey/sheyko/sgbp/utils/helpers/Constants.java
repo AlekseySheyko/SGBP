@@ -11,9 +11,10 @@ public class Constants {
     public static final String CATEGORY_HOTELS = "Hotels";
     public static final String CATEGORY_OTHER = "Other";
 
-    public static final int ARG_VIEW_NEAREST = 0;
-    public static final int ARG_VIEW_NOTIFICATIONS = 1;
-    public static final int ARG_VIEW_COUPONS = 2;
+    public static final int VIEW_CATEGORIES = -1;
+    public static final int VIEW_NEAREST = 0;
+    public static final int VIEW_NOTIFICATIONS = 1;
+    public static final int VIEW_COUPONS = 2;
 
     public Map<String, String> categories;
 
