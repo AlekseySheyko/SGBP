@@ -146,7 +146,7 @@ public class StoreListFragment extends ListFragment
                     store.getLatitude(),
                     store.getLongitude(),
                     store.getCategory()));
-            mSharedPrefs.edit().putFloat(store.getId() + "", store.getDistance()).apply();
+            mSharedPrefs.edit().putFloat(store.getStoreid() + "", store.getDistance()).apply();
         }
         StoresAdapter mAdapter = new StoresAdapter(getActivity(),
                 R.layout.store_list_item, mStoreList);

@@ -74,7 +74,7 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 
             int viewMode = mSharedPrefs.getInt("view_mode", -1);
             if (viewMode == Constants.ARG_VIEW_NEAREST) {
-                float distance = mSharedPrefs.getFloat(store.getId() + "", -1);
+                float distance = mSharedPrefs.getFloat(store.getStoreid() + "", -1);
                 mtd.setText(distance + "");
             } else if (viewMode == Constants.ARG_VIEW_NOTIFICATIONS) {
                 mtd.setText("23 dec, 4:02 PM");
