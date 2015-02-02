@@ -83,10 +83,9 @@ public class StoreListFragment extends ListFragment
                     "Select * from Store where " +
                             "name like '%" + mSearchQuery + "%' or " +
                             "address like '%" + mSearchQuery + "%' or " +
-                            "phone like '%" + mSearchQuery + "%' or " +
                             "category like '%" + mSearchQuery + "%'");
         } else if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
-            mNotifications = Notification.listAll(Notification.class);
+            mNotifications = Select.from(Notification.class).orderBy("id DESC").list();
             for (Notification notification : mNotifications) {
                 mNotificationList.add(new Notification(
                         notification.getStoreName(), notification.getDate()));
