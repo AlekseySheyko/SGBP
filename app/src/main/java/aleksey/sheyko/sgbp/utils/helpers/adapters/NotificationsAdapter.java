@@ -14,13 +14,11 @@ import aleksey.sheyko.sgbp.model.Notification;
 
 public class NotificationsAdapter extends ArrayAdapter<Notification> {
 
-    private Context mContext;
     // declaring our ArrayList of items
     private ArrayList<Notification> mObjects;
 
     public NotificationsAdapter(Context context, int textViewResourceId, ArrayList<Notification> objects) {
         super(context, textViewResourceId, objects);
-        mContext = context;
         mObjects = objects;
     }
 
@@ -31,9 +29,6 @@ public class NotificationsAdapter extends ArrayAdapter<Notification> {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.store_list_item, null);
         }
-
-
-
         Notification notification = mObjects.get(position);
         if (notification != null) {
             TextView primaryTextView = (TextView) view.findViewById(R.id.nameLabel);

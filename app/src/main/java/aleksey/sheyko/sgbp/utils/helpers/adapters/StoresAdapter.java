@@ -10,10 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.model.Notification;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
 
@@ -62,21 +60,12 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 
         int viewMode = mSharedPrefs.getInt(
                 "view_mode", Constants.VIEW_CATEGORIES);
-        Store store = null;
-        if (viewMode == Constants.VIEW_NOTIFICATIONS) {
-            List<Notification> notifications = Notification.listAll(Notification.class);
-            if (position <= notifications.size()) {
-                store = mObjects.get(position);
-            }
-        } else {
-            store = mObjects.get(position);
-        }
-
+        Store store = mObjects.get(position);
         if (store != null) {
             TextView primaryTextView = (TextView) view.findViewById(R.id.nameLabel);
             TextView secondaryTextView = (TextView) view.findViewById(R.id.secondaryLabel);
 
-            if (primaryTextView != null && viewMode != Constants.VIEW_NOTIFICATIONS) {
+            if (primaryTextView != null) {
                 primaryTextView.setText(store.getName());
             }
             if (secondaryTextView == null) return null;
@@ -89,14 +78,6 @@ public class StoresAdapter extends ArrayAdapter<Store> {
                             mSharedPrefs.getFloat(store.getStoreid() + "", -1))
                             .replace(".0", "") + "mi";
                     secondaryTextView.setText(distance);
-                    break;
-                case Constants.VIEW_NOTIFICATIONS:
-                    List<Notification> notifications = Notification.listAll(Notification.class);
-                    if (position < notifications.size()) {
-                        Notification notification = notifications.get(position);
-                        primaryTextView.setText(notification.getStoreName());
-                        secondaryTextView.setText(notification.getDate());
-                    }
                     break;
                 // In case of «VIEW_COUPONS», show nothing in secondary
             }

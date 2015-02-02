@@ -85,8 +85,7 @@ public class StoreListFragment extends ListFragment
                             "name like '%" + mSearchQuery + "%' or " +
                             "address like '%" + mSearchQuery + "%' or " +
                             "category like '%" + mSearchQuery + "%'");
-        } else if (mViewMode == Constants.VIEW_COUPONS ||
-                mViewMode == Constants.VIEW_NOTIFICATIONS) {
+        } else if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
             List<Notification> notifications = Notification.listAll(Notification.class);
             for (Notification notification : notifications) {
                 mNotificationList.add(notification);
@@ -102,17 +101,7 @@ public class StoreListFragment extends ListFragment
             new UpdateStoreList(this).execute();
             return;
         }
-
-        for (Store store : mStores) {
-            mStoreList.add(new Store(
-                    store.getStoreid(),
-                    store.getName(),
-                    store.getAddress(),
-                    store.getPhone(),
-                    store.getLatitude(),
-                    store.getLongitude(),
-                    store.getCategory()));
-        }
+        populateListAdapter();
     }
 
     private synchronized void createLocationClient() {
