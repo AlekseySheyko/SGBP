@@ -40,11 +40,10 @@ import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
 public class StoreListFragment extends ListFragment
         implements ConnectionCallbacks, OnStoreListLoaded {
 
-    public static final String TAG = StoreListFragment.class.getSimpleName();
-
     private ArrayList<Store> mStoreList = new ArrayList<>();
     private ArrayList<Notification> mNotificationList = new ArrayList<>();
     private List<Store> mStores;
+    private List<Notification> mNotifications;
     private String mCategory;
     private String mSearchQuery;
     private int mViewMode;
@@ -54,8 +53,8 @@ public class StoreListFragment extends ListFragment
     @Override
     public void onStart() {
         super.onStart();
-            getListView().setEmptyView(
-                    noItems(getResources().getString(R.string.empty)));
+        getListView().setEmptyView(
+                noItems(getResources().getString(R.string.widget_empty)));
     }
 
     @Override
@@ -84,13 +83,17 @@ public class StoreListFragment extends ListFragment
                     "Select * from Store where " +
                             "name like '%" + mSearchQuery + "%' or " +
                             "address like '%" + mSearchQuery + "%' or " +
+                            "phone like '%" + mSearchQuery + "%' or " +
                             "category like '%" + mSearchQuery + "%'");
         } else if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
-            List<Notification> notifications = Notification.listAll(Notification.class);
-            for (Notification notification : notifications) {
-                mNotificationList.add(notification);
+            mNotifications = Notification.listAll(Notification.class);
+            for (Notification notification : mNotifications) {
+                mNotificationList.add(new Notification(
+                        notification.getStoreName(), notification.getDate()));
             }
             return;
+        } else if (mViewMode == Constants.VIEW_COUPONS) {
+            mStores = Store.listAll(Store.class);
         } else if (mViewMode == Constants.VIEW_NEAREST) {
             createLocationClient();
             mGoogleApiClient.connect();
@@ -101,7 +104,17 @@ public class StoreListFragment extends ListFragment
             new UpdateStoreList(this).execute();
             return;
         }
-        populateListAdapter();
+
+        for (Store store : mStores) {
+            mStoreList.add(new Store(
+                    store.getStoreid(),
+                    store.getName(),
+                    store.getAddress(),
+                    store.getPhone(),
+                    store.getLatitude(),
+                    store.getLongitude(),
+                    store.getCategory()));
+        }
     }
 
     private synchronized void createLocationClient() {
@@ -160,7 +173,7 @@ public class StoreListFragment extends ListFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (mViewMode != Constants.VIEW_NOTIFICATIONS) {
+        if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
             NotificationsAdapter mAdapter = new NotificationsAdapter(getActivity(),
                     R.layout.store_list_item, mNotificationList);
             setListAdapter(mAdapter);

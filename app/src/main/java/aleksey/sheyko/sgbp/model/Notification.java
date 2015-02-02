@@ -2,7 +2,7 @@ package aleksey.sheyko.sgbp.model;
 
 import com.orm.SugarRecord;
 
-public class Notification extends SugarRecord<Notification>{
+public class Notification extends SugarRecord<Notification> {
     private String storeName;
     private String date;
 

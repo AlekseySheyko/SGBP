@@ -39,6 +39,7 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         holder.txt01.setText("Places");
         holder.txt02.setText(mActionTitles[position]);
 

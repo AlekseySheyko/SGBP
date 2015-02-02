@@ -57,27 +57,29 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 		 *
 		 * Therefore, store refers to the current Store object.
 		 */
-
-        int viewMode = mSharedPrefs.getInt(
-                "view_mode", Constants.VIEW_CATEGORIES);
         Store store = mObjects.get(position);
-        if (store != null) {
-            TextView primaryTextView = (TextView) view.findViewById(R.id.nameLabel);
-            TextView secondaryTextView = (TextView) view.findViewById(R.id.secondaryLabel);
 
-            if (primaryTextView != null) {
-                primaryTextView.setText(store.getName());
+        if (store != null) {
+            TextView ttd = (TextView) view.findViewById(R.id.nameLabel);
+            TextView mtd = (TextView) view.findViewById(R.id.secondaryLabel);
+            if (ttd != null) {
+                ttd.setText(store.getName());
             }
-            if (secondaryTextView == null) return null;
+            if (mtd == null) return null;
+            int viewMode = mSharedPrefs.getInt(
+                    "view_mode", Constants.VIEW_CATEGORIES);
             switch (viewMode) {
                 case Constants.VIEW_CATEGORIES:
-                    secondaryTextView.setText(store.getAddress());
+                    mtd.setText(store.getAddress());
                     break;
                 case Constants.VIEW_NEAREST:
                     String distance = String.format("%.1f%n",
                             mSharedPrefs.getFloat(store.getStoreid() + "", -1))
-                            .replace(".0", "") + "mi";
-                    secondaryTextView.setText(distance);
+                            .replace(".0", "") + "miles";
+                    mtd.setText(distance);
+                    break;
+                case Constants.VIEW_NOTIFICATIONS:
+                    mtd.setText("23 dec, 4:02 PM");
                     break;
                 // In case of «VIEW_COUPONS», show nothing in secondary
             }
