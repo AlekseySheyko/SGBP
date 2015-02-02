@@ -54,22 +54,16 @@ public class StoreListFragment extends ListFragment
     @Override
     public void onStart() {
         super.onStart();
-        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mViewMode = mSharedPrefs.getInt(
-                "view_mode", Constants.VIEW_CATEGORIES);
-        if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
             getListView().setEmptyView(
-                    noItems(getResources().getString(R.string.notifications_empty)));
-        } else {
-            getListView().setEmptyView(
-                    noItems(getResources().getString(R.string.stores_empty)));
-        }
+                    noItems(getResources().getString(R.string.empty)));
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mViewMode = mSharedPrefs.getInt(
+                "view_mode", Constants.VIEW_CATEGORIES);
         if (mViewMode == Constants.VIEW_CATEGORIES ||
                 mViewMode == Constants.VIEW_NEAREST) {
             setHasOptionsMenu(true);
@@ -90,13 +84,12 @@ public class StoreListFragment extends ListFragment
                     "Select * from Store where " +
                             "name like '%" + mSearchQuery + "%' or " +
                             "address like '%" + mSearchQuery + "%' or " +
-                            "phone like '%" + mSearchQuery + "%' or " +
                             "category like '%" + mSearchQuery + "%'");
         } else if (mViewMode == Constants.VIEW_COUPONS ||
                 mViewMode == Constants.VIEW_NOTIFICATIONS) {
             List<Notification> notifications = Notification.listAll(Notification.class);
             for (Notification notification : notifications) {
-                    mNotificationList.add(notification);
+                mNotificationList.add(notification);
             }
             return;
         } else if (mViewMode == Constants.VIEW_NEAREST) {
