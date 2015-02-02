@@ -16,10 +16,11 @@
     <string name="title_activity_searchable">SearchableActivity</string>
     <string name="search_label">Search stores</string>
     <string name="title_activity_search">Results</string>
-    <string name="widget_empty">Sorry, no stores found</string>
+    <string name="stores_empty">Sorry, no stores found</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_profile">Profile</string>
     <string name="action_about">About</string>
+    <string name="notifications_empty">Any notifications yet</string>
 
 </resources>

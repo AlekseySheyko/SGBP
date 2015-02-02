@@ -59,16 +59,27 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 		 *
 		 * Therefore, store refers to the current Store object.
 		 */
-        Store store = mObjects.get(position);
+
+        int viewMode = mSharedPrefs.getInt(
+                "view_mode", Constants.VIEW_CATEGORIES);
+        Store store = null;
+        if (viewMode == Constants.VIEW_NOTIFICATIONS) {
+            List<Notification> notifications = Notification.listAll(Notification.class);
+            if (position <= notifications.size()) {
+                store = mObjects.get(position);
+            }
+        } else {
+            store = mObjects.get(position);
+        }
+
         if (store != null) {
             TextView primaryTextView = (TextView) view.findViewById(R.id.nameLabel);
             TextView secondaryTextView = (TextView) view.findViewById(R.id.secondaryLabel);
-            if (primaryTextView != null) {
+
+            if (primaryTextView != null && viewMode != Constants.VIEW_NOTIFICATIONS) {
                 primaryTextView.setText(store.getName());
             }
             if (secondaryTextView == null) return null;
-            int viewMode = mSharedPrefs.getInt(
-                    "view_mode", Constants.VIEW_CATEGORIES);
             switch (viewMode) {
                 case Constants.VIEW_CATEGORIES:
                     secondaryTextView.setText(store.getAddress());
@@ -85,8 +96,6 @@ public class StoresAdapter extends ArrayAdapter<Store> {
                         Notification notification = notifications.get(position);
                         primaryTextView.setText(notification.getStoreName());
                         secondaryTextView.setText(notification.getDate());
-                    } else {
-                        return view;
                     }
                     break;
                 // In case of «VIEW_COUPONS», show nothing in secondary

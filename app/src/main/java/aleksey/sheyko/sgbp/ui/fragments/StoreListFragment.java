@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,9 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.model.Notification;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.ui.activities.MapPane;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
+import aleksey.sheyko.sgbp.utils.helpers.adapters.NotificationsAdapter;
 import aleksey.sheyko.sgbp.utils.helpers.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
 import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
@@ -52,16 +53,22 @@ public class StoreListFragment extends ListFragment
     @Override
     public void onStart() {
         super.onStart();
-        getListView().setEmptyView(
-                noItems(getResources().getString(R.string.widget_empty)));
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mViewMode = mSharedPrefs.getInt(
+                "view_mode", Constants.VIEW_CATEGORIES);
+        if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
+            getListView().setEmptyView(
+                    noItems(getResources().getString(R.string.notifications_empty)));
+        } else {
+            getListView().setEmptyView(
+                    noItems(getResources().getString(R.string.stores_empty)));
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mViewMode = mSharedPrefs.getInt(
-                "view_mode", Constants.VIEW_CATEGORIES);
+
         if (mViewMode == Constants.VIEW_CATEGORIES ||
                 mViewMode == Constants.VIEW_NEAREST) {
             setHasOptionsMenu(true);
@@ -87,6 +94,16 @@ public class StoreListFragment extends ListFragment
         } else if (mViewMode == Constants.VIEW_COUPONS ||
                 mViewMode == Constants.VIEW_NOTIFICATIONS) {
             mStores = Store.listAll(Store.class);
+
+            ArrayList<Notification> notificationList = new ArrayList<>();
+            List<Notification> notifications = Notification.listAll(Notification.class);
+            for (Notification notification : notifications) {
+                    notificationList.add(notification);
+            }
+            NotificationsAdapter mAdapter = new NotificationsAdapter(getActivity(),
+                    R.layout.store_list_item, notificationList);
+            setListAdapter(mAdapter);
+            return;
         } else if (mViewMode == Constants.VIEW_NEAREST) {
             createLocationClient();
             mGoogleApiClient.connect();
@@ -145,7 +162,6 @@ public class StoreListFragment extends ListFragment
 
     private void populateListAdapter() {
         for (Store store : mStores) {
-            Log.i(TAG, store.getDistance() + "");
             mStoreList.add(new Store(
                     store.getStoreid(),
                     store.getName(),
