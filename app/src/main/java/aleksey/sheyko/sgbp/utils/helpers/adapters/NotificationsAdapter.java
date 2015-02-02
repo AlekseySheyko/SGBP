@@ -32,6 +32,8 @@ public class NotificationsAdapter extends ArrayAdapter<Notification> {
             view = inflater.inflate(R.layout.store_list_item, null);
         }
 
+
+
         Notification notification = mObjects.get(position);
         if (notification != null) {
             TextView primaryTextView = (TextView) view.findViewById(R.id.nameLabel);

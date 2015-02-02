@@ -43,6 +43,7 @@ public class StoreListFragment extends ListFragment
     public static final String TAG = StoreListFragment.class.getSimpleName();
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
+    private ArrayList<Notification> mNotificationList = new ArrayList<>();
     private List<Store> mStores;
     private String mCategory;
     private String mSearchQuery;
@@ -93,16 +94,10 @@ public class StoreListFragment extends ListFragment
                             "category like '%" + mSearchQuery + "%'");
         } else if (mViewMode == Constants.VIEW_COUPONS ||
                 mViewMode == Constants.VIEW_NOTIFICATIONS) {
-            mStores = Store.listAll(Store.class);
-
-            ArrayList<Notification> notificationList = new ArrayList<>();
             List<Notification> notifications = Notification.listAll(Notification.class);
             for (Notification notification : notifications) {
-                    notificationList.add(notification);
+                    mNotificationList.add(notification);
             }
-            NotificationsAdapter mAdapter = new NotificationsAdapter(getActivity(),
-                    R.layout.store_list_item, notificationList);
-            setListAdapter(mAdapter);
             return;
         } else if (mViewMode == Constants.VIEW_NEAREST) {
             createLocationClient();
@@ -183,9 +178,15 @@ public class StoreListFragment extends ListFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        StoresAdapter mAdapter = new StoresAdapter(getActivity(),
-                R.layout.store_list_item, mStoreList);
-        setListAdapter(mAdapter);
+        if (mViewMode != Constants.VIEW_NOTIFICATIONS) {
+            NotificationsAdapter mAdapter = new NotificationsAdapter(getActivity(),
+                    R.layout.store_list_item, mNotificationList);
+            setListAdapter(mAdapter);
+        } else {
+            StoresAdapter mAdapter = new StoresAdapter(getActivity(),
+                    R.layout.store_list_item, mStoreList);
+            setListAdapter(mAdapter);
+        }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
