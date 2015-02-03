@@ -51,13 +51,6 @@ public class StoreListFragment extends ListFragment
     private SharedPreferences mSharedPrefs;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        getListView().setEmptyView(
-                noItems(getResources().getString(R.string.widget_empty)));
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -182,6 +175,18 @@ public class StoreListFragment extends ListFragment
             setListAdapter(mAdapter);
         }
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
+            getListView().setEmptyView(
+                    noItems(getResources().getString(R.string.notifications_empty)));
+        } else {
+            getListView().setEmptyView(
+                    noItems(getResources().getString(R.string.stores_empty)));
+        }
     }
 
     @Override
