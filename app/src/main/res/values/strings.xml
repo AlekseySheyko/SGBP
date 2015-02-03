@@ -22,5 +22,6 @@
     <string name="action_profile">Profile</string>
     <string name="action_about">About</string>
     <string name="notifications_empty">No notifications yet</string>
+    <string name="title_activity_register">Register</string>
 
 </resources>

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -193,14 +194,20 @@ public class StoreListFragment extends ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        String name = mStoreList.get(position).getName();
-        String latitude = mStoreList.get(position).getLatitude();
-        String longitude = mStoreList.get(position).getLongitude();
-        Intent intent = new Intent(this.getActivity(), MapPane.class);
+        if (mViewMode == Constants.VIEW_NEAREST ||
+                mViewMode == Constants.VIEW_CATEGORIES) {
+            String name = mStoreList.get(position).getName();
+            String latitude = mStoreList.get(position).getLatitude();
+            String longitude = mStoreList.get(position).getLongitude();
+            Intent intent = new Intent(this.getActivity(), MapPane.class);
             intent.putExtra("name", name);
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
-        startActivity(intent);
+            startActivity(intent);
+        } else if (mViewMode == Constants.VIEW_COUPONS) {
+            Toast.makeText(this.getActivity(),
+                    "Coupons are coming soon", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
