@@ -42,6 +42,17 @@ public class MapPane extends Activity {
                 mCategory = getIntent().getStringExtra("category");
             } else if (getIntent().hasExtra(SearchManager.QUERY)) {
                 mSearchQuery = getIntent().getStringExtra(SearchManager.QUERY);
+            } else if (getIntent().hasExtra("latitude")) {
+                String name = getIntent().getStringExtra("name");
+                Double latitude = Double.parseDouble(
+                        getIntent().getStringExtra("latitude"));
+                Double longitude = Double.parseDouble(
+                        getIntent().getStringExtra("longitude"));
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude, longitude))
+                        .title(name)).showInfoWindow();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
+                return;
             }
         }
 

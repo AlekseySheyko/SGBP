@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -187,6 +188,19 @@ public class StoreListFragment extends ListFragment
             getListView().setEmptyView(
                     noItems(getResources().getString(R.string.stores_empty)));
         }
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        String name = mStoreList.get(position).getName();
+        String latitude = mStoreList.get(position).getLatitude();
+        String longitude = mStoreList.get(position).getLongitude();
+        Intent intent = new Intent(this.getActivity(), MapPane.class);
+            intent.putExtra("name", name);
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+        startActivity(intent);
     }
 
     @Override

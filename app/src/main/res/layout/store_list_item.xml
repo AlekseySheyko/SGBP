@@ -16,9 +16,9 @@
 
     <TextView
         android:id="@+id/secondaryLabel"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:singleLine="true"
-        android:textColor="#5d5b5b"
+        android:textColor="#8c8989"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
