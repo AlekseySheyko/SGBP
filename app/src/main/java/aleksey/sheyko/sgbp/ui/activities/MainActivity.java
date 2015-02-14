@@ -162,8 +162,9 @@ public class MainActivity extends FragmentActivity {
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         if (menu.findItem(R.id.search) != null) {
             menu.findItem(R.id.search).setVisible(!drawerOpen);
-        } else if (menu.findItem(R.id.action_map) != null) {
-            menu.findItem(R.id.action_map).setVisible(!drawerOpen);
+        }
+        if (menu.findItem(R.id.action_coupons) != null) {
+            menu.findItem(R.id.action_coupons).setVisible(!drawerOpen);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -188,30 +189,11 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
-        }
-        if (item.getItemId() == R.id.action_coupons) {
-            Fragment fragment = new StoreListFragment();
-            mSharedPrefs.edit()
-                    .putInt("view_mode", Constants.VIEW_COUPONS).apply();
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_container, fragment);
-            ft.commit();
-            mActionBar.setDisplayShowTitleEnabled(true);
-            mActionBar.setTitle(getResources()
-                    .getString(R.string.action_coupons));
-            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         }
         return super.onOptionsItemSelected(item);
     }

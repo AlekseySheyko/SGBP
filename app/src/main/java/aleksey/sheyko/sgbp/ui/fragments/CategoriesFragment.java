@@ -1,13 +1,17 @@
 package aleksey.sheyko.sgbp.ui.fragments;
 
+import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -62,4 +66,21 @@ public class CategoriesFragment extends Fragment {
                 searchManager.getSearchableInfo(getActivity().getComponentName()));
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_coupons) {
+            Fragment fragment = new StoreListFragment();
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+                    .putInt("view_mode", Constants.VIEW_COUPONS).apply();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container, fragment);
+            ft.commit();
+            ActionBar actionBar = getActivity().getActionBar();
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(getResources()
+                    .getString(R.string.action_coupons));
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
