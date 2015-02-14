@@ -2,9 +2,7 @@ package aleksey.sheyko.sgbp.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,8 +12,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class RegisterActivity extends Activity {
-
-    private SharedPreferences mSharedPrefs;
 
     @InjectView(R.id.nameField)
     EditText mNameField;
@@ -29,14 +25,8 @@ public class RegisterActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isRegistered = mSharedPrefs.getBoolean("is_registered", false);
-        if (isRegistered) {
-            navigateToMainScreen();
-        } else {
-            setContentView(R.layout.activity_register);
-            ButterKnife.inject(this);
-        }
+        setContentView(R.layout.activity_register);
+        ButterKnife.inject(this);
     }
 
     public void register(View view) {
@@ -49,7 +39,6 @@ public class RegisterActivity extends Activity {
             Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-        mSharedPrefs.edit().putBoolean("is_registered", true).apply();
         navigateToMainScreen();
     }
 

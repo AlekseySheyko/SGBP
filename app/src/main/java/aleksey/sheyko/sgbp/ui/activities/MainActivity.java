@@ -1,5 +1,7 @@
 package aleksey.sheyko.sgbp.ui.activities;
 
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.Fragment;
@@ -11,11 +13,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar.OnNavigationListener;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,16 +31,15 @@ import aleksey.sheyko.sgbp.utils.helpers.Constants;
 import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
 
     private String[] mPlanetTitles;
-    private Toolbar toolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private android.support.v7.app.ActionBar mActionBar;
+    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,39 +47,41 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         // setup action bar for tabs
-//        mActionBar = getSupportActionBar();
-//        mActionBar.setDisplayShowTitleEnabled(false);
-//        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        mActionBar = getActionBar();
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         mTitle = mDrawerTitle = getTitle();
         mPlanetTitles = getResources().getStringArray(R.array.navigation_items);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        setSupportActionBar(toolbar);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name) {
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
-//                mActionBar.setTitle(mTitle);
-//                if (mTitle.equals("Places")) {
-//                    mActionBar.setDisplayShowTitleEnabled(false);
-//                    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-//                } else {
-//                    mActionBar.setDisplayShowTitleEnabled(true);
-//                    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//                }
+                mActionBar.setTitle(mTitle);
+                if (mTitle.equals("Places")) {
+                    mActionBar.setDisplayShowTitleEnabled(false);
+                    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                } else {
+                    mActionBar.setDisplayShowTitleEnabled(true);
+                    mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                }
                 invalidateOptionsMenu();
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-//                mActionBar.setDisplayShowTitleEnabled(true);
-//                mActionBar.setTitle(getResources().getString(R.string.app_name));
-//                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                mActionBar.setDisplayShowTitleEnabled(true);
+                mActionBar.setTitle(getResources().getString(R.string.app_name));
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 invalidateOptionsMenu();
             }
         };
@@ -88,8 +89,8 @@ public class MainActivity extends ActionBarActivity {
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-//        mActionBar.setDisplayHomeAsUpEnabled(true);
-//        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setHomeButtonEnabled(true);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
@@ -122,20 +123,20 @@ public class MainActivity extends ActionBarActivity {
         switch (position) {
             case 0:
                 fragment = new CategoriesFragment();
-//                mActionBar.setDisplayShowTitleEnabled(false);
-//                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                mActionBar.setDisplayShowTitleEnabled(false);
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
                 PreferenceManager.getDefaultSharedPreferences(this)
                         .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                 break;
             case 1:
                 fragment = new StoreListFragment();
-//                mActionBar.setDisplayShowTitleEnabled(true);
-//                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                mActionBar.setDisplayShowTitleEnabled(true);
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
             case 2:
                 fragment = new StoreListFragment();
-//                mActionBar.setDisplayShowTitleEnabled(true);
-//                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                mActionBar.setDisplayShowTitleEnabled(true);
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
         }
         // Insert the fragment by replacing any existing fragment
@@ -166,7 +167,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-//        mActionBar.setTitle(mTitle);
+        mActionBar.setTitle(mTitle);
     }
 
     @Override
@@ -234,7 +235,7 @@ public class MainActivity extends ActionBarActivity {
         SpinnerAdapter adapter = new SpinnerAdapter(this,
                 R.layout.actionbar_spinner,
                 getResources().getStringArray(R.array.actionbar_spinner_actions));
-//        mActionBar.setListNavigationCallbacks(adapter, mOnNavigationListener);
+        mActionBar.setListNavigationCallbacks(adapter, mOnNavigationListener);
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {
