@@ -198,6 +198,9 @@ public class MainActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         if (item.getItemId() == R.id.action_coupons) {
             Fragment fragment = new StoreListFragment();
             mSharedPrefs.edit()
@@ -210,7 +213,7 @@ public class MainActivity extends FragmentActivity {
                     .getString(R.string.action_coupons));
             mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         }
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupActionBarDropdown() {

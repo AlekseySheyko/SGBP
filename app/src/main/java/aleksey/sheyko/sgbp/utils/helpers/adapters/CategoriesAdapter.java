@@ -27,6 +27,7 @@ public class CategoriesAdapter extends BaseAdapter {
                 items.add(new Item(Constants.CATEGORY_BODY_CARE, R.drawable.category_preview));
                 items.add(new Item(Constants.CATEGORY_HOTELS, R.drawable.category_preview));
                 items.add(new Item(Constants.CATEGORY_OTHER, R.drawable.category_preview));
+                items.add(new Item(Constants.CATEGORY_MOBILE, R.drawable.category_preview));
     }
 
     @Override
