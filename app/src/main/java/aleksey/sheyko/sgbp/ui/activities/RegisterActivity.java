@@ -13,14 +13,16 @@ import butterknife.InjectView;
 
 public class RegisterActivity extends Activity {
 
-    @InjectView(R.id.nameField)
-    EditText mNameField;
     @InjectView(R.id.emailField)
     EditText mEmailField;
     @InjectView(R.id.schoolField)
     EditText mSchoolField;
     @InjectView(R.id.classField)
     EditText mClassField;
+    @InjectView(R.id.firstNameField)
+    EditText mFirstNameField;
+    @InjectView(R.id.lastNameField)
+    EditText mLastNameField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +32,12 @@ public class RegisterActivity extends Activity {
     }
 
     public void register(View view) {
-        String mName = mNameField.getText().toString();
+        String mFirstName = mFirstNameField.getText().toString();
         String mEmail = mEmailField.getText().toString();
         String mSchool = mSchoolField.getText().toString();
         String mClass = mClassField.getText().toString();
 
-        if (mName.isEmpty() || mEmail.isEmpty() || mSchool.isEmpty() || mClass.isEmpty()) {
+        if (mFirstName.isEmpty() || mEmail.isEmpty() || mSchool.isEmpty() || mClass.isEmpty()) {
             Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }

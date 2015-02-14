@@ -10,51 +10,84 @@
               android:background="@color/window_background"
               tools:context="aleksey.sheyko.sgbp.ui.activities.RegisterActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:background="@drawable/container">
-
-        <EditText
-            android:hint="Name"
-            android:id="@+id/nameField"
-            android:inputType="textPersonName"
-            android:maxLength="32"
-            style="@style/registerField"/>
-
-        <EditText
-            android:inputType="textEmailAddress"
-            android:hint="Email"
-            android:id="@+id/emailField"
-            android:maxLength="40"
-            style="@style/registerField"/>
-
-        <EditText
-            style="@style/registerField"
-            android:hint="School"
-            android:maxLength="120"
-            android:id="@+id/schoolField"/>
-
-        <EditText
-            style="@style/registerField"
-            android:ems="8"
-            android:maxLength="12"
-            android:hint="Class"
-            android:id="@+id/classField"/>
-
-    </LinearLayout>
-
-    <FrameLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
         android:layout_weight="1">
-    </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:background="@drawable/container">
+
+            <EditText
+                android:hint="First name"
+                android:id="@+id/firstNameField"
+                android:inputType="textPersonName"
+                android:maxLength="32"
+                style="@style/registerField"/>
+
+            <EditText
+                android:hint="Last name"
+                android:id="@+id/lastNameField"
+                android:inputType="textPersonName"
+                android:maxLength="32"
+                style="@style/registerField"/>
+
+            <EditText
+                android:inputType="textEmailAddress"
+                android:hint="Email"
+                android:id="@+id/emailField"
+                android:maxLength="40"
+                style="@style/registerField"/>
+
+            <EditText
+                android:hint="School name"
+                android:id="@+id/schoolField"
+                android:maxLength="120"
+                style="@style/registerField"/>
+
+            <EditText
+                style="@style/registerField"
+                android:ems="8"
+                android:maxLength="12"
+                android:hint="Grade level"
+                android:id="@+id/classField"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="I'm over 18 years"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="4dp"/>
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:scaleX="1.20"
+                    android:scaleY="1.20"
+                    android:checked="true"
+                    android:focusable="true"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <Button
         android:layout_width="wrap_content"
@@ -68,7 +101,8 @@
         android:textSize="20sp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:onClick="register"/>
+        android:onClick="register"
+        android:layout_marginTop="16dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,5 +115,6 @@
         android:layout_marginBottom="8dp"
         android:textSize="16sp"
         android:clickable="true"
-        android:onClick="login"/>
+        android:onClick="login"
+        android:focusable="true"/>
 </LinearLayout>
