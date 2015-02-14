@@ -1,9 +1,10 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="android:dropDownListViewStyle">@style/SpinnerDropdown</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="SpinnerDropdown" parent="@android:style/Widget.TextView.SpinnerItem">
