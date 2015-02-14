@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -40,6 +41,7 @@ public class MainActivity extends FragmentActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private ActionBar mActionBar;
+    private SharedPreferences mSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class MainActivity extends FragmentActivity {
         // setup action bar for tabs
         mActionBar = getActionBar();
         mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setIcon(
+                new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         mTitle = mDrawerTitle = getTitle();
@@ -103,6 +107,8 @@ public class MainActivity extends FragmentActivity {
         if (!isServiceRunning(LocationService.class)) {
             startService(new Intent(this, LocationService.class));
         }
+
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -118,15 +124,13 @@ public class MainActivity extends FragmentActivity {
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
         Fragment fragment = null;
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .edit().putInt("view_mode", position).apply();
+        mSharedPrefs.edit().putInt("view_mode", position).apply();
         switch (position) {
             case 0:
                 fragment = new CategoriesFragment();
                 mActionBar.setDisplayShowTitleEnabled(false);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-                PreferenceManager.getDefaultSharedPreferences(this)
-                        .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
+                mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                 break;
             case 1:
                 fragment = new StoreListFragment();
@@ -194,10 +198,19 @@ public class MainActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
+        if (item.getItemId() == R.id.action_coupons) {
+            Fragment fragment = new StoreListFragment();
+            mSharedPrefs.edit()
+                    .putInt("view_mode", Constants.VIEW_COUPONS).apply();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container, fragment);
+            ft.commit();
+            mActionBar.setDisplayShowTitleEnabled(true);
+            mActionBar.setTitle(getResources()
+                    .getString(R.string.action_coupons));
+            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     private void setupActionBarDropdown() {
@@ -212,18 +225,16 @@ public class MainActivity extends FragmentActivity {
                 StoreListFragment secondFragment = new StoreListFragment();
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-                SharedPreferences sharedPrefs =
-                        PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 // Replace whatever is in the fragment container with this fragment and give
                 // the fragment a tag name equal to the string at the position selected
                 switch (position) {
                     case 0:
                         ft.replace(R.id.fragment_container, firstFragment, strings[position]);
-                        sharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
+                        mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                         break;
                     case 1:
                         ft.replace(R.id.fragment_container, secondFragment, strings[position]);
-                        sharedPrefs.edit().putInt("view_mode", Constants.VIEW_NEAREST).apply();
+                        mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_NEAREST).apply();
                         break;
                 }
                 // Apply changes

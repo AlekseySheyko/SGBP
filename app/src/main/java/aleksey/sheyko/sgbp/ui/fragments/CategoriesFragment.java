@@ -33,13 +33,13 @@ public class CategoriesFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
 
-        GridView gridView = (GridView) rootView.findViewById(R.id.categoriesGrid);
+        GridView gridView = (GridView)
+                rootView.findViewById(R.id.categoriesGrid);
         gridView.setAdapter(new CategoriesAdapter(this.getActivity()));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
                 intent.putExtra("category", new Constants().categories.get(position + ""));
                 startActivity(intent);
