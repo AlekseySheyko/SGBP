@@ -73,8 +73,9 @@ public class CategoriesFragment extends Fragment {
             PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
                     .putInt("view_mode", Constants.VIEW_COUPONS).apply();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_container, fragment);
-            ft.commit();
+            ft.replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
             ActionBar actionBar = getActivity().getActionBar();
             actionBar.setDisplayShowTitleEnabled(true);
             actionBar.setTitle(getResources()

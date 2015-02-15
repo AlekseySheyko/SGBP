@@ -136,7 +136,10 @@ public class MainActivity extends FragmentActivity {
                 mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                 break;
             case 1:
-                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, CategoryActivity.class);
+                intent.putExtra("category", Constants.CATEGORY_MOBILE);
+                mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
+                startActivity(intent);
                 return;
             case 2:
                 fragment = new StoreListFragment();
@@ -147,6 +150,7 @@ public class MainActivity extends FragmentActivity {
                 fragment = new StoreListFragment();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_COUPONS).apply();
                 break;
             case 4:
                 Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
@@ -158,10 +162,11 @@ public class MainActivity extends FragmentActivity {
                 break;
         }
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction ft = manager.beginTransaction();
+        ft.replace(R.id.fragment_container, fragment);
+        addToBackStackIfNeeded(ft);
+        ft.commit();
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -171,6 +176,18 @@ public class MainActivity extends FragmentActivity {
             setTitle(mNavItems[position]);
         }
         mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    private void addToBackStackIfNeeded(FragmentTransaction transaction) {
+        FragmentManager manager = getFragmentManager();
+        if (manager.getBackStackEntryCount() < 1 ) {
+            transaction.addToBackStack(null);
+        } else {
+            for(int i = 0; i < manager.getBackStackEntryCount(); ++i) {
+                manager.popBackStack();
+            }
+            transaction.addToBackStack(null);
+        }
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
@@ -270,7 +287,20 @@ public class MainActivity extends FragmentActivity {
 
     public void sendEmail(View view) {
         Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto","robert@schoolgivebackprogram.com", null));
+                "mailto", "robert@schoolgivebackprogram.com", null));
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 1) {
+            getFragmentManager().popBackStack();
+        } else if (getFragmentManager().getBackStackEntryCount() == 1) {
+            mActionBar.setDisplayShowTitleEnabled(false);
+            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

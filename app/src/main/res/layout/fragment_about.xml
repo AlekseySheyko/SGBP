@@ -15,51 +15,63 @@
 
         <TextView
             android:id="@+id/header1"
+            android:text="@string/header1"
             style="@style/TextHeader"
             android:layout_marginTop="0dp"/>
 
         <TextView
             android:id="@+id/body1"
+            android:text="@string/body1"
             style="@style/TextBody"/>
 
         <TextView
             android:id="@+id/header2"
+            android:text="@string/header2"
             style="@style/TextHeader"/>
 
         <TextView
             android:id="@+id/body2"
+            android:text="@string/body2"
             style="@style/TextBody"/>
 
         <TextView
             android:id="@+id/header3"
+            android:text="@string/header3"
             style="@style/TextHeader"/>
 
         <TextView
             android:id="@+id/body3"
+            android:text="@string/body3"
             style="@style/TextBody"/>
 
         <TextView
             android:id="@+id/header4"
+            android:text="@string/header4"
             style="@style/TextHeader"/>
 
         <TextView
             android:id="@+id/body4"
+            android:text="@string/body4"
             style="@style/TextBody"/>
 
         <TextView
             android:id="@+id/header5"
+            android:text="@string/header5"
             style="@style/TextHeader"/>
 
         <TextView
             android:id="@+id/body5"
+            android:text="@string/body5"
             style="@style/TextBody"/>
 
         <TextView
             android:id="@+id/header6"
+            android:text="@string/header6"
             style="@style/TextHeader"/>
 
         <TextView
             android:id="@+id/body6"
+            android:text="@string/body6"
             style="@style/TextBody"/>
 
             <TextView
@@ -70,7 +82,7 @@
                 android:textColor="#2980b9"
                 android:clickable="true"
                 android:onClick="dial"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="24dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,7 +93,8 @@
                 android:textColor="#2980b9"
                 android:clickable="true"
                 android:onClick="sendEmail"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp"/>
 
     </LinearLayout>
 

@@ -10,7 +10,7 @@ public class Constants {
     public static final String CATEGORY_BODY_CARE = "Body care";
     public static final String CATEGORY_HOTELS = "Hotels";
     public static final String CATEGORY_OTHER = "Other";
-    public static final String CATEGORY_MOBILE = "Mobile category";
+    public static final String CATEGORY_MOBILE = "Mobile";
 
     public static final int VIEW_CATEGORIES = -1;
     public static final int VIEW_NEAREST = 0;
