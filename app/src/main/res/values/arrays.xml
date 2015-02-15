@@ -5,8 +5,11 @@
         <item>Nearest</item>
     </string-array>
     <string-array name="navigation_items">
-        <item>Places</item>
+        <item>Participating Business</item>
+        <item>Mobile Business</item>
         <item>Notifications</item>
         <item>Coupons</item>
+        <item>Manage Account</item>
+        <item>About Program</item>
     </string-array>
 </resources>

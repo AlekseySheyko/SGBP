@@ -23,9 +23,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.service.LocationService;
+import aleksey.sheyko.sgbp.ui.fragments.AboutFragment;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
@@ -34,7 +36,7 @@ import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
 
 public class MainActivity extends FragmentActivity {
 
-    private String[] mPlanetTitles;
+    private String[] mNavItems;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
@@ -56,7 +58,7 @@ public class MainActivity extends FragmentActivity {
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.navigation_items);
+        mNavItems = getResources().getStringArray(R.array.navigation_items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -99,7 +101,7 @@ public class MainActivity extends FragmentActivity {
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
+                R.layout.navigation_list_item, mNavItems));
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -133,12 +135,23 @@ public class MainActivity extends FragmentActivity {
                 mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                 break;
             case 1:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+                return;
+            case 2:
                 fragment = new StoreListFragment();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
-            case 2:
+            case 3:
                 fragment = new StoreListFragment();
+                mActionBar.setDisplayShowTitleEnabled(true);
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                break;
+            case 4:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+                return;
+            case 5:
+                fragment = new AboutFragment();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 break;
@@ -151,7 +164,11 @@ public class MainActivity extends FragmentActivity {
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
+        if (position == 5) {
+            setTitle("About");
+        } else if (position != 0) {
+            setTitle(mNavItems[position]);
+        }
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 

@@ -94,6 +94,7 @@ public class StoreListFragment extends ListFragment
             return;
         }
 
+        if (mStores == null) return;
         if (mStores.size() == 0 && mSearchQuery == null) {
             new UpdateStoreList(this).execute();
             return;
