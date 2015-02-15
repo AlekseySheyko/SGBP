@@ -20,7 +20,6 @@ public class CategoriesAdapter extends BaseAdapter {
 
     public CategoriesAdapter(Context context) {
         inflater = LayoutInflater.from(context);
-
                 items.add(new Item(Constants.CATEGORY_FOOD, R.drawable.category_preview));
                 items.add(new Item(Constants.CATEGORY_AUTO, R.drawable.category_preview));
                 items.add(new Item(Constants.CATEGORY_SOUND, R.drawable.category_preview));
