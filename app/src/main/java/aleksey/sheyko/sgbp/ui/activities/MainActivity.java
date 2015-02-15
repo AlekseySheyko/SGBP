@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import aleksey.sheyko.sgbp.R;
@@ -31,7 +32,6 @@ import aleksey.sheyko.sgbp.ui.fragments.AccountFragment;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
-import aleksey.sheyko.sgbp.utils.helpers.adapters.NavigationAdapter;
 import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
 
 
@@ -100,12 +100,9 @@ public class MainActivity extends FragmentActivity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mNavItems = getResources().getStringArray(R.array.navigation_items);
 
-        NavigationAdapter adapter = new NavigationAdapter(this);
-        for (String mNavItem : mNavItems) {
-            adapter.addItem(mNavItem);
-        }
         // Set the adapter for the list view
-        mDrawerList.setAdapter(adapter);
+        mDrawerList.setAdapter(new ArrayAdapter<>(this,
+                R.layout.navigation_list_item, mNavItems));
 
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
