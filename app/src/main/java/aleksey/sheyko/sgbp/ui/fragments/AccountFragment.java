@@ -3,6 +3,7 @@ package aleksey.sheyko.sgbp.ui.fragments;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.Service;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -11,11 +12,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
 
 public class AccountFragment extends Fragment {
+
+    private EditText mFirstNameField;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,12 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_account, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mFirstNameField = (EditText) view.findViewById(R.id.firstNameField);
     }
 
     @Override
@@ -55,5 +66,9 @@ public class AccountFragment extends Fragment {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setTitle("Places");
         getFragmentManager().popBackStack();
+
+        InputMethodManager imm = (InputMethodManager)
+                getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mFirstNameField.getWindowToken(), 0);
     }
 }

@@ -41,5 +41,10 @@
     <string name="preference_notifications">Push Notifications</string>
     <string name="preference_location">Location Tracking</string>
     <string name="preference_coupons">Receive Coupons</string>
+    <string name="first_name_hint">First name</string>
+    <string name="last_name_hint">Last name</string>
+    <string name="email_hint">Email</string>
+    <string name="school_hint">School name</string>
+    <string name="grade_hint">Grade level</string>
 
 </resources>

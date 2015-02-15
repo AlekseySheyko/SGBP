@@ -32,40 +32,24 @@
                 style="?android:attr/listSeparatorTextViewStyle"/>
 
             <EditText
-                android:hint="First name"
                 android:id="@+id/firstNameField"
-                android:inputType="textPersonName|textNoSuggestions"
-                android:maxLength="32"
-                style="@style/registerField"/>
+                style="@style/FirstNameField"/>
 
             <EditText
-                android:hint="Last name"
                 android:id="@+id/lastNameField"
-                android:inputType="textPersonName|textNoSuggestions"
-                android:maxLength="32"
-                style="@style/registerField"/>
+                style="@style/LastNameField"/>
 
             <EditText
-                android:inputType="textEmailAddress"
-                android:hint="Email"
                 android:id="@+id/emailField"
-                android:maxLength="40"
-                style="@style/registerField"/>
+                style="@style/EmailField"/>
 
             <EditText
-                android:hint="School name"
                 android:id="@+id/schoolField"
-                android:inputType="textNoSuggestions"
-                android:maxLength="120"
-                style="@style/registerField"/>
+                style="@style/SchoolField"/>
 
             <EditText
-                style="@style/registerField"
-                android:ems="8"
-                android:maxLength="12"
-                android:hint="Grade level"
-                android:id="@+id/classField"
-                android:inputType="textNoSuggestions"/>
+                android:id="@+id/gradeField"
+                style="@style/GradeField"/>
 
             <TextView
                 android:layout_width="match_parent"

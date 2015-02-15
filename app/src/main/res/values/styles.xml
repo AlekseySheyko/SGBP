@@ -11,12 +11,43 @@
         <item name="android:minHeight">96dp</item>
     </style>
 
-    <style name="registerField">
+    <style name="RegisterField">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">50dp</item>
         <item name="android:inputType">textPersonName</item>
         <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="FirstNameField" parent="RegisterField">
+        <item name="android:hint">@string/first_name_hint</item>
+        <item name="android:inputType">textPersonName|textNoSuggestions|textCapWords</item>
+        <item name="android:maxLength">32</item>
+    </style>
+
+    <style name="LastNameField" parent="RegisterField">
+        <item name="android:hint">@string/last_name_hint</item>
+        <item name="android:inputType">textPersonName|textNoSuggestions|textCapWords</item>
+        <item name="android:maxLength">32</item>
+    </style>
+
+    <style name="EmailField" parent="RegisterField">
+        <item name="android:hint">@string/email_hint</item>
+        <item name="android:inputType">textEmailAddress</item>
+        <item name="android:maxLength">40</item>
+    </style>
+
+    <style name="SchoolField" parent="RegisterField">
+        <item name="android:hint">@string/school_hint</item>
+        <item name="android:inputType">textNoSuggestions|textCapSentences</item>
+        <item name="android:maxLength">120</item>
+    </style>
+
+    <style name="GradeField" parent="RegisterField">
+        <item name="android:hint">@string/grade_hint</item>
+        <item name="android:ems">8</item>
+        <item name="android:maxLength">12</item>
+        <item name="android:inputType">textNoSuggestions|textCapSentences</item>
     </style>
 
     <style name="TextHeader">
@@ -66,5 +97,4 @@
         <item name="android:checked">true</item>
         <item name="android:focusable">true</item>
     </style>
-
 </resources>

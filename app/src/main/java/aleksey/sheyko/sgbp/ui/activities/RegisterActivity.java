@@ -16,7 +16,7 @@ public class RegisterActivity extends Activity {
     EditText mEmailField;
     @InjectView(R.id.schoolField)
     EditText mSchoolField;
-    @InjectView(R.id.classField)
+    @InjectView(R.id.gradeField)
     EditText mClassField;
     @InjectView(R.id.firstNameField)
     EditText mFirstNameField;
