@@ -37,5 +37,9 @@
     <string name="body5">Shop with and support participating businesses, acknowledge their involvement; encourage your favorite businesses to join School Give Back Program.</string>
     <string name="header6">Our mission</string>
     <string name="body6">School Give Back Program’s mission is to subsidize under-funded local schools, while promoting a positive change in the education of our children.</string>
+    <string name="action_save">Save</string>
+    <string name="preference_notifications">Push Notifications</string>
+    <string name="preference_location">Location Tracking</string>
+    <string name="preference_coupons">Receive Coupons</string>
 
 </resources>

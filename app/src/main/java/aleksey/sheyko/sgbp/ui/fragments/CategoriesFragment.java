@@ -44,6 +44,8 @@ public class CategoriesFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
                 intent.putExtra("category", new Constants().categories.get(position + ""));
                 startActivity(intent);

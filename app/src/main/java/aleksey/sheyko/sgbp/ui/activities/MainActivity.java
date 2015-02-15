@@ -23,11 +23,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.service.LocationService;
 import aleksey.sheyko.sgbp.ui.fragments.AboutFragment;
+import aleksey.sheyko.sgbp.ui.fragments.AccountFragment;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
@@ -151,16 +151,16 @@ public class MainActivity extends FragmentActivity {
                 mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_NOTIFICATIONS).apply();
                 break;
             case 3:
-                // TODO Make list items for coupons small height
                 fragment = new StoreListFragment();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_COUPONS).apply();
                 break;
-                // TODO Последние неважные элементы навигации закрасить серым и уменьшить
             case 4:
-                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
-                return;
+                fragment = new AccountFragment();
+                mActionBar.setDisplayShowTitleEnabled(true);
+                mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                break;
             case 5:
                 fragment = new AboutFragment();
                 mActionBar.setDisplayShowTitleEnabled(true);
@@ -178,6 +178,8 @@ public class MainActivity extends FragmentActivity {
         mDrawerList.setItemChecked(position, true);
         if (position == 5) {
             setTitle("About");
+        } else if (position == 4) {
+            setTitle("Account");
         } else if (position == 0) {
             setTitle("Places");
         } else {
