@@ -253,10 +253,12 @@ public class MainActivity extends FragmentActivity {
                     case 0:
                         ft.replace(R.id.fragment_container, firstFragment, strings[position]);
                         mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
+                        getFragmentManager().popBackStack();
                         break;
                     case 1:
                         ft.replace(R.id.fragment_container, secondFragment, strings[position]);
                         mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_NEAREST).apply();
+                        addToBackStackIfNeeded(ft);
                         break;
                 }
                 // Apply changes
@@ -301,6 +303,8 @@ public class MainActivity extends FragmentActivity {
             mActionBar.setDisplayShowTitleEnabled(false);
             mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
             mActionBar.setTitle("Places");
+            mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
+            mActionBar.setSelectedNavigationItem(0);
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();

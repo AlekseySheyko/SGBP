@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import aleksey.sheyko.sgbp.R;
 import butterknife.ButterKnife;
@@ -37,10 +36,13 @@ public class RegisterActivity extends Activity {
         String mSchool = mSchoolField.getText().toString();
         String mClass = mClassField.getText().toString();
 
+        /*
+        TODO Restore this check before release
         if (mFirstName.isEmpty() || mEmail.isEmpty() || mSchool.isEmpty() || mClass.isEmpty()) {
             Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
             return;
         }
+        */
         navigateToMainScreen();
     }
 
