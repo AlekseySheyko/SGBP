@@ -22,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,6 +31,7 @@ import aleksey.sheyko.sgbp.ui.fragments.AboutFragment;
 import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
+import aleksey.sheyko.sgbp.utils.helpers.adapters.NavigationAdapter;
 import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
 
 
@@ -59,7 +59,6 @@ public class MainActivity extends FragmentActivity {
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         mTitle = mDrawerTitle = getTitle();
-        mNavItems = getResources().getStringArray(R.array.navigation_items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -99,10 +98,15 @@ public class MainActivity extends FragmentActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mNavItems = getResources().getStringArray(R.array.navigation_items);
 
+        NavigationAdapter adapter = new NavigationAdapter(this);
+        for (String mNavItem : mNavItems) {
+            adapter.addItem(mNavItem);
+        }
         // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.navigation_list_item, mNavItems));
+        mDrawerList.setAdapter(adapter);
+
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -147,11 +151,13 @@ public class MainActivity extends FragmentActivity {
                 mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_NOTIFICATIONS).apply();
                 break;
             case 3:
+                // TODO Make list items for coupons small height
                 fragment = new StoreListFragment();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_COUPONS).apply();
                 break;
+                // TODO Последние неважные элементы навигации закрасить серым и уменьшить
             case 4:
                 Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
                 return;
@@ -182,10 +188,10 @@ public class MainActivity extends FragmentActivity {
 
     private void addToBackStackIfNeeded(FragmentTransaction transaction) {
         FragmentManager manager = getFragmentManager();
-        if (manager.getBackStackEntryCount() < 1 ) {
+        if (manager.getBackStackEntryCount() < 1) {
             transaction.addToBackStack(null);
         } else {
-            for(int i = 0; i < manager.getBackStackEntryCount(); ++i) {
+            for (int i = 0; i < manager.getBackStackEntryCount(); ++i) {
                 manager.popBackStack();
             }
             transaction.addToBackStack(null);
