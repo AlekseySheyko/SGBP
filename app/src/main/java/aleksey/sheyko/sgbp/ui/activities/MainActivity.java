@@ -127,7 +127,6 @@ public class MainActivity extends FragmentActivity {
     private void selectItem(int position) {
         // Create a new fragment and specify the planet to show based on position
         Fragment fragment = null;
-        mSharedPrefs.edit().putInt("view_mode", position).apply();
         switch (position) {
             case 0:
                 fragment = new CategoriesFragment();
@@ -145,6 +144,7 @@ public class MainActivity extends FragmentActivity {
                 fragment = new StoreListFragment();
                 mActionBar.setDisplayShowTitleEnabled(true);
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_NOTIFICATIONS).apply();
                 break;
             case 3:
                 fragment = new StoreListFragment();
@@ -172,7 +172,9 @@ public class MainActivity extends FragmentActivity {
         mDrawerList.setItemChecked(position, true);
         if (position == 5) {
             setTitle("About");
-        } else if (position != 0) {
+        } else if (position == 0) {
+            setTitle("Places");
+        } else {
             setTitle(mNavItems[position]);
         }
         mDrawerLayout.closeDrawer(mDrawerList);
@@ -298,6 +300,7 @@ public class MainActivity extends FragmentActivity {
         } else if (getFragmentManager().getBackStackEntryCount() == 1) {
             mActionBar.setDisplayShowTitleEnabled(false);
             mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            mActionBar.setTitle("Places");
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
