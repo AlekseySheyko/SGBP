@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -259,5 +260,17 @@ public class MainActivity extends FragmentActivity {
             }
         }
         return false;
+    }
+
+    public void dial(View view) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:9165335518"));
+        startActivity(intent);
+    }
+
+    public void sendEmail(View view) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto","robert@schoolgivebackprogram.com", null));
+        startActivity(intent);
     }
 }
