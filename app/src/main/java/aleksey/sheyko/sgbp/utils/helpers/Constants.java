@@ -10,7 +10,6 @@ public class Constants {
     public static final String CATEGORY_BODY_CARE = "Body care";
     public static final String CATEGORY_HOTELS = "Hotels";
     public static final String CATEGORY_MOBILE = "Mobile";
-    public static final String CATEGORY_OTHER = "Other";
 
     public static final int VIEW_CATEGORIES = -1;
     public static final int VIEW_NEAREST = 0;
@@ -27,6 +26,5 @@ public class Constants {
         categories.put("3", Constants.CATEGORY_BODY_CARE);
         categories.put("4", Constants.CATEGORY_HOTELS);
         categories.put("5", Constants.CATEGORY_MOBILE);
-        categories.put("6", Constants.CATEGORY_OTHER);
     }
 }

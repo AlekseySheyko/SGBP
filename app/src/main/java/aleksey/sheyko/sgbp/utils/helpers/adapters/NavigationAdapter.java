@@ -32,11 +32,7 @@ public class NavigationAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (position <= 3) {
             return TYPE_ITEM;
-        } else {
-            return TYPE_ITEM_SMALL;
-        }
     }
 
     @Override
