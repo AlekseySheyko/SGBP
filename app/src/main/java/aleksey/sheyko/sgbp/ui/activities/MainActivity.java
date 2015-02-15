@@ -211,6 +211,9 @@ public class MainActivity extends FragmentActivity {
         if (menu.findItem(R.id.action_coupons) != null) {
             menu.findItem(R.id.action_coupons).setVisible(!drawerOpen);
         }
+        if (menu.findItem(R.id.action_save) != null) {
+            menu.findItem(R.id.action_save).setVisible(!drawerOpen);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 

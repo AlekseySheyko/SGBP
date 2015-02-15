@@ -108,4 +108,12 @@
         <item name="android:checked">true</item>
         <item name="android:focusable">true</item>
     </style>
+
+    <style name="TextDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:layout_marginRight">18dp</item>
+        <item name="android:background">#22ffffff</item>
+    </style>
 </resources>
