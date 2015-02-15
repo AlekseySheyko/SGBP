@@ -90,17 +90,4 @@
         android:onClick="register"
         android:layout_marginTop="16dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Already a member?"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="8dp"
-        android:textSize="16sp"
-        android:clickable="true"
-        android:onClick="login"
-        android:focusable="true"/>
 </LinearLayout>

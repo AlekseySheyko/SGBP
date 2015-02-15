@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.Service;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -17,10 +18,23 @@ import android.widget.EditText;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.utils.helpers.Constants;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class AccountFragment extends Fragment {
 
-    private EditText mFirstNameField;
+    private SharedPreferences mSharedPrefs;
+
+    @InjectView(R.id.firstNameField)
+    EditText mFirstNameField;
+    @InjectView(R.id.lastNameField)
+    EditText mLastNameField;
+    @InjectView(R.id.emailField)
+    EditText mEmailField;
+    @InjectView(R.id.schoolField)
+    EditText mSchoolField;
+    @InjectView(R.id.gradeField)
+    EditText mGradeField;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +52,31 @@ public class AccountFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mFirstNameField = (EditText) view.findViewById(R.id.firstNameField);
+        ButterKnife.inject(this, view);
+
+        mSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());
+        String firstName = mSharedPrefs.getString("first_name", "");
+        String lastName = mSharedPrefs.getString("last_name", "");
+        String email = mSharedPrefs.getString("email", "");
+        String school = mSharedPrefs.getString("school", "");
+        String grade = mSharedPrefs.getString("grade", "");
+
+        if (!firstName.isEmpty()) {
+            mFirstNameField.setText(firstName);
+        }
+        if (!lastName.isEmpty()) {
+            mLastNameField.setText(lastName);
+        }
+        if (!email.isEmpty()) {
+            mEmailField.setText(email);
+        }
+        if (!school.isEmpty()) {
+            mSchoolField.setText(school);
+        }
+        if (!grade.isEmpty()) {
+            mGradeField.setText(grade);
+        }
     }
 
     @Override
@@ -50,9 +88,34 @@ public class AccountFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_save) {
+            updateValues();
             navigateToMainScreen();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateValues() {
+        String firstName = mFirstNameField.getText().toString();
+        String lastName = mLastNameField.getText().toString();
+        String email = mEmailField.getText().toString();
+        String school = mSchoolField.getText().toString();
+        String grade = mGradeField.getText().toString();
+
+        if (!firstName.isEmpty()) {
+            mSharedPrefs.edit().putString("first_name", firstName).apply();
+        }
+        if (!lastName.isEmpty()) {
+            mSharedPrefs.edit().putString("last_name", lastName).apply();
+        }
+        if (!email.isEmpty()) {
+            mSharedPrefs.edit().putString("email", email).apply();
+        }
+        if (!school.isEmpty()) {
+            mSharedPrefs.edit().putString("school", school).apply();
+        }
+        if (!grade.isEmpty()) {
+            mSharedPrefs.edit().putString("grade", grade).apply();
+        }
     }
 
     private void navigateToMainScreen() {
