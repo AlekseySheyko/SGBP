@@ -95,10 +95,10 @@ public class RegisterActivity extends Activity {
     }
 
     private void register() {
-        mSharedPrefs.edit()
-                .putBoolean("registered", true).apply();
-        updateValues();
-        navigateToMainScreen();
+//        mSharedPrefs.edit()
+//                .putBoolean("registered", true).apply();
+//        updateValues();
+//        navigateToMainScreen();
     }
 
     public void register(View v) {

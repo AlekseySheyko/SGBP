@@ -50,5 +50,7 @@
     <string name="preference_level">Multi-grade</string>
     <string name="start_button_label">Get Started</string>
     <string name="action_send">Send</string>
+    <string name="info_header_label">Personal info</string>
+    <string name="prefs_header_label">Preferences</string>
 
 </resources>
