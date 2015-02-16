@@ -46,23 +46,12 @@
                     android:paddingLeft="8dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="I'm over 18 years"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="4dp"/>
+                        android:text="@string/preference_age"
+                        style="@style/CheckBoxTextLabel"/>
 
                     <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:minHeight="48dp"
-                        android:minWidth="48dp"
-                        android:scaleX="1.20"
-                        android:scaleY="1.20"
-                        android:checked="true"
-                        android:focusable="true"/>
+                        android:id="@+id/checkbox_age"
+                        style="@style/CheckBox"/>
 
                 </LinearLayout>
 
@@ -111,12 +100,28 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp">
+
+                    <TextView
+                        android:text="@string/preference_level"
+                        style="@style/CheckBoxTextLabel"/>
+
+                    <CheckBox
+                        android:id="@+id/checkbox_level"
+                        style="@style/CheckBox"
+                        android:checked="false"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Get Started"
+                android:text="@string/start_button_label"
                 android:id="@+id/button"
                 android:layout_gravity="center_horizontal"
                 android:paddingLeft="40dp"

@@ -7,6 +7,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -88,6 +90,14 @@ public class MainActivity extends FragmentActivity {
                 mActionBar.setTitle(getResources().getString(R.string.app_name));
                 mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 invalidateOptionsMenu();
+                hideKeyboard();
+            }
+
+            private void hideKeyboard() {
+                InputMethodManager imm = (InputMethodManager)
+                        getSystemService(Service.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(
+                        getWindow().getDecorView().getRootView().getWindowToken(), 0);
             }
         };
 

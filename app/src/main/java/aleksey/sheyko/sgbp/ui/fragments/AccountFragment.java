@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import aleksey.sheyko.sgbp.R;
@@ -35,6 +36,14 @@ public class AccountFragment extends Fragment {
     EditText mSchoolField;
     @InjectView(R.id.gradeField)
     EditText mGradeField;
+    @InjectView(R.id.checkbox_notifications)
+    CheckBox mCheckBoxNotifications;
+    @InjectView(R.id.checkbox_location)
+    CheckBox mCheckBoxLocation;
+    @InjectView(R.id.checkbox_coupons)
+    CheckBox mCheckBoxCoupons;
+    @InjectView(R.id.checkbox_level)
+    CheckBox mCheckBoxLevel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,10 @@ public class AccountFragment extends Fragment {
         String email = mSharedPrefs.getString("email", "");
         String school = mSharedPrefs.getString("school", "");
         String grade = mSharedPrefs.getString("grade", "");
+        boolean notifications = mSharedPrefs.getBoolean("notifications", true);
+        boolean location = mSharedPrefs.getBoolean("location", true);
+        boolean coupons = mSharedPrefs.getBoolean("coupons", true);
+        boolean multipleLevel = mSharedPrefs.getBoolean("multipleLevel", false);
 
         if (!firstName.isEmpty()) {
             mFirstNameField.setText(firstName);
@@ -77,6 +90,10 @@ public class AccountFragment extends Fragment {
         if (!grade.isEmpty()) {
             mGradeField.setText(grade);
         }
+        mCheckBoxNotifications.setChecked(notifications);
+        mCheckBoxLocation.setChecked(location);
+        mCheckBoxCoupons.setChecked(coupons);
+        mCheckBoxLevel.setChecked(multipleLevel);
     }
 
     @Override
@@ -100,6 +117,10 @@ public class AccountFragment extends Fragment {
         String email = mEmailField.getText().toString();
         String school = mSchoolField.getText().toString();
         String grade = mGradeField.getText().toString();
+        boolean notifications = mCheckBoxNotifications.isChecked();
+        boolean location = mCheckBoxLocation.isChecked();
+        boolean coupons = mCheckBoxCoupons.isChecked();
+        boolean multipleLevel = mCheckBoxLevel.isChecked();
 
         mSharedPrefs.edit()
                 .putString("first_name", firstName)
@@ -107,6 +128,10 @@ public class AccountFragment extends Fragment {
                 .putString("email", email)
                 .putString("school", school)
                 .putString("grade", grade)
+                .putBoolean("notifications", notifications)
+                .putBoolean("location", location)
+                .putBoolean("coupons", coupons)
+                .putBoolean("multipleLevel", multipleLevel)
                 .apply();
     }
 
@@ -125,5 +150,6 @@ public class AccountFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager)
                 getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mFirstNameField.getWindowToken(), 0);
+        ft.commit();
     }
 }

@@ -46,5 +46,9 @@
     <string name="email_hint">Email</string>
     <string name="school_hint">School name</string>
     <string name="grade_hint">Grade level</string>
+    <string name="preference_age">I\'m over 18 years</string>
+    <string name="preference_level">Multi-grade</string>
+    <string name="start_button_label">Get Started</string>
+    <string name="action_send">Send</string>
 
 </resources>
