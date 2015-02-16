@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.utils.tasks.RegUserTask;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -47,9 +48,9 @@ public class RegisterActivity extends Activity {
         mSharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-//        if (isRegistered) {
-//            navigateToMainScreen();
-//        }
+        //        if (isRegistered) {
+        //            navigateToMainScreen();
+        //        }
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
 
@@ -95,17 +96,6 @@ public class RegisterActivity extends Activity {
     }
 
     private void register() {
-//        mSharedPrefs.edit()
-//                .putBoolean("registered", true).apply();
-//        updateValues();
-//        navigateToMainScreen();
-    }
-
-    public void register(View v) {
-        register();
-    }
-
-    private void updateValues() {
         String firstName = mFirstNameField.getText().toString();
         String lastName = mLastNameField.getText().toString();
         String email = mEmailField.getText().toString();
@@ -117,7 +107,29 @@ public class RegisterActivity extends Activity {
         boolean coupons = mCheckBoxCoupons.isChecked();
         boolean multipleLevel = mCheckBoxLevel.isChecked();
 
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
+        if (firstName.isEmpty()) {
+            getError(mFirstNameField);
+            return;
+        }
+        if (lastName.isEmpty()) {
+            getError(mLastNameField);
+            return;
+        }
+        if (email.isEmpty()) {
+            getError(mEmailField);
+            return;
+        }
+        if (school.isEmpty()) {
+            getError(mSchoolField);
+            return;
+        }
+        if (grade.isEmpty()) {
+            getError(mGradeField);
+            return;
+        }
+
+        mSharedPrefs.edit()
+                .putBoolean("registered", true)
                 .putString("first_name", firstName)
                 .putString("last_name", lastName)
                 .putString("email", email)
@@ -128,6 +140,24 @@ public class RegisterActivity extends Activity {
                 .putBoolean("coupons", coupons)
                 .putBoolean("multipleLevel", multipleLevel)
                 .apply();
+
+        new RegUserTask(this).execute(
+                firstName, lastName, school, email,
+                multipleLevel + "", coupons + "",
+                notifications + "", location + "",
+                is18 + "");
+
+        navigateToMainScreen();
+    }
+
+    private void getError(EditText editText) {
+        String error = getResources().getString(R.string.empty_field_error);
+        editText.setError(
+                editText.getHint().toString() + " " + error);
+    }
+
+    public void register(View v) {
+        register();
     }
 
     private void navigateToMainScreen() {

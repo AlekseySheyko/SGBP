@@ -52,5 +52,6 @@
     <string name="action_send">Send</string>
     <string name="info_header_label">Personal info</string>
     <string name="prefs_header_label">Preferences</string>
+    <string name="empty_field_error"> is required</string>
 
 </resources>
