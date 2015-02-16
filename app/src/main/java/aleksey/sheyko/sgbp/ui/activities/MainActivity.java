@@ -41,7 +41,6 @@ public class MainActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
-    private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private ActionBar mActionBar;
     private SharedPreferences mSharedPrefs;
@@ -51,14 +50,14 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // setup action bar for tabs
+        // Setup action bar for tabs
         mActionBar = getActionBar();
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setIcon(
                 new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
-        mTitle = mDrawerTitle = getTitle();
+        mTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
@@ -107,7 +106,7 @@ public class MainActivity extends FragmentActivity {
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        setupActionBarDropdown();
+        setupActionbarSpinner();
         if (!isServiceRunning(LocationService.class)) {
             startService(new Intent(this, LocationService.class));
         }
@@ -243,7 +242,7 @@ public class MainActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupActionBarDropdown() {
+    private void setupActionbarSpinner() {
         OnNavigationListener mOnNavigationListener = new OnNavigationListener() {
             // Get the same strings provided for the drop-down's ArrayAdapter
             String[] strings = getResources().getStringArray(R.array.actionbar_spinner_actions);

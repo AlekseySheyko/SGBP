@@ -101,21 +101,13 @@ public class AccountFragment extends Fragment {
         String school = mSchoolField.getText().toString();
         String grade = mGradeField.getText().toString();
 
-        if (!firstName.isEmpty()) {
-            mSharedPrefs.edit().putString("first_name", firstName).apply();
-        }
-        if (!lastName.isEmpty()) {
-            mSharedPrefs.edit().putString("last_name", lastName).apply();
-        }
-        if (!email.isEmpty()) {
-            mSharedPrefs.edit().putString("email", email).apply();
-        }
-        if (!school.isEmpty()) {
-            mSharedPrefs.edit().putString("school", school).apply();
-        }
-        if (!grade.isEmpty()) {
-            mSharedPrefs.edit().putString("grade", grade).apply();
-        }
+        mSharedPrefs.edit()
+                .putString("first_name", firstName)
+                .putString("last_name", lastName)
+                .putString("email", email)
+                .putString("school", school)
+                .putString("grade", grade)
+                .apply();
     }
 
     private void navigateToMainScreen() {

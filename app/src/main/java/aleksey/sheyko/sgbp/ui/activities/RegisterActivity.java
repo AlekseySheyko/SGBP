@@ -33,9 +33,9 @@ public class RegisterActivity extends Activity {
 
         mSharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
-        if (mSharedPrefs.getBoolean("registered", false)) {
-            navigateToMainScreen();
-        }
+        //        if (mSharedPrefs.getBoolean("registered", false)) {
+        //            navigateToMainScreen();
+        //        }
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
 
@@ -76,23 +76,13 @@ public class RegisterActivity extends Activity {
         String school = mSchoolField.getText().toString();
         String grade = mGradeField.getText().toString();
 
-        SharedPreferences sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        if (!firstName.isEmpty()) {
-            sharedPrefs.edit().putString("first_name", firstName).apply();
-        }
-        if (!lastName.isEmpty()) {
-            sharedPrefs.edit().putString("last_name", lastName).apply();
-        }
-        if (!email.isEmpty()) {
-            sharedPrefs.edit().putString("email", email).apply();
-        }
-        if (!school.isEmpty()) {
-            sharedPrefs.edit().putString("school", school).apply();
-        }
-        if (!grade.isEmpty()) {
-            sharedPrefs.edit().putString("grade", grade).apply();
-        }
+        PreferenceManager.getDefaultSharedPreferences(this).edit()
+                .putString("first_name", firstName)
+                .putString("last_name", lastName)
+                .putString("email", email)
+                .putString("school", school)
+                .putString("grade", grade)
+                .apply();
     }
 
     private void navigateToMainScreen() {

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Personal info"
+        android:layout_marginBottom="8dp"
+        style="?android:attr/listSeparatorTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/firstNameField"
+        style="@style/FirstNameField"/>
+
+    <EditText
+        android:id="@+id/lastNameField"
+        style="@style/LastNameField"/>
+
+    <EditText
+        android:id="@+id/emailField"
+        style="@style/EmailField"/>
+
+    <EditText
+        android:id="@+id/schoolField"
+        style="@style/SchoolField"/>
+
+    <EditText
+        android:id="@+id/gradeField"
+        style="@style/GradeField"/>
+
+</LinearLayout>
