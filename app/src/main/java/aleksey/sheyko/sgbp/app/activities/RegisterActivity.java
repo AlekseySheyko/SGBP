@@ -23,27 +23,13 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class RegisterActivity extends Activity {
 
-    protected static final String TAG = RegisterActivity.class.getSimpleName();
-
     private SharedPreferences mSharedPrefs;
-
-    @InjectView(R.id.firstNameField)
-    EditText mFirstNameField;
-    @InjectView(R.id.lastNameField)
-    EditText mLastNameField;
-    @InjectView(R.id.emailField)
-    EditText mEmailField;
-    @InjectView(R.id.schoolField)
-    EditText mSchoolField;
-    @InjectView(R.id.gradeField)
-    EditText mGradeField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,47 +42,72 @@ public class RegisterActivity extends Activity {
         }
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_register);
-        ButterKnife.inject(this);
     }
+
+    List<String> mSchoolList;
 
     @Override protected void onResume() {
         super.onResume();
-        listSchools();
-    }
-
-    private void listSchools() {
-
+        if (mSchoolList == null) {
+            listSchools();
+        }
     }
 
     private final OkHttpClient client = new OkHttpClient();
 
+    private void listSchools() {
+        String schoolsUrl = "http://test.sgbp.info/SGBPWS.asmx/GetSchoolName";
+
+        Request request = new Request.Builder()
+                .url(schoolsUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Request request, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                Log.i(TAG, response.body().string());
+            }
+        });
+    }
+
     private void register() {
         setProgressBarIndeterminateVisibility(true);
 
-        String firstName = mFirstNameField.getText().toString();
-        String lastName = mLastNameField.getText().toString();
-        String email = mEmailField.getText().toString();
-        String school = mSchoolField.getText().toString();
-        String grade = mGradeField.getText().toString();
+        EditText firstNameField = (EditText) findViewById(R.id.firstNameField);
+        EditText lastNameField = (EditText) findViewById(R.id.lastNameField);
+        EditText emailField = (EditText) findViewById(R.id.emailField);
+        EditText schoolField = (EditText) findViewById(R.id.schoolField);
+        EditText gradeField = (EditText) findViewById(R.id.gradeField);
+
+        String firstName = firstNameField.getText().toString();
+        String lastName = lastNameField.getText().toString();
+        String email = emailField.getText().toString();
+        String school = schoolField.getText().toString();
+        String grade = gradeField.getText().toString();
 
         if (firstName.isEmpty()) {
-            showError(mFirstNameField);
+            showError(firstNameField);
             return;
         }
         if (lastName.isEmpty()) {
-            showError(mLastNameField);
+            showError(lastNameField);
             return;
         }
         if (email.isEmpty()) {
-            showError(mEmailField);
+            showError(emailField);
             return;
         }
         if (school.isEmpty()) {
-            showError(mSchoolField);
+            showError(schoolField);
             return;
         }
         if (grade.isEmpty()) {
-            showError(mGradeField);
+            showError(gradeField);
             return;
         }
 
@@ -108,18 +119,20 @@ public class RegisterActivity extends Activity {
         }
     }
 
+    protected static final String TAG = RegisterActivity.class.getSimpleName();
+
     public void register(String firstName, String lastName, String email, String school, String grade) throws Exception {
 
         String deviceId = getDeviceId();
         boolean is18 = ((CheckBox) findViewById(R.id.checkbox_age)).isChecked();
         boolean isMultiGrade = ((CheckBox) findViewById(R.id.checkbox_level)).isChecked();
-        boolean notify = ((CheckBox) findViewById(R.id.checkbox_notifications)).isChecked();
+        boolean getNotifications = ((CheckBox) findViewById(R.id.checkbox_notifications)).isChecked();
         boolean trackLocation = ((CheckBox) findViewById(R.id.checkbox_location)).isChecked();
         boolean receiveCoupons = ((CheckBox) findViewById(R.id.checkbox_coupons)).isChecked();
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http")
-                .authority("www.test.sgbp.info.com")
+                .authority("test.sgbp.info")
                 .appendPath("SGBPWS.asmx")
                 .appendQueryParameter("Key", deviceId)
                 .appendQueryParameter("Device_Info_Id", deviceId)
