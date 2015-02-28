@@ -4,12 +4,12 @@
              android:layout_height="match_parent"
              android:foreground="?android:selectableItemBackground">
 
-    <aleksey.sheyko.sgbp.utils.helpers.SquareImageView
+    <aleksey.sheyko.sgbp.app.helpers.SquareImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        class="aleksey.sheyko.sgbp.utils.helpers.SquareImageView"/>
+        class="aleksey.sheyko.sgbp.app.helpers.SquareImageView"/>
 
 
     <LinearLayout

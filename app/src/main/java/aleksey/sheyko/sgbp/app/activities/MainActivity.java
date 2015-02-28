@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.ui.activities;
+package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -28,13 +28,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.service.LocationService;
-import aleksey.sheyko.sgbp.ui.fragments.AboutFragment;
-import aleksey.sheyko.sgbp.ui.fragments.AccountFragment;
-import aleksey.sheyko.sgbp.ui.fragments.CategoriesFragment;
-import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
-import aleksey.sheyko.sgbp.utils.helpers.Constants;
-import aleksey.sheyko.sgbp.utils.helpers.adapters.SpinnerAdapter;
+import aleksey.sheyko.sgbp.app.service.LocationService;
+import aleksey.sheyko.sgbp.app.fragments.AboutFragment;
+import aleksey.sheyko.sgbp.app.fragments.AccountFragment;
+import aleksey.sheyko.sgbp.app.fragments.CategoriesFragment;
+import aleksey.sheyko.sgbp.app.fragments.StoreListFragment;
+import aleksey.sheyko.sgbp.app.helpers.Constants;
+import aleksey.sheyko.sgbp.app.adapters.SpinnerAdapter;
 
 
 public class MainActivity extends FragmentActivity {
@@ -51,6 +51,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 
         // Setup action bar for tabs
         mActionBar = getActionBar();

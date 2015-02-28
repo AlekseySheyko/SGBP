@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.utils.helpers.adapters;
+package aleksey.sheyko.sgbp.app.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.utils.helpers.Constants;
+import aleksey.sheyko.sgbp.app.helpers.Constants;
 
 public class StoresAdapter extends ArrayAdapter<Store> {
 

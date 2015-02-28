@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.ui.fragments;
+package aleksey.sheyko.sgbp.app.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;

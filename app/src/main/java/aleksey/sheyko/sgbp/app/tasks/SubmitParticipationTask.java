@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.utils.tasks;
+package aleksey.sheyko.sgbp.app.tasks;
 
 import android.app.NotificationManager;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.service;
+package aleksey.sheyko.sgbp.app.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

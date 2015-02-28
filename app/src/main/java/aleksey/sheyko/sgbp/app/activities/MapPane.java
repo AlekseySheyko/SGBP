@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.ui.activities;
+package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
+import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList;
 
 public class MapPane extends Activity {
 

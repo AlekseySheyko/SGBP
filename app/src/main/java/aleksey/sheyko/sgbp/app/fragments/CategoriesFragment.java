@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.ui.fragments;
+package aleksey.sheyko.sgbp.app.fragments;
 
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -19,9 +19,9 @@ import android.widget.GridView;
 import android.widget.SearchView;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.utils.helpers.adapters.CategoriesAdapter;
-import aleksey.sheyko.sgbp.utils.helpers.Constants;
-import aleksey.sheyko.sgbp.ui.activities.CategoryActivity;
+import aleksey.sheyko.sgbp.app.adapters.CategoriesAdapter;
+import aleksey.sheyko.sgbp.app.helpers.Constants;
+import aleksey.sheyko.sgbp.app.activities.CategoryActivity;
 
 public class CategoriesFragment extends Fragment {
 

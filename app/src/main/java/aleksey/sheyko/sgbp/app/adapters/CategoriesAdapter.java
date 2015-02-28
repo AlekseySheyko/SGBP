@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.utils.helpers.adapters;
+package aleksey.sheyko.sgbp.app.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.utils.helpers.Constants;
+import aleksey.sheyko.sgbp.app.helpers.Constants;
 
 public class CategoriesAdapter extends BaseAdapter {
     private List<Item> items = new ArrayList<Item>();

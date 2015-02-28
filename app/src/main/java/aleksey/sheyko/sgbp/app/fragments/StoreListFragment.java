@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.ui.fragments;
+package aleksey.sheyko.sgbp.app.fragments;
 
 import android.app.ListFragment;
 import android.app.SearchManager;
@@ -32,12 +32,12 @@ import java.util.List;
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Notification;
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.ui.activities.MapPane;
-import aleksey.sheyko.sgbp.utils.helpers.Constants;
-import aleksey.sheyko.sgbp.utils.helpers.adapters.NotificationsAdapter;
-import aleksey.sheyko.sgbp.utils.helpers.adapters.StoresAdapter;
-import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
-import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
+import aleksey.sheyko.sgbp.app.activities.MapPane;
+import aleksey.sheyko.sgbp.app.helpers.Constants;
+import aleksey.sheyko.sgbp.app.adapters.NotificationsAdapter;
+import aleksey.sheyko.sgbp.app.adapters.StoresAdapter;
+import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList;
+import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList.OnStoreListLoaded;
 
 public class StoreListFragment extends ListFragment
         implements ConnectionCallbacks, OnStoreListLoaded {

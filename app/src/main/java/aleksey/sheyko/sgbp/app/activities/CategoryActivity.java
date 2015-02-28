@@ -1,11 +1,11 @@
-package aleksey.sheyko.sgbp.ui.activities;
+package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.ui.fragments.StoreListFragment;
+import aleksey.sheyko.sgbp.app.fragments.StoreListFragment;
 
 public class CategoryActivity extends Activity {
 

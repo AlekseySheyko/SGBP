@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.utils.tasks;
+package aleksey.sheyko.sgbp.app.tasks;
 
 import android.content.Context;
 import android.net.Uri;

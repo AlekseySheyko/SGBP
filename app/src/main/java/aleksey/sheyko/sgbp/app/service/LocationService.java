@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.service;
+package aleksey.sheyko.sgbp.app.service;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -22,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList;
-import aleksey.sheyko.sgbp.utils.tasks.UpdateStoreList.OnStoreListLoaded;
+import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList;
+import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList.OnStoreListLoaded;
 
 public class LocationService extends Service
         implements LocationListener, ConnectionCallbacks, OnStoreListLoaded {
@@ -37,6 +38,7 @@ public class LocationService extends Service
     public int onStartCommand(Intent intent, int flags, int startId) {
         createLocationClient();
         mGoogleApiClient.connect();
+        Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 
@@ -123,7 +125,7 @@ public class LocationService extends Service
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);
         mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 
     @Override
@@ -138,7 +140,7 @@ public class LocationService extends Service
 
     @Override
     public void onLocationChanged(Location location) {
-
+        Toast.makeText(this, "Location changed", Toast.LENGTH_SHORT).show();
     }
 
     @Override

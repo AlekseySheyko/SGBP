@@ -1,9 +1,9 @@
-package aleksey.sheyko.sgbp.utils.tasks;
+package aleksey.sheyko.sgbp.app.tasks;
 
 import android.os.AsyncTask;
 
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.utils.helpers.Constants;
+import aleksey.sheyko.sgbp.app.helpers.Constants;
 
 public class UpdateStoreList extends AsyncTask<Void, Void, Void> {
     public static final String TAG = UpdateStoreList.class.getSimpleName();

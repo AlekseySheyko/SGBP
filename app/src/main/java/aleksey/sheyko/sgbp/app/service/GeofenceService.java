@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.service;
+package aleksey.sheyko.sgbp.app.service;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.List;
 
-import aleksey.sheyko.sgbp.utils.tasks.SubmitParticipationTask;
+import aleksey.sheyko.sgbp.app.tasks.SubmitParticipationTask;
 
 public class GeofenceService extends IntentService {
     public static final String TAG = GeofenceService.class.getSimpleName();

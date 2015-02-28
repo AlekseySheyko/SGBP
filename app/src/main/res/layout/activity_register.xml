@@ -1,6 +1,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            tools:context="aleksey.sheyko.sgbp.ui.activities.RegisterActivity"
+            tools:context="aleksey.sheyko.sgbp.app.activities.RegisterActivity"
             style="@style/RegScrollView">
 
     <LinearLayout

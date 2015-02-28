@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.utils.helpers;
+package aleksey.sheyko.sgbp.app.helpers;
 
 import java.util.HashMap;
 import java.util.Map;
