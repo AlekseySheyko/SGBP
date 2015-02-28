@@ -37,7 +37,18 @@ public class SchoolsXmlParser {
             String name = parser.getName();
             // Starts by looking for the entry tag
             if (name.equals("SchoolInfo")) {
-                entries.add(readSchool(parser));
+
+                while (parser.next() != XmlPullParser.END_TAG) {
+                    if (parser.getEventType() != XmlPullParser.START_TAG) {
+                        continue;
+                    }
+                    String tag = parser.getName();
+                    // Starts by looking for the entry tag
+                    if (tag.equals("SGBP_School_Info")) {
+                        entries.add(readSchool(parser));
+                    }
+                }
+
             } else {
                 skip(parser);
             }
@@ -58,7 +69,7 @@ public class SchoolsXmlParser {
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
     // to their respective "read" methods for processing. Otherwise, skips the tag.
     private School readSchool(XmlPullParser parser) throws XmlPullParserException, IOException {
-        parser.require(XmlPullParser.START_TAG, ns, "SchoolInfo");
+        parser.require(XmlPullParser.START_TAG, ns, "SGBP_School_Info");
         int id = -1;
         String name = null;
         while (parser.next() != XmlPullParser.END_TAG) {
