@@ -22,10 +22,15 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
+import aleksey.sheyko.sgbp.rest.SchoolsXmlParser.School;
 
 public class RegisterActivity extends Activity {
 
@@ -49,13 +54,17 @@ public class RegisterActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         if (mSchoolList == null) {
-            listSchools();
+            try {
+                loadSchoolsFromNetwork();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private final OkHttpClient client = new OkHttpClient();
 
-    private void listSchools() {
+    private void loadSchoolsFromNetwork() throws Exception {
         String schoolsUrl = "http://test.sgbp.info/SGBPWS.asmx/GetSchoolName";
 
         Request request = new Request.Builder()
@@ -70,7 +79,16 @@ public class RegisterActivity extends Activity {
             @Override public void onResponse(Response response) throws IOException {
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                Log.i(TAG, response.body().string());
+                try (InputStream in = response.body().byteStream()) {
+                    SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
+                    List<School> schoolsList = schoolsXmlParser.parse(in);
+
+                    for (School school : schoolsList) {
+                        Log.i(TAG, "School: " + school.name);
+                    }
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
