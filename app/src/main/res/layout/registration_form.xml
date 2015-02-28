@@ -17,20 +17,22 @@
         style="?android:attr/listSeparatorTextViewStyle"/>
 
     <EditText
-        android:id="@+id/firstNameField"
+        android:id="@+id/firstName"
         style="@style/FirstNameField"/>
 
     <EditText
-        android:id="@+id/lastNameField"
+        android:id="@+id/lastName"
         style="@style/LastNameField"/>
 
     <EditText
-        android:id="@+id/emailField"
+        android:id="@+id/email"
         style="@style/EmailField"/>
 
-    <EditText
-        android:id="@+id/schoolField"
-        style="@style/SchoolField"/>
+    <Spinner
+        android:id="@+id/school"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"/>
 
     <EditText
         android:id="@+id/gradeField"

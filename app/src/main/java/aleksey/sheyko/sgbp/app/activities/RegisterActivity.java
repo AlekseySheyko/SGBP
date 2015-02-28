@@ -13,8 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Callback;
@@ -82,10 +84,17 @@ public class RegisterActivity extends Activity {
                 try (InputStream in = response.body().byteStream()) {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
                     List<School> schoolsList = schoolsXmlParser.parse(in);
-
-                    for (School school : schoolsList) {
-                        Log.i(TAG, "School: " + school.name);
+                    String[] schoolNames = new String[schoolsList.size()];
+                    for (int i = 0; i < schoolsList.size(); i++) {
+                        schoolNames[i] = schoolsList.get(i).name;
                     }
+
+                    Spinner schoolSpinner = (Spinner) findViewById(R.id.school);
+                    schoolSpinner.setAdapter(new ArrayAdapter<>(
+                            RegisterActivity.this,
+                            android.R.layout.simple_spinner_item,
+                            schoolNames
+                    ));
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 }
@@ -96,10 +105,10 @@ public class RegisterActivity extends Activity {
     private void register() {
         setProgressBarIndeterminateVisibility(true);
 
-        EditText firstNameField = (EditText) findViewById(R.id.firstNameField);
-        EditText lastNameField = (EditText) findViewById(R.id.lastNameField);
-        EditText emailField = (EditText) findViewById(R.id.emailField);
-        EditText schoolField = (EditText) findViewById(R.id.schoolField);
+        EditText firstNameField = (EditText) findViewById(R.id.firstName);
+        EditText lastNameField = (EditText) findViewById(R.id.lastName);
+        EditText emailField = (EditText) findViewById(R.id.email);
+        EditText schoolField = (EditText) findViewById(R.id.school);
         EditText gradeField = (EditText) findViewById(R.id.gradeField);
 
         String firstName = firstNameField.getText().toString();

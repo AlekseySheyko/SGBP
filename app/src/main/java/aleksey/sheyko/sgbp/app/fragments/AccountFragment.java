@@ -26,13 +26,13 @@ public class AccountFragment extends Fragment {
 
     private SharedPreferences mSharedPrefs;
 
-    @InjectView(R.id.firstNameField)
+    @InjectView(R.id.firstName)
     EditText mFirstNameField;
-    @InjectView(R.id.lastNameField)
+    @InjectView(R.id.lastName)
     EditText mLastNameField;
-    @InjectView(R.id.emailField)
+    @InjectView(R.id.email)
     EditText mEmailField;
-    @InjectView(R.id.schoolField)
+    @InjectView(R.id.school)
     EditText mSchoolField;
     @InjectView(R.id.gradeField)
     EditText mGradeField;
