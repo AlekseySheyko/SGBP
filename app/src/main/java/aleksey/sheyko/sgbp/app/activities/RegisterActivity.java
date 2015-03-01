@@ -67,9 +67,9 @@ public class RegisterActivity extends Activity {
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-        if (isRegistered) {
+//TODO        if (isRegistered) {
             navigateToMainScreen();
-        }
+//        }
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
@@ -82,6 +82,8 @@ public class RegisterActivity extends Activity {
         mSchoolsList = School.listAll(School.class);
         if (mSchoolsList.size() == 0) {
             loadSchoolsListFromNetwork();
+        } else {
+            setupSpinner();
         }
         String firstName = mSharedPrefs.getString("first_name", "");
         String lastName = mSharedPrefs.getString("last_name", "");
@@ -144,70 +146,7 @@ public class RegisterActivity extends Activity {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
                     schoolsXmlParser.parse(in);
                     mSchoolsList = School.listAll(School.class);
-                    ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
-                            RegisterActivity.this, android.R.layout.simple_spinner_item) {
-
-                        @Override
-                        public View getView(int position, View convertView, ViewGroup parent) {
-                            View v = super.getView(position, convertView, parent);
-                            if (position == getCount()) {
-                                ((TextView) v.findViewById(android.R.id.text1)).setText("");
-                                ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
-                            }
-                            return v;
-                        }
-
-                        @Override
-                        public int getCount() {
-                            return super.getCount() - 1; // you don't display last item. It is used as hint.
-                        }
-                    };
-                    schoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    for (School school : mSchoolsList) {
-                        schoolAdapter.add(school.getName());
-                    }
-                    schoolAdapter.add("School");
-                    mSchoolSpinner.setAdapter(schoolAdapter);
-
-                    int schoolId = mSharedPrefs.getInt("school_id", -1);
-                    if (schoolId == -1) {
-                        mSchoolSpinner.setSelection(schoolAdapter.getCount());
-                    } else {
-                        mSchoolSpinner.setSelection(schoolId);
-                    }
-
-                    ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(
-                            RegisterActivity.this, android.R.layout.simple_spinner_item) {
-
-                        @Override
-                        public View getView(int position, View convertView, ViewGroup parent) {
-                            View v = super.getView(position, convertView, parent);
-                            if (position == getCount()) {
-                                ((TextView) v.findViewById(android.R.id.text1)).setText("");
-                                ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
-                            }
-                            return v;
-                        }
-
-                        @Override
-                        public int getCount() {
-                            return super.getCount() - 1; // you don't display last item. It is used as hint.
-                        }
-                    };
-                    gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    String[] gradeStrings = getResources().getStringArray(R.array.grade_levels);
-                    for (String gradeString : gradeStrings) {
-                        gradeAdapter.add(gradeString);
-                    }
-                    gradeAdapter.add("Grade level");
-                    mGradeSpinner.setAdapter(gradeAdapter);
-
-                    int gradeId = mSharedPrefs.getInt("grade_id", -1);
-                    if (gradeId == -1) {
-                        mGradeSpinner.setSelection(gradeAdapter.getCount());
-                    } else {
-                        mGradeSpinner.setSelection(gradeId);
-                    }
+                    setupSpinner();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -217,6 +156,73 @@ public class RegisterActivity extends Activity {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void setupSpinner() {
+        ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
+                RegisterActivity.this, android.R.layout.simple_spinner_item) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                if (position == getCount()) {
+                    ((TextView) v.findViewById(android.R.id.text1)).setText("");
+                    ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                }
+                return v;
+            }
+
+            @Override
+            public int getCount() {
+                return super.getCount() - 1; // you don't display last item. It is used as hint.
+            }
+        };
+        schoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for (School school : mSchoolsList) {
+            schoolAdapter.add(school.getName());
+        }
+        schoolAdapter.add("School");
+        mSchoolSpinner.setAdapter(schoolAdapter);
+
+        int schoolId = mSharedPrefs.getInt("school_id", -1);
+        if (schoolId == -1) {
+            mSchoolSpinner.setSelection(schoolAdapter.getCount());
+        } else {
+            mSchoolSpinner.setSelection(schoolId);
+        }
+
+        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(
+                RegisterActivity.this, android.R.layout.simple_spinner_item) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                if (position == getCount()) {
+                    ((TextView) v.findViewById(android.R.id.text1)).setText("");
+                    ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                }
+                return v;
+            }
+
+            @Override
+            public int getCount() {
+                return super.getCount() - 1; // you don't display last item. It is used as hint.
+            }
+        };
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] gradeStrings = getResources().getStringArray(R.array.grade_levels);
+        for (String gradeString : gradeStrings) {
+            gradeAdapter.add(gradeString);
+        }
+        gradeAdapter.add("Grade level");
+        mGradeSpinner.setAdapter(gradeAdapter);
+
+        int gradeId = mSharedPrefs.getInt("grade_id", -1);
+        if (gradeId == -1) {
+            mGradeSpinner.setSelection(gradeAdapter.getCount());
+        } else {
+            mGradeSpinner.setSelection(gradeId);
+        }
     }
 
     private void register() {

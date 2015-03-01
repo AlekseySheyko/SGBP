@@ -45,7 +45,6 @@ public class StoresXmlParser {
                     // Starts by looking for the entry tag
                     if (tag.equals("SGBP_Store_Info")) {
                         readStore(parser).save();
-
                     }
                 }
 
