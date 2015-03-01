@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,20 +18,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser.School;
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class RegisterActivity extends Activity {
 
@@ -56,50 +54,32 @@ public class RegisterActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         if (mSchoolList == null) {
-            try {
-                loadSchoolsFromNetwork();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private final OkHttpClient client = new OkHttpClient();
-
-    private void loadSchoolsFromNetwork() throws Exception {
-        String schoolsUrl = "http://test.sgbp.info/SGBPWS.asmx/GetSchoolName";
-
-        Request request = new Request.Builder()
-                .url(schoolsUrl)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override public void onFailure(Request request, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override public void onResponse(Response response) throws IOException {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                try (InputStream in = response.body().byteStream()) {
-                    SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
-                    List<School> schoolsList = schoolsXmlParser.parse(in);
-                    String[] schoolNames = new String[schoolsList.size()];
-                    for (int i = 0; i < schoolsList.size(); i++) {
-                        schoolNames[i] = schoolsList.get(i).name;
+            ApiService service = new RestClient().getApiService();
+            service.getSchoolsList(new ResponseCallback() {
+                @Override public void success(Response response) {
+                    try (InputStream in = response.getBody().in()) {
+                        SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
+                        List<School> schoolsList = schoolsXmlParser.parse(in);
+                        String[] schoolNames = new String[schoolsList.size()];
+                        for (int i = 0; i < schoolsList.size(); i++) {
+                            schoolNames[i] = schoolsList.get(i).name;
+                        }
+                        Spinner schoolSpinner = (Spinner) findViewById(R.id.school);
+                        schoolSpinner.setAdapter(new ArrayAdapter<>(
+                                RegisterActivity.this,
+                                android.R.layout.simple_spinner_item,
+                                schoolNames
+                        ));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                }
 
-                    Spinner schoolSpinner = (Spinner) findViewById(R.id.school);
-                    schoolSpinner.setAdapter(new ArrayAdapter<>(
-                            RegisterActivity.this,
-                            android.R.layout.simple_spinner_item,
-                            schoolNames
-                    ));
-                } catch (XmlPullParserException e) {
+                @Override public void failure(RetrofitError e) {
                     e.printStackTrace();
                 }
-            }
-        });
+            });
+        }
     }
 
     private void register() {
@@ -108,14 +88,14 @@ public class RegisterActivity extends Activity {
         EditText firstNameField = (EditText) findViewById(R.id.firstName);
         EditText lastNameField = (EditText) findViewById(R.id.lastName);
         EditText emailField = (EditText) findViewById(R.id.email);
-        EditText schoolField = (EditText) findViewById(R.id.school);
-        EditText gradeField = (EditText) findViewById(R.id.gradeField);
+        Spinner schoolSpinner = (Spinner) findViewById(R.id.school);
+        Spinner gradeSpinner = (Spinner) findViewById(R.id.grade);
 
         String firstName = firstNameField.getText().toString();
         String lastName = lastNameField.getText().toString();
         String email = emailField.getText().toString();
-        String school = schoolField.getText().toString();
-        String grade = gradeField.getText().toString();
+        String school = schoolSpinner.getSelectedItem().toString();
+        String grade = gradeSpinner.getSelectedItem().toString();
 
         if (firstName.isEmpty()) {
             showError(firstNameField);
@@ -127,14 +107,6 @@ public class RegisterActivity extends Activity {
         }
         if (email.isEmpty()) {
             showError(emailField);
-            return;
-        }
-        if (school.isEmpty()) {
-            showError(schoolField);
-            return;
-        }
-        if (grade.isEmpty()) {
-            showError(gradeField);
             return;
         }
 
@@ -174,21 +146,21 @@ public class RegisterActivity extends Activity {
                 .url(registerUrl)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override public void onFailure(Request request, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override public void onResponse(Response response) throws IOException {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                Log.i(TAG, response.body().string());
-
-                mSharedPrefs.edit().putBoolean("registered", true).apply();
-                setProgressBarIndeterminateVisibility(false);
-                navigateToMainScreen();
-            }
-        });
+        //        client.newCall(request).enqueue(new Callback() {
+        //            @Override public void onFailure(Request request, IOException e) {
+        //                e.printStackTrace();
+        //            }
+        //
+        //            @Override public void onResponse(Response response) throws IOException {
+        //                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        //
+        //                Log.i(TAG, response.body().string());
+        //
+        //                mSharedPrefs.edit().putBoolean("registered", true).apply();
+        //                setProgressBarIndeterminateVisibility(false);
+        //                navigateToMainScreen();
+        //            }
+        //        });
     }
 
     public String getDeviceId() {

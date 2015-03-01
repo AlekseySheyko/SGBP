@@ -34,9 +34,11 @@
         android:layout_height="wrap_content"
         android:minHeight="48dp"/>
 
-    <EditText
-        android:id="@+id/gradeField"
-        style="@style/GradeField"/>
+    <Spinner
+        android:id="@+id/grade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"/>
 
     <TextView
         android:layout_width="match_parent"

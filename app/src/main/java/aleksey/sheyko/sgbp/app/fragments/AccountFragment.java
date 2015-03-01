@@ -34,7 +34,7 @@ public class AccountFragment extends Fragment {
     EditText mEmailField;
     @InjectView(R.id.school)
     EditText mSchoolField;
-    @InjectView(R.id.gradeField)
+    @InjectView(R.id.grade)
     EditText mGradeField;
     @InjectView(R.id.checkbox_notifications)
     CheckBox mCheckBoxNotifications;
