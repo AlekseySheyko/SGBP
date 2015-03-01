@@ -29,7 +29,7 @@ import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.ResponseCallback;
+import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -148,7 +148,6 @@ public class AccountFragment extends Fragment {
             showError(mEmailField);
             return;
         }
-        getActivity().setProgressBarIndeterminateVisibility(true);
 
         try {
             update(firstName, lastName, schoolId);
@@ -172,10 +171,8 @@ public class AccountFragment extends Fragment {
 
         ApiService service = new RestClient().getApiService();
         service.update(deviceId, firstName, lastName, schoolId, isMultiGrade, IS_REGISTERED,
-                receiveCoupons, getNotifications, trackLocation, is18, userId, new ResponseCallback() {
-                    @Override public void success(Response response) {
-                        getActivity().setProgressBarIndeterminateVisibility(false);
-                        navigateToMainScreen();
+                receiveCoupons, getNotifications, trackLocation, is18, userId, new Callback<Response>() {
+                    @Override public void success(Response response, Response response2) {
                     }
 
                     @Override public void failure(RetrofitError e) {

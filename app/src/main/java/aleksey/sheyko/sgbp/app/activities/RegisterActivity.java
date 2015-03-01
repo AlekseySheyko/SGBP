@@ -32,6 +32,7 @@ import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -281,8 +282,8 @@ public class RegisterActivity extends Activity {
 
         ApiService service = new RestClient().getApiService();
         service.register(deviceId, userId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
-                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new ResponseCallback() {
-                    @Override public void success(Response response) {
+                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
+                    @Override public void success(Response response, Response response2) {
                         mSharedPrefs.edit()
                                 .putBoolean("registered", true)
                                 .putString("device_id", deviceId)

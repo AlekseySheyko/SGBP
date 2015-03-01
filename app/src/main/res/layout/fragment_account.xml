@@ -1,5 +1,5 @@
 <ScrollView style="@style/RegScrollView">
 
-    <include layout="@layout/registration_form"/>
+        <include layout="@layout/registration_form"/>
 
 </ScrollView>
