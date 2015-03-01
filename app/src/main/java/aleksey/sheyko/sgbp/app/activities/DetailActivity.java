@@ -17,10 +17,30 @@ import aleksey.sheyko.sgbp.R;
 
 public class DetailActivity extends Activity {
 
+    private double mLatitude;
+    private double mLongitude;
+    private String mName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        if (getIntent() != null) {
+            if (getIntent().hasExtra("latitude")) {
+                mName = getIntent().getStringExtra("name");
+                String address = getIntent().getStringExtra("address");
+                String phone = getIntent().getStringExtra("phone");
+
+                ((TextView) findViewById(R.id.address)).setText(address);
+                ((TextView) findViewById(R.id.phone)).setText(phone);
+
+                mLatitude = Double.parseDouble(
+                        getIntent().getStringExtra("latitude"));
+                mLongitude = Double.parseDouble(
+                        getIntent().getStringExtra("longitude"));
+            }
+        }
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -31,25 +51,17 @@ public class DetailActivity extends Activity {
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.setOnMapClickListener(new OnMapClickListener() {
             @Override public void onMapClick(LatLng latLng) {
-                startActivity(new Intent(DetailActivity.this, MapPane.class));
+                startActivity(new Intent(DetailActivity.this, MapPane.class)
+                        .putExtra("name", mName)
+                        .putExtra("latitude", mLatitude)
+                        .putExtra("longitude", mLongitude)
+                );
             }
         });
-
-        if (getIntent() != null) {
-            if (getIntent().hasExtra("latitude")) {
-                String name = getIntent().getStringExtra("name");
-                (TextView) findViewById(R.id.)
-
-                Double latitude = Double.parseDouble(
-                        getIntent().getStringExtra("latitude"));
-                Double longitude = Double.parseDouble(
-                        getIntent().getStringExtra("longitude"));
-                map.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude, longitude))
-                        .title(name)).showInfoWindow();
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
-            }
-        }
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(mLatitude, mLongitude))
+                .title(mName)).showInfoWindow();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLatitude, mLongitude), 13));
     }
 
     public void showMap(View view) {

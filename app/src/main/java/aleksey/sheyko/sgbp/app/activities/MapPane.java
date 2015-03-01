@@ -56,10 +56,8 @@ public class MapPane extends Activity {
                 mSearchQuery = getIntent().getStringExtra(SearchManager.QUERY);
             } else if (getIntent().hasExtra("latitude")) {
                 String name = getIntent().getStringExtra("name");
-                Double latitude = Double.parseDouble(
-                        getIntent().getStringExtra("latitude"));
-                Double longitude = Double.parseDouble(
-                        getIntent().getStringExtra("longitude"));
+                Double latitude = getIntent().getDoubleExtra("latitude", -1);
+                Double longitude = getIntent().getDoubleExtra("longitude", -1);
                 mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(latitude, longitude))
                         .title(name)).showInfoWindow();

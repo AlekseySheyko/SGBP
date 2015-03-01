@@ -229,6 +229,8 @@ public class StoreListFragment extends ListFragment
             String longitude = mStoreList.get(position).getLongitude();
             Intent intent = new Intent(this.getActivity(), DetailActivity.class);
             intent.putExtra("name", name);
+            intent.putExtra("address", address);
+            intent.putExtra("phone", phone);
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
             startActivity(intent);
