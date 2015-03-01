@@ -82,6 +82,33 @@ public class RegisterActivity extends Activity {
         if (mSchoolList == null) {
             loadSchoolsListFromNetwork();
         }
+        String firstName = mSharedPrefs.getString("first_name", "");
+        String lastName = mSharedPrefs.getString("last_name", "");
+        String email = mSharedPrefs.getString("email", "");
+        int schoolId = mSharedPrefs.getInt("school_id", 0);
+        int gradeId = mSharedPrefs.getInt("grade_id", 0);
+        boolean is18 = mSharedPrefs.getBoolean("is18", true);
+        boolean isMultiGrade = mSharedPrefs.getBoolean("multipleLevel", false);
+        boolean getNotifications = mSharedPrefs.getBoolean("notifications", true);
+        boolean trackLocation = mSharedPrefs.getBoolean("location", true);
+        boolean receiveCoupons = mSharedPrefs.getBoolean("coupons", true);
+
+        if (!firstName.isEmpty()) {
+            mFirstNameField.setText(firstName);
+        }
+        if (!lastName.isEmpty()) {
+            mLastNameField.setText(lastName);
+        }
+        if (!email.isEmpty()) {
+            mEmailField.setText(email);
+        }
+        mSchoolSpinner.setSelection(schoolId);
+        mGradeSpinner.setSelection(gradeId);
+        mCheckBoxAge.setChecked(is18);
+        mCheckBoxLevel.setChecked(isMultiGrade);
+        mCheckBoxNotifications.setChecked(getNotifications);
+        mCheckBoxLocation.setChecked(trackLocation);
+        mCheckBoxCoupons.setChecked(receiveCoupons);
     }
 
     @Override protected void onPause() {
