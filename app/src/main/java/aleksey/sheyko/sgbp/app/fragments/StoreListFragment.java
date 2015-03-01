@@ -71,6 +71,9 @@ public class StoreListFragment extends ListFragment
         if (getActivity().getIntent() != null) {
             if (getActivity().getIntent().hasExtra("category")) {
                 mCategory = getActivity().getIntent().getStringExtra("category");
+                if (mCategory.equals(Constants.CATEGORY_MOBILE)) {
+                    setHasOptionsMenu(false);
+                }
             } else if (getActivity().getIntent().hasExtra(SearchManager.QUERY)) {
                 mSearchQuery = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
             }
@@ -129,7 +132,8 @@ public class StoreListFragment extends ListFragment
                     store.getAddress(),
                     store.getPhone(),
                     store.getLatitude(),
-                    store.getLongitude()));
+                    store.getLongitude(),
+                    store.getCategory()));
         }
     }
 
@@ -174,7 +178,8 @@ public class StoreListFragment extends ListFragment
                     store.getAddress(),
                     store.getPhone(),
                     store.getLatitude(),
-                    store.getLongitude()));
+                    store.getLongitude(),
+                    store.getCategory()));
             mSharedPrefs.edit().putFloat(store.getStoreid() + "", store.getDistance()).apply();
         }
         StoresAdapter mAdapter = new StoresAdapter(getActivity(),

@@ -8,6 +8,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import aleksey.sheyko.sgbp.app.helpers.Constants;
 import aleksey.sheyko.sgbp.model.Store;
 
 public class StoresXmlParser {
@@ -64,6 +65,7 @@ public class StoresXmlParser {
         String phone = null;
         String latitude = null;
         String longitude = null;
+        String category = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -73,6 +75,42 @@ public class StoresXmlParser {
                 id = readId(parser);
             } else if (tag.equals("Store_Name")) {
                 name = readName(parser);
+                switch (name) {
+                    case "AR Performance":
+                        category = Constants.CATEGORY_SOUND;
+                        break;
+                    case "Import Garage":
+                        category = Constants.CATEGORY_AUTO;
+                        break;
+                    case "Starbucks":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "Thai Chilli":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "Maharani India Restaurant":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "Mike's Sound Solutions":
+                        category = Constants.CATEGORY_SOUND;
+                        break;
+                    case "Chuck E Cheese's":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "La Fuente":
+                        category = Constants.CATEGORY_HOTELS;
+                        break;
+                    case "O’Reilly Auto Parts":
+                        category = Constants.CATEGORY_AUTO;
+                        break;
+                    case "Bubbles Car Wash":
+                        category = Constants.CATEGORY_AUTO;
+                        break;
+                    default:
+                        category = Constants.CATEGORY_OTHER;
+                        break;
+                }
+
             } else if (tag.equals("Store_Address_Line1")) {
                 address = readAddress(parser);
             } else if (tag.equals("Store_Phone")) {
@@ -81,11 +119,16 @@ public class StoresXmlParser {
                 latitude = readLatitude(parser);
             } else if (tag.equals("Store_Address_Longitude")) {
                 longitude = readLongitude(parser);
+            } else if (tag.equals("Is_Store_Location_Physical")) {
+                boolean isMobile = readIsMobile(parser);
+                if (isMobile) {
+                    category = Constants.CATEGORY_MOBILE;
+                }
             } else {
                 skip(parser);
             }
         }
-        return new Store(id, name, address, phone, latitude, longitude);
+        return new Store(id, name, address, phone, latitude, longitude, category);
     }
 
     // Processes id tags in the feed.
@@ -100,7 +143,7 @@ public class StoresXmlParser {
     private String readName(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "Store_Name");
         String name = readText(parser);
-        name = name.substring(0,1).toUpperCase() + name.substring(1);
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
         parser.require(XmlPullParser.END_TAG, ns, "Store_Name");
         return name;
     }
@@ -109,7 +152,7 @@ public class StoresXmlParser {
     private String readAddress(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "Store_Address_Line1");
         String address = readText(parser);
-        address = address.substring(0,1).toUpperCase() + address.substring(1);
+        address = address.substring(0, 1).toUpperCase() + address.substring(1);
         parser.require(XmlPullParser.END_TAG, ns, "Store_Address_Line1");
         return address;
     }
@@ -136,6 +179,14 @@ public class StoresXmlParser {
         String lng = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "Store_Address_Longitude");
         return lng;
+    }
+
+    // Processes mobile tags in the feed.
+    private boolean readIsMobile(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "Is_Store_Location_Physical");
+        boolean isMobile = !Boolean.parseBoolean(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "Is_Store_Location_Physical");
+        return isMobile;
     }
 
     // For the tags title and summary, extracts their text values.

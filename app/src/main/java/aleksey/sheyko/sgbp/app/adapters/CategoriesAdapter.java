@@ -23,8 +23,8 @@ public class CategoriesAdapter extends BaseAdapter {
         items.add(new Item(Constants.CATEGORY_FOOD, R.drawable.category_food));
         items.add(new Item(Constants.CATEGORY_AUTO, R.drawable.category_auto));
         items.add(new Item(Constants.CATEGORY_SOUND, R.drawable.category_sound));
-        items.add(new Item(Constants.CATEGORY_BODY_CARE, R.drawable.category_body));
         items.add(new Item(Constants.CATEGORY_HOTELS, R.drawable.category_hotels));
+        items.add(new Item(Constants.CATEGORY_OTHER, R.drawable.category_other));
         items.add(new Item(Constants.CATEGORY_MOBILE, R.drawable.category_mobile));
     }
 

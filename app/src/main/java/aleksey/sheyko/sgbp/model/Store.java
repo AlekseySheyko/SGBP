@@ -16,13 +16,14 @@ public class Store extends SugarRecord<Store> {
     public Store() {
     }
 
-    public Store(int storeid, String name, String address, String phone, String latitude, String longitude) {
+    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category) {
         this.storeid = storeid;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.category = category;
     }
 
     public int getStoreid() {

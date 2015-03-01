@@ -19,9 +19,9 @@ import android.widget.GridView;
 import android.widget.SearchView;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.app.activities.CategoryActivity;
 import aleksey.sheyko.sgbp.app.adapters.CategoriesAdapter;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
-import aleksey.sheyko.sgbp.app.activities.CategoryActivity;
 
 public class CategoriesFragment extends Fragment {
 
@@ -47,7 +47,8 @@ public class CategoriesFragment extends Fragment {
                 PreferenceManager.getDefaultSharedPreferences(getActivity())
                         .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
-                intent.putExtra("category", new Constants().categories.get(position + ""));
+                String category = new Constants().categories.get(position + "");
+                intent.putExtra("category", category);
                 startActivity(intent);
             }
         });
