@@ -10,10 +10,10 @@ import retrofit.http.POST;
 public interface ApiService {
 
     @GET("/GetSchoolName")
-    void getSchoolsList(Callback<Response> callback);
+    void listSchools(Callback<Response> callback);
 
-    @GET("/GetGradesList")
-    void getGradesList(Callback<Response> callback);
+    @GET("/GetStoresList")
+    void listStores(Callback<Response> callback);
 
     @FormUrlEncoded
     @POST("/SaveTeamMemberInfo")

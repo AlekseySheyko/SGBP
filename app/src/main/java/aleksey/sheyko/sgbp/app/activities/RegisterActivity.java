@@ -68,7 +68,7 @@ public class RegisterActivity extends Activity {
 
     private void loadSchoolsListFromNetwork() {
         ApiService service = new RestClient().getApiService();
-        service.getSchoolsList(new ResponseCallback() {
+        service.listSchools(new ResponseCallback() {
             @Override public void success(Response response) {
                 try (InputStream in = response.getBody().in()) {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();

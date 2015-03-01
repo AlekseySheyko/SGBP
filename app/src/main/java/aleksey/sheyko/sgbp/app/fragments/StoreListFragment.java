@@ -26,21 +26,26 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.location.LocationServices;
 import com.orm.query.Select;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.model.Notification;
-import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.app.activities.MapPane;
-import aleksey.sheyko.sgbp.app.helpers.Constants;
 import aleksey.sheyko.sgbp.app.adapters.NotificationsAdapter;
 import aleksey.sheyko.sgbp.app.adapters.StoresAdapter;
-import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList;
-import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList.OnStoreListLoaded;
+import aleksey.sheyko.sgbp.app.helpers.Constants;
+import aleksey.sheyko.sgbp.model.Notification;
+import aleksey.sheyko.sgbp.model.Store;
+import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.RestClient;
+import aleksey.sheyko.sgbp.rest.StoresXmlParser;
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class StoreListFragment extends ListFragment
-        implements ConnectionCallbacks, OnStoreListLoaded {
+        implements ConnectionCallbacks {
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
     private ArrayList<Notification> mNotificationList = new ArrayList<>();
@@ -94,9 +99,24 @@ public class StoreListFragment extends ListFragment
             return;
         }
 
-        if (mStores == null) return;
-        if (mStores.size() == 0 && mSearchQuery == null) {
-            new UpdateStoreList(this).execute();
+        if (mStores != null && mStores.size() == 0 && mSearchQuery == null) {
+            ApiService service = new RestClient().getApiService();
+            service.listStores(new ResponseCallback() {
+                @Override public void success(Response response) {
+                    try (InputStream in = response.getBody().in()) {
+                        StoresXmlParser storesXmlParser = new StoresXmlParser();
+                        storesXmlParser.parse(in);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    mStores = Store.listAll(Store.class);
+                    populateListAdapter();
+                }
+
+                @Override public void failure(RetrofitError e) {
+                    e.printStackTrace();
+                }
+            });
             return;
         }
 
@@ -107,8 +127,7 @@ public class StoreListFragment extends ListFragment
                     store.getAddress(),
                     store.getPhone(),
                     store.getLatitude(),
-                    store.getLongitude(),
-                    store.getCategory()));
+                    store.getLongitude()));
         }
     }
 
@@ -153,8 +172,7 @@ public class StoreListFragment extends ListFragment
                     store.getAddress(),
                     store.getPhone(),
                     store.getLatitude(),
-                    store.getLongitude(),
-                    store.getCategory()));
+                    store.getLongitude()));
             mSharedPrefs.edit().putFloat(store.getStoreid() + "", store.getDistance()).apply();
         }
         StoresAdapter mAdapter = new StoresAdapter(getActivity(),
@@ -256,13 +274,5 @@ public class StoreListFragment extends ListFragment
         ((ViewGroup) getListView().getParent()).addView(emptyView);
 
         return emptyView;
-    }
-
-    @Override
-    public void onStoreListUpdated() {
-        StoresAdapter mAdapter = new StoresAdapter(getActivity(),
-                R.layout.store_list_item, mStoreList);
-
-        setListAdapter(mAdapter);
     }
 }

@@ -18,17 +18,24 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.InputStream;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList;
+import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.RestClient;
+import aleksey.sheyko.sgbp.rest.StoresXmlParser;
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MapPane extends Activity {
 
     private String mCategory;
     private String mSearchQuery;
     private GoogleMap mMap;
+    private List<Store> mStores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,21 +68,41 @@ public class MapPane extends Activity {
             }
         }
 
-        List<Store> stores;
         if (mCategory != null) {
-            stores = Store.find(Store.class, "category = ?", mCategory);
+            mStores = Store.find(Store.class, "category = ?", mCategory);
         } else if (mSearchQuery != null) {
-            stores = Store.findWithQuery(Store.class,
+            mStores = Store.findWithQuery(Store.class,
                     "Select * from Store where name like '%" + mSearchQuery + "%'");
         } else {
-            stores = Store.listAll(Store.class);
+            mStores = Store.listAll(Store.class);
         }
 
-        if (stores.size() == 0 && mSearchQuery == null)
-            new UpdateStoreList().execute();
+        if (mStores.size() == 0 && mSearchQuery == null) {
+            ApiService service = new RestClient().getApiService();
+            service.listStores(new ResponseCallback() {
+                @Override public void success(Response response) {
+                    try (InputStream in = response.getBody().in()) {
+                        StoresXmlParser storesXmlParser = new StoresXmlParser();
+                        storesXmlParser.parse(in);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    mStores = Store.listAll(Store.class);
+                    addMarkers();
+                }
 
+                @Override public void failure(RetrofitError e) {
+                    e.printStackTrace();
+                }
+            });
+            return;
+        }
+        addMarkers();
+    }
+
+    private void addMarkers() {
         final LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for (Store store : stores) {
+        for (Store store : mStores) {
             Marker marker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(
                             Double.parseDouble(store.getLatitude()),

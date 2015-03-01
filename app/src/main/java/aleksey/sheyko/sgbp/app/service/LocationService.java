@@ -19,20 +19,26 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.model.Store;
-import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList;
-import aleksey.sheyko.sgbp.app.tasks.UpdateStoreList.OnStoreListLoaded;
+import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.RestClient;
+import aleksey.sheyko.sgbp.rest.StoresXmlParser;
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class LocationService extends Service
-        implements LocationListener, ConnectionCallbacks, OnStoreListLoaded {
+        implements LocationListener, ConnectionCallbacks {
 
     protected static final String TAG = LocationService.class.getSimpleName();
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private List<Store> mStores;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -57,13 +63,29 @@ public class LocationService extends Service
     private void addGeofences() {
         List<Geofence> mGeofenceList = new ArrayList<>();
 
-        List<Store> stores = Store.listAll(Store.class);
-        if (stores.size() == 0) {
-            new UpdateStoreList(this).execute();
+        mStores = Store.listAll(Store.class);
+        if (mStores.size() == 0) {
+            ApiService service = new RestClient().getApiService();
+            service.listStores(new ResponseCallback() {
+                @Override public void success(Response response) {
+                    try (InputStream in = response.getBody().in()) {
+                        StoresXmlParser storesXmlParser = new StoresXmlParser();
+                        storesXmlParser.parse(in);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    mStores = Store.listAll(Store.class);
+                    addGeofences();
+                }
+
+                @Override public void failure(RetrofitError e) {
+                    e.printStackTrace();
+                }
+            });
             return;
         }
 
-        for (Store store : stores) {
+        for (Store store : mStores) {
             if (store.getGeofenceId() == null) {
                 Geofence geofence = createGeofence(
                         "aleksey.sheyko.sgbp.GEOFENCE_" + store.getId(),
@@ -140,10 +162,5 @@ public class LocationService extends Service
     @Override
     public void onLocationChanged(Location location) {
         Toast.makeText(this, "Location changed", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onStoreListUpdated() {
-        addGeofences();
     }
 }
