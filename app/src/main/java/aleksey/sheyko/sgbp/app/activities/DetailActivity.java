@@ -2,6 +2,7 @@ package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ public class DetailActivity extends Activity {
     private double mLatitude;
     private double mLongitude;
     private String mName;
+    private String mPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +32,10 @@ public class DetailActivity extends Activity {
             if (getIntent().hasExtra("latitude")) {
                 mName = getIntent().getStringExtra("name");
                 String address = getIntent().getStringExtra("address");
-                String phone = getIntent().getStringExtra("phone");
+                mPhone = getIntent().getStringExtra("phone");
 
                 ((TextView) findViewById(R.id.address)).setText(address);
-                ((TextView) findViewById(R.id.phone)).setText(phone);
+                ((TextView) findViewById(R.id.phone)).setText(mPhone);
 
                 mLatitude = Double.parseDouble(
                         getIntent().getStringExtra("latitude"));
@@ -51,11 +53,7 @@ public class DetailActivity extends Activity {
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.setOnMapClickListener(new OnMapClickListener() {
             @Override public void onMapClick(LatLng latLng) {
-                startActivity(new Intent(DetailActivity.this, MapPane.class)
-                        .putExtra("name", mName)
-                        .putExtra("latitude", mLatitude)
-                        .putExtra("longitude", mLongitude)
-                );
+                navigateToMap();
             }
         });
         map.addMarker(new MarkerOptions()
@@ -64,9 +62,21 @@ public class DetailActivity extends Activity {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLatitude, mLongitude), 13));
     }
 
-    public void showMap(View view) {
+    private void navigateToMap() {
+        startActivity(new Intent(DetailActivity.this, MapPane.class)
+                        .putExtra("name", mName)
+                        .putExtra("latitude", mLatitude)
+                        .putExtra("longitude", mLongitude)
+        );
     }
 
-    public void call(View view) {
+    public void showMap(View view) {
+        navigateToMap();
+    }
+
+    public void dial(View view) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + mPhone.replaceAll("[^0-9]", "")));
+        startActivity(intent);
     }
 }

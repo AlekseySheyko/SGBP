@@ -66,10 +66,10 @@
         <activity
             android:name=".app.activities.MapPane"
             android:label="@string/title_activity_map"
-            android:parentActivityName=".app.activities.MainActivity" >
+            android:parentActivityName=".app.activities.DetailActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".app.activities.MainActivity" />
+                android:value=".app.activities.DetailActivity" />
         </activity>
         <activity
             android:name=".app.activities.CategoryActivity"
