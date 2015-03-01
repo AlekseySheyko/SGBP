@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.squareup.okhttp.Request;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
@@ -65,13 +67,15 @@ public class RegisterActivity extends Activity {
     private Spinner mSchoolSpinner;
     private Spinner mGradeSpinner;
 
+    private List<School> mSchoolsList;
+
     private void loadSchoolsListFromNetwork() {
         ApiService service = new RestClient().getApiService();
         service.getSchoolsList(new ResponseCallback() {
             @Override public void success(Response response) {
                 try (InputStream in = response.getBody().in()) {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
-                    List<School> schoolsList = schoolsXmlParser.parse(in);
+                    mSchoolsList = schoolsXmlParser.parse(in);
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                             RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
@@ -91,7 +95,7 @@ public class RegisterActivity extends Activity {
                         }
                     };
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    for (School school : schoolsList) {
+                    for (School school : mSchoolsList) {
                         adapter.add(school.name);
                     }
                     adapter.add("School");
@@ -119,16 +123,26 @@ public class RegisterActivity extends Activity {
                 try (InputStream in = response.getBody().in()) {
                     GradesXmlParser gradesXmlParser = new GradesXmlParser();
                     List<Grade> gradesList = gradesXmlParser.parse(in);
-                    String[] gradeNames = new String[gradesList.size()];
-                    for (int i = 0; i < gradesList.size(); i++) {
-                        gradeNames[i] = gradesList.get(i).name;
+                    HashMap<Integer, String> map = new HashMap<>();
+                    for (Grade grade : gradesList) {
+                        map.put(grade.schoolId, grade.name);
                     }
+                    List<String> gradeNamesList = new ArrayList<>();
+                    int selectedSchoolId = mSchoolSpinner.getSelectedItemPosition();
+                    for (Integer schoolId : map.keySet()) {
+                        if (schoolId == selectedSchoolId) {
+                            gradeNamesList.add(map.get(schoolId));
+                        }
+                    }
+                    String[] gradeNames = gradeNamesList.toArray(new String[gradeNamesList.size()]);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(
                             RegisterActivity.this,
                             android.R.layout.simple_spinner_item,
                             gradeNames
                     );
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                    mGradeSpinner = (Spinner) findViewById(R.id.grade);
                     mGradeSpinner.setAdapter(adapter);
                 } catch (Exception e) {
                     e.printStackTrace();
