@@ -11,11 +11,13 @@ import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.okhttp.Request;
@@ -60,6 +62,9 @@ public class RegisterActivity extends Activity {
         }
     }
 
+    private Spinner mSchoolSpinner;
+    private Spinner mGradeSpinner;
+
     private void loadSchoolsListFromNetwork() {
         ApiService service = new RestClient().getApiService();
         service.getSchoolsList(new ResponseCallback() {
@@ -67,18 +72,33 @@ public class RegisterActivity extends Activity {
                 try (InputStream in = response.getBody().in()) {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
                     List<School> schoolsList = schoolsXmlParser.parse(in);
-                    String[] schoolNames = new String[schoolsList.size()];
-                    for (int i = 0; i < schoolsList.size(); i++) {
-                        schoolNames[i] = schoolsList.get(i).name;
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                            RegisterActivity.this,
-                            android.R.layout.simple_spinner_item,
-                            schoolNames
-                    );
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                            RegisterActivity.this, android.R.layout.simple_spinner_item) {
+
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View v = super.getView(position, convertView, parent);
+                            if (position == getCount()) {
+                                ((TextView) v.findViewById(android.R.id.text1)).setText("");
+                                ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                            }
+                            return v;
+                        }
+
+                        @Override
+                        public int getCount() {
+                            return super.getCount() - 1; // you don't display last item. It is used as hint.
+                        }
+                    };
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    Spinner schoolSpinner = (Spinner) findViewById(R.id.school);
-                    schoolSpinner.setAdapter(adapter);
+                    for (School school : schoolsList) {
+                        adapter.add(school.name);
+                    }
+                    adapter.add("School");
+
+                    mSchoolSpinner = (Spinner) findViewById(R.id.school);
+                    mSchoolSpinner.setAdapter(adapter);
+                    mSchoolSpinner.setSelection(adapter.getCount());
 
                     loadGradeListFromNetwork();
                 } catch (Exception e) {
@@ -109,8 +129,7 @@ public class RegisterActivity extends Activity {
                             gradeNames
                     );
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    Spinner gradeSpinner = (Spinner) findViewById(R.id.grade);
-                    gradeSpinner.setAdapter(adapter);
+                    mGradeSpinner.setAdapter(adapter);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -128,14 +147,12 @@ public class RegisterActivity extends Activity {
         EditText firstNameField = (EditText) findViewById(R.id.firstName);
         EditText lastNameField = (EditText) findViewById(R.id.lastName);
         EditText emailField = (EditText) findViewById(R.id.email);
-        Spinner schoolSpinner = (Spinner) findViewById(R.id.school);
-        Spinner gradeSpinner = (Spinner) findViewById(R.id.grade);
 
         String firstName = firstNameField.getText().toString();
         String lastName = lastNameField.getText().toString();
         String email = emailField.getText().toString();
-        String school = schoolSpinner.getSelectedItem().toString();
-        String grade = gradeSpinner.getSelectedItem().toString();
+        String school = mSchoolSpinner.getSelectedItem().toString();
+        String grade = mGradeSpinner.getSelectedItem().toString();
 
         if (firstName.isEmpty()) {
             showError(firstNameField);
