@@ -2,8 +2,10 @@ package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,21 +30,18 @@ public class DetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        if (getIntent() != null) {
-            if (getIntent().hasExtra("latitude")) {
-                mName = getIntent().getStringExtra("name");
-                String address = getIntent().getStringExtra("address");
-                mPhone = getIntent().getStringExtra("phone");
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mName = sharedPrefs.getString("name", "");
+        String address = sharedPrefs.getString("address", "");
+        mPhone = sharedPrefs.getString("phone", "");
 
-                ((TextView) findViewById(R.id.address)).setText(address);
-                ((TextView) findViewById(R.id.phone)).setText(mPhone);
+        ((TextView) findViewById(R.id.address)).setText(address);
+        ((TextView) findViewById(R.id.phone)).setText(mPhone);
 
-                mLatitude = Double.parseDouble(
-                        getIntent().getStringExtra("latitude"));
-                mLongitude = Double.parseDouble(
-                        getIntent().getStringExtra("longitude"));
-            }
-        }
+        mLatitude = Double.parseDouble(
+                sharedPrefs.getString("latitude", ""));
+        mLongitude = Double.parseDouble(
+                sharedPrefs.getString("longitude", ""));
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);

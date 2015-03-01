@@ -2,8 +2,10 @@ package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -54,10 +56,13 @@ public class MapPane extends Activity {
                 mCategory = getIntent().getStringExtra("category");
             } else if (getIntent().hasExtra(SearchManager.QUERY)) {
                 mSearchQuery = getIntent().getStringExtra(SearchManager.QUERY);
-            } else if (getIntent().hasExtra("latitude")) {
-                String name = getIntent().getStringExtra("name");
-                Double latitude = getIntent().getDoubleExtra("latitude", -1);
-                Double longitude = getIntent().getDoubleExtra("longitude", -1);
+            } else {
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                String name = sharedPrefs.getString("name", "");
+                Double latitude = Double.parseDouble(
+                        sharedPrefs.getString("latitude", ""));
+                Double longitude = Double.parseDouble(
+                        sharedPrefs.getString("longitude", ""));
                 mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(latitude, longitude))
                         .title(name)).showInfoWindow();

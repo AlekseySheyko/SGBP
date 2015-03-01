@@ -227,13 +227,14 @@ public class StoreListFragment extends ListFragment
             String phone = mStoreList.get(position).getPhone();
             String latitude = mStoreList.get(position).getLatitude();
             String longitude = mStoreList.get(position).getLongitude();
-            Intent intent = new Intent(this.getActivity(), DetailActivity.class);
-            intent.putExtra("name", name);
-            intent.putExtra("address", address);
-            intent.putExtra("phone", phone);
-            intent.putExtra("latitude", latitude);
-            intent.putExtra("longitude", longitude);
-            startActivity(intent);
+            mSharedPrefs.edit()
+                    .putString("name", name)
+                    .putString("address", address)
+                    .putString("phone", phone)
+                    .putString("latitude", latitude)
+                    .putString("longitude", longitude)
+                    .apply();
+            startActivity(new Intent(this.getActivity(), DetailActivity.class));
         } else if (mViewMode == Constants.VIEW_COUPONS) {
             Toast.makeText(this.getActivity(),
                     "Coupons are coming soon", Toast.LENGTH_SHORT).show();
