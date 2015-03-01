@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,13 +26,12 @@ import java.util.List;
 import java.util.Random;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
-import aleksey.sheyko.sgbp.rest.SchoolsXmlParser.School;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.Callback;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -69,19 +67,20 @@ public class RegisterActivity extends Activity {
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-        if (isRegistered) {
+//TODO        if (isRegistered) {
             navigateToMainScreen();
-        }
+//        }
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
     }
 
-    List<String> mSchoolList;
+    List<School> mSchoolsList;
 
     @Override protected void onResume() {
         super.onResume();
-        if (mSchoolList == null) {
+        mSchoolsList = School.listAll(School.class);
+        if (mSchoolsList.size() == 0) {
             loadSchoolsListFromNetwork();
         }
         String firstName = mSharedPrefs.getString("first_name", "");
@@ -89,9 +88,9 @@ public class RegisterActivity extends Activity {
         String email = mSharedPrefs.getString("email", "");
         boolean is18 = mSharedPrefs.getBoolean("is18", true);
         boolean isMultiGrade = mSharedPrefs.getBoolean("multipleLevel", false);
-        boolean getNotifications = mSharedPrefs.getBoolean("notifications", true);
-        boolean trackLocation = mSharedPrefs.getBoolean("location", true);
-        boolean receiveCoupons = mSharedPrefs.getBoolean("coupons", true);
+        boolean notifications = mSharedPrefs.getBoolean("notifications", true);
+        boolean location = mSharedPrefs.getBoolean("location", true);
+        boolean coupons = mSharedPrefs.getBoolean("coupons", true);
 
         if (!firstName.isEmpty()) {
             mFirstNameField.setText(firstName);
@@ -104,9 +103,9 @@ public class RegisterActivity extends Activity {
         }
         mCheckBoxAge.setChecked(is18);
         mCheckBoxLevel.setChecked(isMultiGrade);
-        mCheckBoxNotifications.setChecked(getNotifications);
-        mCheckBoxLocation.setChecked(trackLocation);
-        mCheckBoxCoupons.setChecked(receiveCoupons);
+        mCheckBoxNotifications.setChecked(notifications);
+        mCheckBoxLocation.setChecked(location);
+        mCheckBoxCoupons.setChecked(coupons);
     }
 
     @Override protected void onPause() {
@@ -143,7 +142,8 @@ public class RegisterActivity extends Activity {
             @Override public void success(Response response) {
                 try (InputStream in = response.getBody().in()) {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
-                    List<School> schoolsList = schoolsXmlParser.parse(in);
+                    schoolsXmlParser.parse(in);
+                    mSchoolsList = School.listAll(School.class);
                     ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
                             RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
@@ -163,12 +163,10 @@ public class RegisterActivity extends Activity {
                         }
                     };
                     schoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    for (School school : schoolsList) {
-                        schoolAdapter.add(school.name);
+                    for (School school : mSchoolsList) {
+                        schoolAdapter.add(school.getName());
                     }
                     schoolAdapter.add("School");
-
-                    mSchoolSpinner = (Spinner) findViewById(R.id.school);
                     mSchoolSpinner.setAdapter(schoolAdapter);
 
                     int schoolId = mSharedPrefs.getInt("school_id", -1);
@@ -202,8 +200,6 @@ public class RegisterActivity extends Activity {
                         gradeAdapter.add(gradeString);
                     }
                     gradeAdapter.add("Grade level");
-
-                    mGradeSpinner = (Spinner) findViewById(R.id.grade);
                     mGradeSpinner.setAdapter(gradeAdapter);
 
                     int gradeId = mSharedPrefs.getInt("grade_id", -1);
@@ -226,27 +222,25 @@ public class RegisterActivity extends Activity {
     private void register() {
         hideKeyboard();
 
-        EditText firstNameField = (EditText) findViewById(R.id.firstName);
-        EditText lastNameField = (EditText) findViewById(R.id.lastName);
-        EditText emailField = (EditText) findViewById(R.id.email);
-
-        String firstName = firstNameField.getText().toString();
-        String lastName = lastNameField.getText().toString();
-        String email = emailField.getText().toString();
+        String firstName = mFirstNameField.getText().toString();
+        String lastName = mLastNameField.getText().toString();
+        String email = mEmailField.getText().toString();
         int schoolId = mSchoolSpinner.getSelectedItemPosition();
-        String grade = mGradeSpinner.getSelectedItem().toString();
 
         if (firstName.isEmpty()) {
-            showError(firstNameField);
+            showError(mFirstNameField);
             return;
         }
         if (lastName.isEmpty()) {
-            showError(lastNameField);
+            showError(mLastNameField);
             return;
         }
         if (email.isEmpty()) {
-            showError(emailField);
+            showError(mEmailField);
             return;
+        }
+        if (schoolId == -1) {
+            Toast.makeText(this, "Connect to a network to load school list", Toast.LENGTH_SHORT).show();
         }
         if (mSchoolSpinner.getSelectedItem().equals("School")) {
             Toast.makeText(this, "Please select your school", Toast.LENGTH_SHORT).show();
@@ -259,33 +253,35 @@ public class RegisterActivity extends Activity {
         setProgressBarIndeterminateVisibility(true);
 
         try {
-            // register(firstName, lastName, email, schoolId, grade);
+            register(firstName, lastName, email, schoolId);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(RegisterActivity.this, "Failed to sign up", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void register(String firstName, String lastName, String email, int schoolId, String grade) throws Exception {
+    public void register(String firstName, String lastName, String email, int schoolId) throws Exception {
 
         final int USER_TYPE = 1;
         final boolean IS_REGISTERED = true;
 
-        String deviceId = getDeviceId();
-        int id = randInt(1000, 9999);
-        boolean is18 = ((CheckBox) findViewById(R.id.age)).isChecked();
-        boolean isMultiGrade = ((CheckBox) findViewById(R.id.multipleGrade)).isChecked();
-        boolean getNotifications = ((CheckBox) findViewById(R.id.notifications)).isChecked();
-        boolean trackLocation = ((CheckBox) findViewById(R.id.location)).isChecked();
-        boolean receiveCoupons = ((CheckBox) findViewById(R.id.coupons)).isChecked();
+        final String deviceId = getDeviceId();
+        final int userId = randInt(100, 999);
+        boolean is18 = mCheckBoxAge.isChecked();
+        boolean isMultiGrade = mCheckBoxLevel.isChecked();
+        boolean getNotifications = mCheckBoxNotifications.isChecked();
+        boolean trackLocation = mCheckBoxLocation.isChecked();
+        boolean receiveCoupons = mCheckBoxCoupons.isChecked();
 
         ApiService service = new RestClient().getApiService();
-        service.register(deviceId, id, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
-                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
-                    @Override public void success(Response response, Response response2) {
-                        Log.i("TAG", response.getBody().toString());
-
-                        mSharedPrefs.edit().putBoolean("registered", true).apply();
+        service.register(deviceId, userId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
+                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new ResponseCallback() {
+                    @Override public void success(Response response) {
+                        mSharedPrefs.edit()
+                                .putBoolean("registered", true)
+                                .putString("device_id", deviceId)
+                                .putInt("user_id", userId)
+                                .apply();
                         setProgressBarIndeterminateVisibility(false);
                         navigateToMainScreen();
                     }

@@ -7,28 +7,26 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+
+import aleksey.sheyko.sgbp.model.School;
 
 public class SchoolsXmlParser {
     // We don't use namespaces
     private static final String ns = null;
 
-    public List parse(InputStream in) throws XmlPullParserException, IOException {
+    public void parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            return readFeed(parser);
+            readFeed(parser);
         } finally {
             in.close();
         }
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List entries = new ArrayList();
-
+    private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "SGBP_School_Info_List");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -45,24 +43,13 @@ public class SchoolsXmlParser {
                     String tag = parser.getName();
                     // Starts by looking for the entry tag
                     if (tag.equals("SGBP_School_Info")) {
-                        entries.add(readSchool(parser));
+                        readSchool(parser).save();
                     }
                 }
 
             } else {
                 skip(parser);
             }
-        }
-        return entries;
-    }
-
-    public static class School {
-        public final int id;
-        public final String name;
-
-        private School(int id, String name) {
-            this.id = id;
-            this.name = name;
         }
     }
 

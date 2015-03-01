@@ -25,4 +25,13 @@ public interface ApiService {
                   @Field("Is_Coupon_Allowed") boolean receiveCoupons, @Field("Is_Notification_Allowed") boolean getNotifications,
                   @Field("Is_Location_Service_Allowed") boolean trackLocation, @Field("Is_User_Over_18_Year") boolean is18,
                   @Field("Is_Device_Registered") boolean isDeviceRegistered, Callback<Response> callback);
+
+    @FormUrlEncoded
+    @POST("/UpdateTeamMemberInfo")
+    void update(@Field("Key") String key, @Field("First_Name") String firstName,
+                @Field("Last_Name") String lastName, @Field("School_Id") int schoolId,
+                @Field("Has_Multiple_Child") boolean multiGrade, @Field("Is_User_Registered") boolean isRegistered,
+                @Field("Is_Coupon_Allowed") boolean receiveCoupons, @Field("Is_Notification_Allowed") boolean getNotifications,
+                @Field("Is_Location_Service_Allowed") boolean trackLocation, @Field("Is_User_Over_18_Year") boolean is18,
+                @Field("User_Reg_Info_Id") int userId, Callback<Response> callback);
 }
