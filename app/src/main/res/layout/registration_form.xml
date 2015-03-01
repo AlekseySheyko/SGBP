@@ -30,15 +30,11 @@
 
     <Spinner
         android:id="@+id/school"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"/>
+        style="@style/RegistrationSpinner"/>
 
     <Spinner
         android:id="@+id/grade"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"/>
+        style="@style/RegistrationSpinner"/>
 
     <TextView
         android:layout_width="match_parent"

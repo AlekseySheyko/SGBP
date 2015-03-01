@@ -1,6 +1,7 @@
 package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -121,7 +123,7 @@ public class RegisterActivity extends Activity {
                     for (String gradeString : gradeStrings) {
                         gradeAdapter.add(gradeString);
                     }
-                    gradeAdapter.add("Grade");
+                    gradeAdapter.add("Grade level");
 
                     mGradeSpinner = (Spinner) findViewById(R.id.grade);
                     mGradeSpinner.setAdapter(gradeAdapter);
@@ -138,7 +140,7 @@ public class RegisterActivity extends Activity {
     }
 
     private void register() {
-        setProgressBarIndeterminateVisibility(true);
+        hideKeyboard();
 
         EditText firstNameField = (EditText) findViewById(R.id.firstName);
         EditText lastNameField = (EditText) findViewById(R.id.lastName);
@@ -162,6 +164,15 @@ public class RegisterActivity extends Activity {
             showError(emailField);
             return;
         }
+        if (mSchoolSpinner.getSelectedItem().equals("School")) {
+            Toast.makeText(this, "Please select your school", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mGradeSpinner.getSelectedItem().equals("Grade level")) {
+            Toast.makeText(this, "Please select your grade level", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        setProgressBarIndeterminateVisibility(true);
 
         try {
             register(firstName, lastName, email, school, grade);
@@ -170,8 +181,6 @@ public class RegisterActivity extends Activity {
             Toast.makeText(RegisterActivity.this, "Failed to sign up", Toast.LENGTH_SHORT).show();
         }
     }
-
-    protected static final String TAG = RegisterActivity.class.getSimpleName();
 
     public void register(String firstName, String lastName, String email, String school, String grade) throws Exception {
 
@@ -244,5 +253,11 @@ public class RegisterActivity extends Activity {
 
     public void register(View v) {
         register();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Service.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mSchoolSpinner.getWindowToken(), 0);
     }
 }
