@@ -25,6 +25,8 @@ import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.GradesXmlParser;
+import aleksey.sheyko.sgbp.rest.GradesXmlParser.Grade;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser.School;
@@ -54,32 +56,70 @@ public class RegisterActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         if (mSchoolList == null) {
-            ApiService service = new RestClient().getApiService();
-            service.getSchoolsList(new ResponseCallback() {
-                @Override public void success(Response response) {
-                    try (InputStream in = response.getBody().in()) {
-                        SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
-                        List<School> schoolsList = schoolsXmlParser.parse(in);
-                        String[] schoolNames = new String[schoolsList.size()];
-                        for (int i = 0; i < schoolsList.size(); i++) {
-                            schoolNames[i] = schoolsList.get(i).name;
-                        }
-                        Spinner schoolSpinner = (Spinner) findViewById(R.id.school);
-                        schoolSpinner.setAdapter(new ArrayAdapter<>(
-                                RegisterActivity.this,
-                                android.R.layout.simple_spinner_item,
-                                schoolNames
-                        ));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+            loadSchoolsListFromNetwork();
+        }
+    }
 
-                @Override public void failure(RetrofitError e) {
+    private void loadSchoolsListFromNetwork() {
+        ApiService service = new RestClient().getApiService();
+        service.getSchoolsList(new ResponseCallback() {
+            @Override public void success(Response response) {
+                try (InputStream in = response.getBody().in()) {
+                    SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
+                    List<School> schoolsList = schoolsXmlParser.parse(in);
+                    String[] schoolNames = new String[schoolsList.size()];
+                    for (int i = 0; i < schoolsList.size(); i++) {
+                        schoolNames[i] = schoolsList.get(i).name;
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                            RegisterActivity.this,
+                            android.R.layout.simple_spinner_item,
+                            schoolNames
+                    );
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    Spinner schoolSpinner = (Spinner) findViewById(R.id.school);
+                    schoolSpinner.setAdapter(adapter);
+
+                    loadGradeListFromNetwork();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-            });
-        }
+            }
+
+            @Override public void failure(RetrofitError e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void loadGradeListFromNetwork() {
+        ApiService service = new RestClient().getApiService();
+        service.getGradesList(new ResponseCallback() {
+            @Override public void success(Response response) {
+                try (InputStream in = response.getBody().in()) {
+                    GradesXmlParser gradesXmlParser = new GradesXmlParser();
+                    List<Grade> gradesList = gradesXmlParser.parse(in);
+                    String[] gradeNames = new String[gradesList.size()];
+                    for (int i = 0; i < gradesList.size(); i++) {
+                        gradeNames[i] = gradesList.get(i).name;
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                            RegisterActivity.this,
+                            android.R.layout.simple_spinner_item,
+                            gradeNames
+                    );
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    Spinner gradeSpinner = (Spinner) findViewById(R.id.grade);
+                    gradeSpinner.setAdapter(adapter);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override public void failure(RetrofitError e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void register() {
