@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Random;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.rest.ApiService;
@@ -45,9 +46,10 @@ public class RegisterActivity extends Activity {
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-        if (isRegistered) {
+        // TODO: Return this check you can update user info on server
+        // if (isRegistered) {
             navigateToMainScreen();
-        }
+        // }
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_register);
     }
@@ -187,7 +189,7 @@ public class RegisterActivity extends Activity {
         final boolean IS_REGISTERED = true;
 
         String deviceId = getDeviceId();
-        int id = Integer.parseInt(deviceId.replaceAll("\\D+", ""));
+        int id = randInt(1000, 9999);
         boolean is18 = ((CheckBox) findViewById(R.id.checkbox_age)).isChecked();
         boolean isMultiGrade = ((CheckBox) findViewById(R.id.checkbox_level)).isChecked();
         boolean getNotifications = ((CheckBox) findViewById(R.id.checkbox_notifications)).isChecked();
@@ -211,8 +213,13 @@ public class RegisterActivity extends Activity {
                 });
     }
 
-    public String getDeviceId() {
+    private String getDeviceId() {
         return Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    private static int randInt(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
     }
 
     @Override

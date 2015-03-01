@@ -52,8 +52,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-
         // Setup action bar for tabs
         mActionBar = getActionBar();
         mActionBar.setDisplayShowTitleEnabled(false);

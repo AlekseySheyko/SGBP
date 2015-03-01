@@ -38,7 +38,6 @@ public class LocationService extends Service
     public int onStartCommand(Intent intent, int flags, int startId) {
         createLocationClient();
         mGoogleApiClient.connect();
-        Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 
