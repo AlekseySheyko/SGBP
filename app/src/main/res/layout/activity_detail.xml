@@ -1,0 +1,115 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ecf0f1"
+              android:orientation="vertical"
+              tools:context="aleksey.sheyko.sgbp.app.activities.DetailActivity">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/map"
+              android:layout_width="match_parent"
+              android:layout_height="200dp"
+              android:name="com.google.android.gms.maps.MapFragment"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/details_header_label"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            style="?android:attr/listSeparatorTextViewStyle"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:minHeight="?android:attr/listPreferredItemHeight"
+            >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address_header"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="398 Jeyeas St, San Fransicso, CA 91234"
+                    android:textColor="#66727e"
+                    android:singleLine="true"/>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/ic_map"
+                style="?android:attr/borderlessButtonStyle"
+                android:onClick="showMap"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:minHeight="?android:attr/listPreferredItemHeight">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phone_header"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="(415) 123-3221"
+                    android:textColor="#66727e"
+                    android:singleLine="true"/>
+            </LinearLayout>
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/ic_phone"
+                android:onClick="call"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

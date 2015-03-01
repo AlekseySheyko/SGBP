@@ -50,8 +50,12 @@
     <string name="preference_level">Multi-grade</string>
     <string name="send_button_label">Get Started</string>
     <string name="info_header_label">Personal info</string>
+    <string name="details_header_label">Details</string>
     <string name="prefs_header_label">Preferences</string>
     <string name="empty_field_error"> is required</string>
     <string name="action_send">Send</string>
+    <string name="title_activity_detail">Details</string>
+    <string name="address_header">Address</string>
+    <string name="phone_header">Phone</string>
 
 </resources>

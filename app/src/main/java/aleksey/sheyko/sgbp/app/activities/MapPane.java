@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -108,7 +107,6 @@ public class MapPane extends Activity {
         for (Store store : mStores) {
             Double latitude = Double.parseDouble(store.getLatitude());
             Double longitude = Double.parseDouble(store.getLongitude());
-            Log.i("TAG", "Lat: " + latitude);
             if (latitude > 35 && latitude < 50) {
                 Marker marker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(latitude, longitude))

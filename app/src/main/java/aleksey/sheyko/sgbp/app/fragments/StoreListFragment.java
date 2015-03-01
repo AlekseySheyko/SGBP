@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.app.activities.DetailActivity;
 import aleksey.sheyko.sgbp.app.activities.MapPane;
 import aleksey.sheyko.sgbp.app.adapters.NotificationsAdapter;
 import aleksey.sheyko.sgbp.app.adapters.StoresAdapter;
@@ -222,9 +223,11 @@ public class StoreListFragment extends ListFragment
                 return;
             }
             String name = mStoreList.get(position).getName();
+            String address = mStoreList.get(position).getAddress();
+            String phone = mStoreList.get(position).getPhone();
             String latitude = mStoreList.get(position).getLatitude();
             String longitude = mStoreList.get(position).getLongitude();
-            Intent intent = new Intent(this.getActivity(), MapPane.class);
+            Intent intent = new Intent(this.getActivity(), DetailActivity.class);
             intent.putExtra("name", name);
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
@@ -238,7 +241,7 @@ public class StoreListFragment extends ListFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity()) == ConnectionResult.SUCCESS) {
-                inflater.inflate(R.menu.store_list_fragment, menu);
+            inflater.inflate(R.menu.store_list_fragment, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
     }
