@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +22,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Request;
-
 import java.io.InputStream;
 import java.util.List;
 
@@ -32,6 +30,7 @@ import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser.School;
+import retrofit.Callback;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -149,7 +148,7 @@ public class RegisterActivity extends Activity {
         String firstName = firstNameField.getText().toString();
         String lastName = lastNameField.getText().toString();
         String email = emailField.getText().toString();
-        String school = mSchoolSpinner.getSelectedItem().toString();
+        int schoolId = mSchoolSpinner.getSelectedItemPosition();
         String grade = mGradeSpinner.getSelectedItem().toString();
 
         if (firstName.isEmpty()) {
@@ -175,54 +174,41 @@ public class RegisterActivity extends Activity {
         setProgressBarIndeterminateVisibility(true);
 
         try {
-            register(firstName, lastName, email, school, grade);
+            register(firstName, lastName, email, schoolId, grade);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(RegisterActivity.this, "Failed to sign up", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void register(String firstName, String lastName, String email, String school, String grade) throws Exception {
+    public void register(String firstName, String lastName, String email, int schoolId, String grade) throws Exception {
+
+        final int USER_TYPE = 1;
+        final boolean IS_REGISTERED = true;
 
         String deviceId = getDeviceId();
+        int id = Integer.parseInt(deviceId.replaceAll("\\D+", ""));
         boolean is18 = ((CheckBox) findViewById(R.id.checkbox_age)).isChecked();
         boolean isMultiGrade = ((CheckBox) findViewById(R.id.checkbox_level)).isChecked();
         boolean getNotifications = ((CheckBox) findViewById(R.id.checkbox_notifications)).isChecked();
         boolean trackLocation = ((CheckBox) findViewById(R.id.checkbox_location)).isChecked();
         boolean receiveCoupons = ((CheckBox) findViewById(R.id.checkbox_coupons)).isChecked();
 
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http")
-                .authority("test.sgbp.info")
-                .appendPath("SGBPWS.asmx")
-                .appendQueryParameter("Key", deviceId)
-                .appendQueryParameter("Device_Info_Id", deviceId)
-                .appendQueryParameter("First_Name", firstName)
-                .appendQueryParameter("Last_Name", firstName)
-                .appendQueryParameter("Device_UID", deviceId)
-                .appendQueryParameter("Device_UID", deviceId)
-        ;
-        String registerUrl = builder.toString();
+        ApiService service = new RestClient().getApiService();
+        service.register(deviceId, id, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
+                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
+                    @Override public void success(Response response, Response response2) {
+                        Log.i("TAG", response.getBody().toString());
 
-        Request request = new Request.Builder()
-                .url(registerUrl)
-                .build();
+                        mSharedPrefs.edit().putBoolean("registered", true).apply();
+                        setProgressBarIndeterminateVisibility(false);
+                        navigateToMainScreen();
+                    }
 
-        //        client.newCall(request).enqueue(new Callback() {
-        //            @Override public void onFailure(Request request, IOException e) {
-        //                e.printStackTrace();
-        //            }
-        //
-        //            @Override public void onResponse(Response response) throws IOException {
-        //                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-        //
-        //                Log.i(TAG, response.body().string());
-        //
-        //                mSharedPrefs.edit().putBoolean("registered", true).apply();
-        //                setProgressBarIndeterminateVisibility(false);
-        //                navigateToMainScreen();
-        //            }
-        //        });
+                    @Override public void failure(RetrofitError e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     public String getDeviceId() {
