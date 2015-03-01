@@ -6,6 +6,9 @@ public class School extends SugarRecord<School> {
     int id;
     String name;
 
+    public School() {
+    }
+
     public School(int id, String name) {
         this.id = id;
         this.name = name;

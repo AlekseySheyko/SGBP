@@ -67,9 +67,9 @@ public class RegisterActivity extends Activity {
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-//TODO        if (isRegistered) {
+        if (isRegistered) {
             navigateToMainScreen();
-//        }
+        }
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);

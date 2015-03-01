@@ -14,13 +14,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.List;
+
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
+import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import butterknife.ButterKnife;
@@ -71,6 +75,23 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+
+        ArrayAdapter<String> schoolAdapter = new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_item
+        );
+        List<School> schoolList = School.listAll(School.class);
+        for (School school : schoolList) {
+            schoolAdapter.add(school.getName());
+        }
+        schoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSchoolSpinner.setAdapter(schoolAdapter);
+
+        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.grade_levels));
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGradeSpinner.setAdapter(gradeAdapter);
 
         mSharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
