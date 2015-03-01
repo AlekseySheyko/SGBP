@@ -31,6 +31,7 @@ import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser.School;
+import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
@@ -40,16 +41,36 @@ public class RegisterActivity extends Activity {
 
     private SharedPreferences mSharedPrefs;
 
+    @InjectView(R.id.firstName)
+    EditText mFirstNameField;
+    @InjectView(R.id.lastName)
+    EditText mLastNameField;
+    @InjectView(R.id.email)
+    EditText mEmailField;
+    @InjectView(R.id.school)
+    Spinner mSchoolSpinner;
+    @InjectView(R.id.grade)
+    Spinner mGradeSpinner;
+    @InjectView(R.id.age)
+    CheckBox mCheckBoxAge;
+    @InjectView(R.id.notifications)
+    CheckBox mCheckBoxNotifications;
+    @InjectView(R.id.location)
+    CheckBox mCheckBoxLocation;
+    @InjectView(R.id.coupons)
+    CheckBox mCheckBoxCoupons;
+    @InjectView(R.id.multipleGrade)
+    CheckBox mCheckBoxLevel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-        // TODO: Return this check you can update user info on server
-        // if (isRegistered) {
+        if (isRegistered) {
             navigateToMainScreen();
-        // }
+        }
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_register);
     }
@@ -63,8 +84,33 @@ public class RegisterActivity extends Activity {
         }
     }
 
-    private Spinner mSchoolSpinner;
-    private Spinner mGradeSpinner;
+    @Override protected void onPause() {
+        super.onPause();
+
+        String firstName = mFirstNameField.getText().toString();
+        String lastName = mLastNameField.getText().toString();
+        String email = mEmailField.getText().toString();
+        int schoolId = mSchoolSpinner.getSelectedItemPosition();
+        int gradeId = mGradeSpinner.getSelectedItemPosition();
+        boolean is18 = mCheckBoxAge.isChecked();
+        boolean isMultiGrade = mCheckBoxLevel.isChecked();
+        boolean getNotifications = mCheckBoxNotifications.isChecked();
+        boolean trackLocation = mCheckBoxLocation.isChecked();
+        boolean receiveCoupons = mCheckBoxCoupons.isChecked();
+
+        mSharedPrefs.edit()
+                .putString("first_name", firstName)
+                .putString("last_name", lastName)
+                .putString("email", email)
+                .putInt("school_id", schoolId)
+                .putInt("grade_id", gradeId)
+                .putBoolean("is18", is18)
+                .putBoolean("notifications", getNotifications)
+                .putBoolean("location", trackLocation)
+                .putBoolean("coupons", receiveCoupons)
+                .putBoolean("multipleLevel", isMultiGrade)
+                .apply();
+    }
 
     private void loadSchoolsListFromNetwork() {
         ApiService service = new RestClient().getApiService();
@@ -176,7 +222,7 @@ public class RegisterActivity extends Activity {
         setProgressBarIndeterminateVisibility(true);
 
         try {
-            register(firstName, lastName, email, schoolId, grade);
+            // register(firstName, lastName, email, schoolId, grade);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(RegisterActivity.this, "Failed to sign up", Toast.LENGTH_SHORT).show();
@@ -190,11 +236,11 @@ public class RegisterActivity extends Activity {
 
         String deviceId = getDeviceId();
         int id = randInt(1000, 9999);
-        boolean is18 = ((CheckBox) findViewById(R.id.checkbox_age)).isChecked();
-        boolean isMultiGrade = ((CheckBox) findViewById(R.id.checkbox_level)).isChecked();
-        boolean getNotifications = ((CheckBox) findViewById(R.id.checkbox_notifications)).isChecked();
-        boolean trackLocation = ((CheckBox) findViewById(R.id.checkbox_location)).isChecked();
-        boolean receiveCoupons = ((CheckBox) findViewById(R.id.checkbox_coupons)).isChecked();
+        boolean is18 = ((CheckBox) findViewById(R.id.age)).isChecked();
+        boolean isMultiGrade = ((CheckBox) findViewById(R.id.multipleGrade)).isChecked();
+        boolean getNotifications = ((CheckBox) findViewById(R.id.notifications)).isChecked();
+        boolean trackLocation = ((CheckBox) findViewById(R.id.location)).isChecked();
+        boolean receiveCoupons = ((CheckBox) findViewById(R.id.coupons)).isChecked();
 
         ApiService service = new RestClient().getApiService();
         service.register(deviceId, id, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,

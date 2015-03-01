@@ -36,13 +36,13 @@ public class AccountFragment extends Fragment {
     EditText mSchoolField;
     @InjectView(R.id.grade)
     EditText mGradeField;
-    @InjectView(R.id.checkbox_notifications)
+    @InjectView(R.id.notifications)
     CheckBox mCheckBoxNotifications;
-    @InjectView(R.id.checkbox_location)
+    @InjectView(R.id.location)
     CheckBox mCheckBoxLocation;
-    @InjectView(R.id.checkbox_coupons)
+    @InjectView(R.id.coupons)
     CheckBox mCheckBoxCoupons;
-    @InjectView(R.id.checkbox_level)
+    @InjectView(R.id.multipleGrade)
     CheckBox mCheckBoxLevel;
 
     @Override

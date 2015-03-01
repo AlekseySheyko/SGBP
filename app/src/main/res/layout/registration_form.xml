@@ -54,7 +54,7 @@
             style="@style/CheckBoxTextLabel"/>
 
         <CheckBox
-            android:id="@+id/checkbox_age"
+            android:id="@+id/age"
             style="@style/CheckBox"/>
 
     </LinearLayout>
@@ -69,7 +69,7 @@
             style="@style/CheckBoxTextLabel"/>
 
         <CheckBox
-            android:id="@+id/checkbox_notifications"
+            android:id="@+id/notifications"
             style="@style/CheckBox"/>
 
     </LinearLayout>
@@ -84,7 +84,7 @@
             style="@style/CheckBoxTextLabel"/>
 
         <CheckBox
-            android:id="@+id/checkbox_location"
+            android:id="@+id/location"
             style="@style/CheckBox"/>
 
     </LinearLayout>
@@ -99,7 +99,7 @@
             style="@style/CheckBoxTextLabel"/>
 
         <CheckBox
-            android:id="@+id/checkbox_coupons"
+            android:id="@+id/coupons"
             style="@style/CheckBox"/>
 
     </LinearLayout>
@@ -114,7 +114,7 @@
             style="@style/CheckBoxTextLabel"/>
 
         <CheckBox
-            android:id="@+id/checkbox_level"
+            android:id="@+id/multipleGrade"
             style="@style/CheckBox"
             android:checked="false"/>
 
