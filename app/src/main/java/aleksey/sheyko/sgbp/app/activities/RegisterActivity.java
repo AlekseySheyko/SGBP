@@ -171,8 +171,8 @@ public class RegisterActivity extends Activity {
                     mSchoolSpinner = (Spinner) findViewById(R.id.school);
                     mSchoolSpinner.setAdapter(schoolAdapter);
 
-                    int schoolId = mSharedPrefs.getInt("school_id", 0);
-                    if (schoolId == 0) {
+                    int schoolId = mSharedPrefs.getInt("school_id", -1);
+                    if (schoolId == -1) {
                         mSchoolSpinner.setSelection(schoolAdapter.getCount());
                     } else {
                         mSchoolSpinner.setSelection(schoolId);
@@ -206,8 +206,8 @@ public class RegisterActivity extends Activity {
                     mGradeSpinner = (Spinner) findViewById(R.id.grade);
                     mGradeSpinner.setAdapter(gradeAdapter);
 
-                    int gradeId = mSharedPrefs.getInt("grade_id", 0);
-                    if (gradeId == 0) {
+                    int gradeId = mSharedPrefs.getInt("grade_id", -1);
+                    if (gradeId == -1) {
                         mGradeSpinner.setSelection(gradeAdapter.getCount());
                     } else {
                         mGradeSpinner.setSelection(gradeId);
