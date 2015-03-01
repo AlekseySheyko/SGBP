@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -78,6 +79,7 @@ public class MapPane extends Activity {
         }
 
         if (mStores.size() == 0 && mSearchQuery == null) {
+            setProgressBarIndeterminateVisibility(true);
             ApiService service = new RestClient().getApiService();
             service.listStores(new ResponseCallback() {
                 @Override public void success(Response response) {
@@ -89,6 +91,7 @@ public class MapPane extends Activity {
                     }
                     mStores = Store.listAll(Store.class);
                     addMarkers();
+                    setProgressBarIndeterminateVisibility(false);
                 }
 
                 @Override public void failure(RetrofitError e) {
@@ -103,13 +106,16 @@ public class MapPane extends Activity {
     private void addMarkers() {
         final LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Store store : mStores) {
-            Marker marker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(
-                            Double.parseDouble(store.getLatitude()),
-                            Double.parseDouble(store.getLongitude())))
-                    .title(store.getName()));
+            Double latitude = Double.parseDouble(store.getLatitude());
+            Double longitude = Double.parseDouble(store.getLongitude());
+            Log.i("TAG", "Lat: " + latitude);
+            if (latitude > 35 && latitude < 50) {
+                Marker marker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude, longitude))
+                        .title(store.getName()));
 
-            builder.include(marker.getPosition());
+                builder.include(marker.getPosition());
+            }
         }
         final int PADDING = 100; // offset from edges of the map in pixels
         mMap.setOnCameraChangeListener(new OnCameraChangeListener() {

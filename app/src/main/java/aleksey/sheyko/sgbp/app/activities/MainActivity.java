@@ -22,19 +22,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.app.service.LocationService;
+import aleksey.sheyko.sgbp.app.adapters.SpinnerAdapter;
 import aleksey.sheyko.sgbp.app.fragments.AboutFragment;
 import aleksey.sheyko.sgbp.app.fragments.AccountFragment;
 import aleksey.sheyko.sgbp.app.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.app.fragments.StoreListFragment;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
-import aleksey.sheyko.sgbp.app.adapters.SpinnerAdapter;
+import aleksey.sheyko.sgbp.app.service.LocationService;
 
 
 public class MainActivity extends FragmentActivity {
@@ -50,6 +51,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
         // Setup action bar for tabs

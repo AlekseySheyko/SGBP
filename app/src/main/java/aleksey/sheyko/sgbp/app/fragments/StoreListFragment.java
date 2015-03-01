@@ -100,6 +100,7 @@ public class StoreListFragment extends ListFragment
         }
 
         if (mStores != null && mStores.size() == 0 && mSearchQuery == null) {
+            getActivity().setProgressBarIndeterminateVisibility(true);
             ApiService service = new RestClient().getApiService();
             service.listStores(new ResponseCallback() {
                 @Override public void success(Response response) {
@@ -111,6 +112,7 @@ public class StoreListFragment extends ListFragment
                     }
                     mStores = Store.listAll(Store.class);
                     populateListAdapter();
+                    getActivity().setProgressBarIndeterminateVisibility(false);
                 }
 
                 @Override public void failure(RetrofitError e) {
@@ -204,9 +206,6 @@ public class StoreListFragment extends ListFragment
         if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
             getListView().setEmptyView(
                     noItems(getResources().getString(R.string.notifications_empty)));
-        } else {
-            getListView().setEmptyView(
-                    noItems(getResources().getString(R.string.stores_empty)));
         }
     }
 
@@ -231,9 +230,7 @@ public class StoreListFragment extends ListFragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity())
-                == ConnectionResult.SUCCESS) {
-            if ((mStores != null && mStores.size() != 0) || mStores == null)
+        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this.getActivity()) == ConnectionResult.SUCCESS) {
                 inflater.inflate(R.menu.store_list_fragment, menu);
         }
         super.onCreateOptionsMenu(menu, inflater);
