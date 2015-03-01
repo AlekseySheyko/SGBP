@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,6 +35,12 @@ public class DetailActivity extends Activity {
         mName = sharedPrefs.getString("name", "");
         String address = sharedPrefs.getString("address", "");
         mPhone = sharedPrefs.getString("phone", "");
+        if (address.isEmpty()) {
+            findViewById(R.id.address_container).setVisibility(View.GONE);
+        }
+        if (mPhone.isEmpty()) {
+            findViewById(R.id.phone_container).setVisibility(View.GONE);
+        }
 
         ((TextView) findViewById(R.id.address)).setText(address);
         ((TextView) findViewById(R.id.phone)).setText(mPhone);
@@ -77,5 +84,13 @@ public class DetailActivity extends Activity {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + mPhone.replaceAll("[^0-9]", "")));
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return true;
     }
 }
