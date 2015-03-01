@@ -233,6 +233,7 @@ public class StoreListFragment extends ListFragment
                     .putString("phone", phone)
                     .putString("latitude", latitude)
                     .putString("longitude", longitude)
+                    .putBoolean("isMobile", mCategory.equals(Constants.CATEGORY_MOBILE))
                     .apply();
             startActivity(new Intent(this.getActivity(), DetailActivity.class));
         } else if (mViewMode == Constants.VIEW_COUPONS) {

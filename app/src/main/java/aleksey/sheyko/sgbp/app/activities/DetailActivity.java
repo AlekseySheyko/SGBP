@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,34 +22,30 @@ import aleksey.sheyko.sgbp.R;
 
 public class DetailActivity extends Activity {
 
-    private double mLatitude;
-    private double mLongitude;
-    private String mName;
-    private String mPhone;
+    private SharedPreferences mSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mName = sharedPrefs.getString("name", "");
-        String address = sharedPrefs.getString("address", "");
-        mPhone = sharedPrefs.getString("phone", "");
-        if (address.isEmpty()) {
-            findViewById(R.id.address_container).setVisibility(View.GONE);
-        }
-        if (mPhone.isEmpty()) {
-            findViewById(R.id.phone_container).setVisibility(View.GONE);
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String name = mSharedPrefs.getString("name", "");
+        String address = mSharedPrefs.getString("address", "");
+        String phone = mSharedPrefs.getString("phone", "");
+        double latitude = Double.parseDouble(mSharedPrefs.getString("latitude", ""));
+        double longitude = Double.parseDouble(mSharedPrefs.getString("longitude", ""));
+        boolean isMobile = mSharedPrefs.getBoolean("isMobile", false);
+
+        Button actionButton = (Button) findViewById(R.id.button);
+        if (isMobile) {
+            actionButton.setText("Participate");
+        } else {
+            actionButton.setText("Make route");
         }
 
         ((TextView) findViewById(R.id.address)).setText(address);
-        ((TextView) findViewById(R.id.phone)).setText(mPhone);
-
-        mLatitude = Double.parseDouble(
-                sharedPrefs.getString("latitude", ""));
-        mLongitude = Double.parseDouble(
-                sharedPrefs.getString("longitude", ""));
+        ((TextView) findViewById(R.id.phone)).setText(phone);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -63,17 +60,28 @@ public class DetailActivity extends Activity {
             }
         });
         map.addMarker(new MarkerOptions()
-                .position(new LatLng(mLatitude, mLongitude))
-                .title(mName)).showInfoWindow();
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLatitude, mLongitude), 13));
+                .position(new LatLng(latitude, longitude))
+                .title(name)).showInfoWindow();
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
+
+
+        if (address.isEmpty()) {
+            findViewById(R.id.address_container).setVisibility(View.GONE);
+        }
+        if (phone.isEmpty()) {
+            findViewById(R.id.phone_container).setVisibility(View.GONE);
+        }
     }
 
     private void navigateToMap() {
+        String name = mSharedPrefs.getString("name", "");
+        double latitude = Double.parseDouble(mSharedPrefs.getString("latitude", ""));
+        double longitude = Double.parseDouble(mSharedPrefs.getString("longitude", ""));
+
         startActivity(new Intent(DetailActivity.this, MapPane.class)
-                        .putExtra("name", mName)
-                        .putExtra("latitude", mLatitude)
-                        .putExtra("longitude", mLongitude)
-        );
+                .putExtra("name", name)
+                .putExtra("latitude", latitude)
+                .putExtra("longitude", longitude));
     }
 
     public void showMap(View view) {
@@ -81,8 +89,9 @@ public class DetailActivity extends Activity {
     }
 
     public void dial(View view) {
+        String phone = mSharedPrefs.getString("phone", "");
         Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + mPhone.replaceAll("[^0-9]", "")));
+        intent.setData(Uri.parse("tel:" + phone.replaceAll("[^0-9]", "")));
         startActivity(intent);
     }
 

@@ -2,4 +2,7 @@
 <resources>
     <color name="window_background">#e4e4e4</color>
     <color name="white">#fff</color>
+    <color name="action_button_focused">#eb6a6a</color>
+    <color name="action_button_pressed">#cd6060</color>
+    <color name="action_button_normal">#ff6b6b</color>
 </resources>
