@@ -23,14 +23,10 @@ import android.widget.Toast;
 import com.squareup.okhttp.Request;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.rest.ApiService;
-import aleksey.sheyko.sgbp.rest.GradesXmlParser;
-import aleksey.sheyko.sgbp.rest.GradesXmlParser.Grade;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser.School;
@@ -67,16 +63,14 @@ public class RegisterActivity extends Activity {
     private Spinner mSchoolSpinner;
     private Spinner mGradeSpinner;
 
-    private List<School> mSchoolsList;
-
     private void loadSchoolsListFromNetwork() {
         ApiService service = new RestClient().getApiService();
         service.getSchoolsList(new ResponseCallback() {
             @Override public void success(Response response) {
                 try (InputStream in = response.getBody().in()) {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
-                    mSchoolsList = schoolsXmlParser.parse(in);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                    List<School> schoolsList = schoolsXmlParser.parse(in);
+                    ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
                             RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
                         @Override
@@ -94,56 +88,44 @@ public class RegisterActivity extends Activity {
                             return super.getCount() - 1; // you don't display last item. It is used as hint.
                         }
                     };
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    for (School school : mSchoolsList) {
-                        adapter.add(school.name);
+                    schoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    for (School school : schoolsList) {
+                        schoolAdapter.add(school.name);
                     }
-                    adapter.add("School");
+                    schoolAdapter.add("School");
 
                     mSchoolSpinner = (Spinner) findViewById(R.id.school);
-                    mSchoolSpinner.setAdapter(adapter);
-                    mSchoolSpinner.setSelection(adapter.getCount());
+                    mSchoolSpinner.setAdapter(schoolAdapter);
+                    mSchoolSpinner.setSelection(schoolAdapter.getCount());
 
-                    loadGradeListFromNetwork();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+                    ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(
+                            RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
-            @Override public void failure(RetrofitError e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private void loadGradeListFromNetwork() {
-        ApiService service = new RestClient().getApiService();
-        service.getGradesList(new ResponseCallback() {
-            @Override public void success(Response response) {
-                try (InputStream in = response.getBody().in()) {
-                    GradesXmlParser gradesXmlParser = new GradesXmlParser();
-                    List<Grade> gradesList = gradesXmlParser.parse(in);
-                    HashMap<Integer, String> map = new HashMap<>();
-                    for (Grade grade : gradesList) {
-                        map.put(grade.schoolId, grade.name);
-                    }
-                    List<String> gradeNamesList = new ArrayList<>();
-                    int selectedSchoolId = mSchoolSpinner.getSelectedItemPosition();
-                    for (Integer schoolId : map.keySet()) {
-                        if (schoolId == selectedSchoolId) {
-                            gradeNamesList.add(map.get(schoolId));
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View v = super.getView(position, convertView, parent);
+                            if (position == getCount()) {
+                                ((TextView) v.findViewById(android.R.id.text1)).setText("");
+                                ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                            }
+                            return v;
                         }
+
+                        @Override
+                        public int getCount() {
+                            return super.getCount() - 1; // you don't display last item. It is used as hint.
+                        }
+                    };
+                    gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    String[] gradeStrings = getResources().getStringArray(R.array.grade_levels);
+                    for (String gradeString : gradeStrings) {
+                        gradeAdapter.add(gradeString);
                     }
-                    String[] gradeNames = gradeNamesList.toArray(new String[gradeNamesList.size()]);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                            RegisterActivity.this,
-                            android.R.layout.simple_spinner_item,
-                            gradeNames
-                    );
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    gradeAdapter.add("Grade");
 
                     mGradeSpinner = (Spinner) findViewById(R.id.grade);
-                    mGradeSpinner.setAdapter(adapter);
+                    mGradeSpinner.setAdapter(gradeAdapter);
+                    mGradeSpinner.setSelection(gradeAdapter.getCount());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
