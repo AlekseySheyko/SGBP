@@ -31,6 +31,7 @@ import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser.School;
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.ResponseCallback;
@@ -73,6 +74,7 @@ public class RegisterActivity extends Activity {
         }
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_register);
+        ButterKnife.inject(this);
     }
 
     List<String> mSchoolList;
@@ -85,8 +87,6 @@ public class RegisterActivity extends Activity {
         String firstName = mSharedPrefs.getString("first_name", "");
         String lastName = mSharedPrefs.getString("last_name", "");
         String email = mSharedPrefs.getString("email", "");
-        int schoolId = mSharedPrefs.getInt("school_id", 0);
-        int gradeId = mSharedPrefs.getInt("grade_id", 0);
         boolean is18 = mSharedPrefs.getBoolean("is18", true);
         boolean isMultiGrade = mSharedPrefs.getBoolean("multipleLevel", false);
         boolean getNotifications = mSharedPrefs.getBoolean("notifications", true);
@@ -102,8 +102,6 @@ public class RegisterActivity extends Activity {
         if (!email.isEmpty()) {
             mEmailField.setText(email);
         }
-        mSchoolSpinner.setSelection(schoolId);
-        mGradeSpinner.setSelection(gradeId);
         mCheckBoxAge.setChecked(is18);
         mCheckBoxLevel.setChecked(isMultiGrade);
         mCheckBoxNotifications.setChecked(getNotifications);
@@ -172,7 +170,13 @@ public class RegisterActivity extends Activity {
 
                     mSchoolSpinner = (Spinner) findViewById(R.id.school);
                     mSchoolSpinner.setAdapter(schoolAdapter);
-                    mSchoolSpinner.setSelection(schoolAdapter.getCount());
+
+                    int schoolId = mSharedPrefs.getInt("school_id", 0);
+                    if (schoolId == 0) {
+                        mSchoolSpinner.setSelection(schoolAdapter.getCount());
+                    } else {
+                        mSchoolSpinner.setSelection(schoolId);
+                    }
 
                     ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(
                             RegisterActivity.this, android.R.layout.simple_spinner_item) {
@@ -201,7 +205,13 @@ public class RegisterActivity extends Activity {
 
                     mGradeSpinner = (Spinner) findViewById(R.id.grade);
                     mGradeSpinner.setAdapter(gradeAdapter);
-                    mGradeSpinner.setSelection(gradeAdapter.getCount());
+
+                    int gradeId = mSharedPrefs.getInt("grade_id", 0);
+                    if (gradeId == 0) {
+                        mGradeSpinner.setSelection(gradeAdapter.getCount());
+                    } else {
+                        mGradeSpinner.setSelection(gradeId);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
