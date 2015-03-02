@@ -41,6 +41,7 @@ public class DetailActivity extends Activity {
         Button actionButton = (Button) findViewById(R.id.button);
         if (isMobile) {
             actionButton.setText("Participate");
+            actionButton.setBackground(getResources().getDrawable(R.drawable.participate_button_selector));
         } else {
             actionButton.setText("Make route");
             actionButton.setOnClickListener(new OnClickListener() {

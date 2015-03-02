@@ -2,7 +2,10 @@
 <resources>
     <color name="window_background">#e4e4e4</color>
     <color name="white">#fff</color>
-    <color name="action_button_focused">#eb6a6a</color>
-    <color name="action_button_pressed">#cd6060</color>
-    <color name="action_button_normal">#ff6b6b</color>
+    <color name="route_button_normal">#ff6b6b</color>
+    <color name="route_button_focused">#eb6a6a</color>
+    <color name="route_button_pressed">#cd6060</color>
+    <color name="participate_button_normal">#ffb25dcd</color>
+    <color name="participate_button_focused">#9b59b6</color>
+    <color name="participate_button_pressed">#ff85509f</color>
 </resources>

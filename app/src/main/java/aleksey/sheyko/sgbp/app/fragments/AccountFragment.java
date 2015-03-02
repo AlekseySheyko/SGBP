@@ -29,7 +29,7 @@ import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.Callback;
+import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -171,8 +171,9 @@ public class AccountFragment extends Fragment {
 
         ApiService service = new RestClient().getApiService();
         service.update(deviceId, firstName, lastName, schoolId, isMultiGrade, IS_REGISTERED,
-                receiveCoupons, getNotifications, trackLocation, is18, userId, new Callback<Response>() {
-                    @Override public void success(Response response, Response response2) {
+                receiveCoupons, getNotifications, trackLocation, is18, userId, new ResponseCallback() {
+                    @Override public void success(Response response) {
+                        navigateToMainScreen();
                     }
 
                     @Override public void failure(RetrofitError e) {
@@ -246,7 +247,6 @@ public class AccountFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_save) {
             update();
-            navigateToMainScreen();
         }
         return super.onOptionsItemSelected(item);
     }
