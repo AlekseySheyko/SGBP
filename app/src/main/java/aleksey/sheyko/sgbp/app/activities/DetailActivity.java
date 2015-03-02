@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,15 +34,22 @@ public class DetailActivity extends Activity {
         String name = mSharedPrefs.getString("name", "");
         String address = mSharedPrefs.getString("address", "");
         String phone = mSharedPrefs.getString("phone", "");
-        double latitude = Double.parseDouble(mSharedPrefs.getString("latitude", ""));
-        double longitude = Double.parseDouble(mSharedPrefs.getString("longitude", ""));
+        final double latitude = Double.parseDouble(mSharedPrefs.getString("latitude", ""));
+        final double longitude = Double.parseDouble(mSharedPrefs.getString("longitude", ""));
         boolean isMobile = mSharedPrefs.getBoolean("isMobile", false);
 
         Button actionButton = (Button) findViewById(R.id.button);
         if (isMobile) {
             actionButton.setText("Participate");
+
         } else {
             actionButton.setText("Make route");
+            actionButton.setOnClickListener(new OnClickListener() {
+                @Override public void onClick(View view) {
+                    startActivity(new Intent(android.content.Intent.ACTION_VIEW,
+                            Uri.parse("http://maps.google.com/maps?daddr=" + latitude + "," + longitude)));
+                }
+            });
         }
 
         ((TextView) findViewById(R.id.address)).setText(address);
