@@ -53,8 +53,10 @@ public class StoreListFragment extends ListFragment
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
     private ArrayList<Notification> mNotificationList = new ArrayList<>();
+    private ArrayList<Coupon> mCouponList;
     private List<Store> mStores;
     private List<Notification> mNotifications;
+    private List<Coupon> mCoupons;
     private String mCategory;
     private String mSearchQuery;
     private int mViewMode;
@@ -103,6 +105,20 @@ public class StoreListFragment extends ListFragment
             mGoogleApiClient.connect();
             return;
         } else if (mViewMode == Constants.VIEW_COUPONS) {
+
+            mCoupons = Coupon.listAll(Coupon.class);
+            if (mCoupons.size() > 0) {
+                mCouponList = new ArrayList<>();
+                for (Coupon coupon : mCoupons) {
+                    mCouponList.add(new Coupon(
+                            coupon.getStoreid(),
+                            coupon.getStoreName(),
+                            coupon.getCode(),
+                            coupon.getDesc(),
+                            coupon.getExpireDate()));
+                }
+                return;
+            }
             getActivity().setProgressBarIndeterminateVisibility(true);
             ApiService service = new RestClient().getApiService();
             service.listCoupons(new ResponseCallback() {
@@ -113,10 +129,10 @@ public class StoreListFragment extends ListFragment
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    List<Coupon> coupons = Coupon.listAll(Coupon.class);
-                    ArrayList<Coupon> couponList = new ArrayList<>();
-                    for (Coupon coupon : coupons) {
-                        couponList.add(new Coupon(
+                    mCoupons = Coupon.listAll(Coupon.class);
+                    mCouponList = new ArrayList<>();
+                    for (Coupon coupon : mCoupons) {
+                        mCouponList.add(new Coupon(
                                 coupon.getStoreid(),
                                 coupon.getStoreName(),
                                 coupon.getCode(),
@@ -124,7 +140,7 @@ public class StoreListFragment extends ListFragment
                                 coupon.getExpireDate()));
                     }
                     CouponAdapter adapter = new CouponAdapter(getActivity(),
-                            R.layout.store_list_item, couponList);
+                            R.layout.store_list_item, mCouponList);
                     setListAdapter(adapter);
                     getActivity().setProgressBarIndeterminateVisibility(false);
                 }
@@ -231,6 +247,10 @@ public class StoreListFragment extends ListFragment
             NotificationsAdapter mAdapter = new NotificationsAdapter(getActivity(),
                     R.layout.store_list_item, mNotificationList);
             setListAdapter(mAdapter);
+        } else if (mViewMode == Constants.VIEW_COUPONS) {
+            CouponAdapter adapter = new CouponAdapter(getActivity(),
+                    R.layout.store_list_item, mCouponList);
+            setListAdapter(adapter);
         } else {
             StoresAdapter mAdapter = new StoresAdapter(getActivity(),
                     R.layout.store_list_item, mStoreList);

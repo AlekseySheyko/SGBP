@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.app.helpers.Constants;
 import aleksey.sheyko.sgbp.model.Coupon;
 
 public class CouponAdapter extends ArrayAdapter<Coupon> {
@@ -45,7 +44,7 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
         // to inflate it basically means to render, or show, the view.
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.store_list_item, null);
+            view = inflater.inflate(R.layout.store_list_item, parent, false);
         }
 
 		/*
@@ -63,23 +62,8 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
             if (ttd != null) {
                 ttd.setText(coupon.getStoreName());
             }
-            if (mtd == null) return null;
-            int viewMode = mSharedPrefs.getInt(
-                    "view_mode", Constants.VIEW_CATEGORIES);
-            switch (viewMode) {
-                case Constants.VIEW_CATEGORIES:
-                    mtd.setText(coupon.getCode());
-                    break;
-                case Constants.VIEW_NEAREST:
-                    String distance = String.format("%.1f%n",
-                            mSharedPrefs.getFloat(coupon.getStoreid() + "", -1))
-                            .replace(".0", "") + "miles";
-                    mtd.setText(distance);
-                    break;
-                case Constants.VIEW_NOTIFICATIONS:
-                    mtd.setText("23 dec, 4:02 PM");
-                    break;
-                // In case of «VIEW_COUPONS», show nothing in secondary
+            if (mtd != null) {
+                mtd.setText(coupon.getCode());
             }
         }
         return view;
