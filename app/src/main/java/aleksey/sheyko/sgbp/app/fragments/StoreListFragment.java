@@ -294,7 +294,18 @@ public class StoreListFragment extends ListFragment
             }
             startActivity(new Intent(this.getActivity(), DetailActivity.class));
         } else if (mViewMode == Constants.VIEW_COUPONS) {
-            // TODO Show map or something
+            int storeId = mCouponList.get(position).getStoreid();
+            Store selectedStore = Store.find(Store.class, "storeid = ?", String.valueOf(storeId)).get(0);
+            String name = selectedStore.getName();
+            String latitude = selectedStore.getLatitude();
+            String longitude = selectedStore.getLongitude();
+            mSharedPrefs.edit()
+                    .putInt("storeId", storeId)
+                    .putString("name", name)
+                    .putString("latitude", latitude)
+                    .putString("longitude", longitude)
+                    .apply();
+            startActivity(new Intent(this.getActivity(), MapPane.class));
         }
     }
 
