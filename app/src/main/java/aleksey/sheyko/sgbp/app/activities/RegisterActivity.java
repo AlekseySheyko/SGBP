@@ -81,7 +81,7 @@ public class RegisterActivity extends Activity {
         ButterKnife.inject(this);
     }
 
-    private boolean checkRegistration() {
+    private void checkRegistration() {
         setProgressBarIndeterminateVisibility(true);
         Toast.makeText(this, "Checking whether device is registered...", Toast.LENGTH_LONG).show();
         ApiService service = new RestClient().getApiService();
@@ -93,10 +93,21 @@ public class RegisterActivity extends Activity {
                     if (userList == null) {
                         return;
                     }
-
                     User user = userList.get(0);
-
-
+                    mSharedPrefs.edit()
+                            .putBoolean("registered", true)
+                            .putString("device_id", getDeviceId())
+                            .putInt("user_id", user.id)
+                            .putString("first_name", user.firstName)
+                            .putString("last_name", user.lastName)
+                            .putString("email", user.email)
+                            .putBoolean("multipleLevel", user.multipleGrade)
+                            .putBoolean("notifications", user.notifications)
+                            .putBoolean("location", user.location)
+                            .putBoolean("coupons", user.coupons)
+                            .apply();
+                    setProgressBarIndeterminateVisibility(false);
+                    navigateToMainScreen();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -104,7 +115,7 @@ public class RegisterActivity extends Activity {
 
             @Override public void failure(RetrofitError e) {
                 e.printStackTrace();
-                // TODO Show dialog "need network"
+                Toast.makeText(RegisterActivity.this, "Please check network connection", Toast.LENGTH_SHORT).show();
             }
         });
     }
