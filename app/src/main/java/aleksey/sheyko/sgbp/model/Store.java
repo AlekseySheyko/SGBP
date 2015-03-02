@@ -12,6 +12,8 @@ public class Store extends SugarRecord<Store> {
     private String category;
     private String geofenceId;
     private float distance;
+    private boolean isParticipated;
+    private long timeAllowNext;
 
     public Store() {
     }
@@ -96,5 +98,21 @@ public class Store extends SugarRecord<Store> {
 
     public void setDistance(float distance) {
         this.distance = distance;
+    }
+
+    public boolean isParticipated() {
+        return isParticipated;
+    }
+
+    public void setParticipated(boolean isParticipated) {
+        this.isParticipated = isParticipated;
+    }
+
+    public long getTimeAllowNext() {
+        return timeAllowNext;
+    }
+
+    public void setTimeAllowNext(long timeAllowNext) {
+        this.timeAllowNext = timeAllowNext;
     }
 }

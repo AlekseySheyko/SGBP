@@ -24,12 +24,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.model.Store;
 
 public class DetailActivity extends Activity {
+
+    private static final long PARTICIPATE_INTERVAL = 15 * 60 * 1000;
 
     private SharedPreferences mSharedPrefs;
 
@@ -39,48 +43,35 @@ public class DetailActivity extends Activity {
         setContentView(R.layout.activity_detail);
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        final String name = mSharedPrefs.getString("name", "");
-        String address = mSharedPrefs.getString("address", "");
-        String phone = mSharedPrefs.getString("phone", "");
-        final double latitude = Double.parseDouble(mSharedPrefs.getString("latitude", ""));
-        final double longitude = Double.parseDouble(mSharedPrefs.getString("longitude", ""));
-        boolean isMobile = mSharedPrefs.getBoolean("isMobile", false);
+        int storeId = mSharedPrefs.getInt("storeId", -1);
+        final Store currentStore = Store.find(Store.class, "storeid = ?", String.valueOf(storeId)).get(0);
+
+        final double latitude = Double.parseDouble(currentStore.getLatitude());
+        final double longitude = Double.parseDouble(currentStore.getLongitude());
+        final String name = currentStore.getName();
+        String address = currentStore.getAddress();
+        String phone = currentStore.getPhone();
 
         final Button actionButton = (Button) findViewById(R.id.button);
+        boolean isMobile = mSharedPrefs.getBoolean("isMobile", false);
         if (isMobile) {
-            actionButton.setText("Participate");
-            actionButton.setBackground(getResources().getDrawable(R.drawable.participate_button_selector));
-            actionButton.setOnClickListener(new OnClickListener() {
-                @Override public void onClick(View view) {
-                    int storeId = mSharedPrefs.getInt("storeId", -1);
-                    String dateTime = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'").format(new Date());
-                    String deviceId = mSharedPrefs.getString("device_id", "");
-                    int userId = mSharedPrefs.getInt("user_id", -1);
-                    int schoolId = mSharedPrefs.getInt("school_id", -1);
+            if (currentStore.isParticipated()) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                long currentTime = calendar.getTimeInMillis();
 
-                    // TODO Delete when button state is configured
-                    showNotification(name);
-                    Toast.makeText(DetailActivity.this, "Thanks for participation", Toast.LENGTH_SHORT).show();
-                    actionButton.setText("Participated");
-                    actionButton.setEnabled(false);
-
-                    // TODO Return when button state is configured
-                    //                    ApiService service = new RestClient().getApiService();
-                    //                    service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
-                    //                        @Override public void success(Response response) {
-                    //                            showNotification(name);
-                    //                            new Notification(name, getCurrentTime()).save();
-                    //                            Toast.makeText(DetailActivity.this, "Thanks for participation", Toast.LENGTH_SHORT).show();
-                    //                            actionButton.setText("Participated");
-                    //                            actionButton.setEnabled(false);
-                    //                        }
-                    //
-                    //                        @Override public void failure(RetrofitError e) {
-                    //                            e.printStackTrace();
-                    //                        }
-                    //                    });
+                if (currentStore.getTimeAllowNext() < currentTime) {
+                    currentStore.setParticipated(false);
+                    actionButton.setEnabled(true);
+                    enableButton(actionButton, currentStore);
+                    return;
                 }
-            });
+                actionButton.setText("Participated");
+                actionButton.setBackground(getResources().getDrawable(R.drawable.participate_button_selector));
+                actionButton.setEnabled(false);
+            } else {
+                enableButton(actionButton, currentStore);
+            }
         } else {
             actionButton.setText("Make route");
             actionButton.setOnClickListener(new OnClickListener() {
@@ -118,6 +109,46 @@ public class DetailActivity extends Activity {
         if (phone.isEmpty()) {
             findViewById(R.id.phone_container).setVisibility(View.GONE);
         }
+    }
+
+    private void enableButton(final Button actionButton, final Store currentStore) {
+        actionButton.setText("Participate");
+        actionButton.setBackground(getResources().getDrawable(R.drawable.participate_button_selector));
+        actionButton.setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                int storeId = mSharedPrefs.getInt("storeId", -1);
+                String dateTime = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'").format(new Date());
+                String deviceId = mSharedPrefs.getString("device_id", "");
+                int userId = mSharedPrefs.getInt("user_id", -1);
+                int schoolId = mSharedPrefs.getInt("school_id", -1);
+
+                //                        ApiService service = new RestClient().getApiService();
+                //                        service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
+                //                            @Override public void success(Response response) {
+                currentStore.setParticipated(true);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new Date());
+                long currentTime = calendar.getTimeInMillis();
+                currentStore.setTimeAllowNext(currentTime + PARTICIPATE_INTERVAL);
+                currentStore.save();
+
+                actionButton.setText("Participated");
+                actionButton.setEnabled(false);
+
+                Toast.makeText(DetailActivity.this, "Thanks for participation", Toast.LENGTH_SHORT).show();
+
+                showNotification(currentStore.getName());
+                //                                new Notification(name, getCurrentTime()).save();
+                //                            }
+                //
+                //                            @Override public void failure(RetrofitError e) {
+                //                                e.printStackTrace();
+                //                            }
+                //                        });
+
+            }
+        });
     }
 
     private void navigateToMap() {
