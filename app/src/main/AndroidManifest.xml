@@ -61,7 +61,8 @@
         <activity
             android:name=".app.activities.MainActivity"
             android:icon="@drawable/ic_launcher"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".app.activities.MapPane"

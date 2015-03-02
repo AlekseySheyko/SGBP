@@ -2,7 +2,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#fff0f4f5"
+              android:background="#f0f4f5"
               android:orientation="vertical"
               tools:context="aleksey.sheyko.sgbp.app.activities.DetailActivity">
 
