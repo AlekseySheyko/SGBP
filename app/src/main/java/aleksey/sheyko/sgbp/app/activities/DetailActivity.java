@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,12 +28,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.model.Notification;
-import aleksey.sheyko.sgbp.rest.ApiService;
-import aleksey.sheyko.sgbp.rest.RestClient;
-import retrofit.ResponseCallback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class DetailActivity extends Activity {
 
@@ -51,7 +46,7 @@ public class DetailActivity extends Activity {
         final double longitude = Double.parseDouble(mSharedPrefs.getString("longitude", ""));
         boolean isMobile = mSharedPrefs.getBoolean("isMobile", false);
 
-        Button actionButton = (Button) findViewById(R.id.button);
+        final Button actionButton = (Button) findViewById(R.id.button);
         if (isMobile) {
             actionButton.setText("Participate");
             actionButton.setBackground(getResources().getDrawable(R.drawable.participate_button_selector));
@@ -63,17 +58,27 @@ public class DetailActivity extends Activity {
                     int userId = mSharedPrefs.getInt("user_id", -1);
                     int schoolId = mSharedPrefs.getInt("school_id", -1);
 
-                    ApiService service = new RestClient().getApiService();
-                    service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
-                        @Override public void success(Response response) {
-                            showNotification(name);
-                            new Notification(name, getCurrentTime()).save();
-                        }
+                    // TODO Delete when button state is configured
+                    showNotification(name);
+                    Toast.makeText(DetailActivity.this, "Thanks for participation", Toast.LENGTH_SHORT).show();
+                    actionButton.setText("Participated");
+                    actionButton.setEnabled(false);
 
-                        @Override public void failure(RetrofitError e) {
-                            e.printStackTrace();
-                        }
-                    });
+                    // TODO Return when button state is configured
+                    //                    ApiService service = new RestClient().getApiService();
+                    //                    service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
+                    //                        @Override public void success(Response response) {
+                    //                            showNotification(name);
+                    //                            new Notification(name, getCurrentTime()).save();
+                    //                            Toast.makeText(DetailActivity.this, "Thanks for participation", Toast.LENGTH_SHORT).show();
+                    //                            actionButton.setText("Participated");
+                    //                            actionButton.setEnabled(false);
+                    //                        }
+                    //
+                    //                        @Override public void failure(RetrofitError e) {
+                    //                            e.printStackTrace();
+                    //                        }
+                    //                    });
                 }
             });
         } else {

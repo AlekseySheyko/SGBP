@@ -333,7 +333,7 @@ public class RegisterActivity extends Activity {
         final boolean IS_REGISTERED = true;
 
         final String deviceId = getDeviceId();
-        final int userId = randInt(100, 999);
+        final int userId = Integer.parseInt(deviceId.replaceAll("[^0-9]", ""));
         boolean is18 = mCheckBoxAge.isChecked();
         boolean isMultiGrade = mCheckBoxLevel.isChecked();
         boolean getNotifications = mCheckBoxNotifications.isChecked();
