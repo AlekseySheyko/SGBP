@@ -13,11 +13,12 @@ import java.util.ArrayList;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Coupon;
+import aleksey.sheyko.sgbp.model.Store;
 
 public class CouponAdapter extends ArrayAdapter<Coupon> {
 
     // declaring our ArrayList of items
-    private ArrayList<Coupon> mObjects;
+    private ArrayList<Coupon> mCoupons;
 
     private SharedPreferences mSharedPrefs;
 
@@ -25,16 +26,16 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
     * the only variable we care about now is ArrayList<Item> objects,
     * because it is the list of objects we want to display.
     */
-    public CouponAdapter(Context context, int textViewResourceId, ArrayList<Coupon> objects) {
-        super(context, textViewResourceId, objects);
-        mObjects = objects;
+    public CouponAdapter(Context context, int textViewResourceId, ArrayList<Coupon> coupons) {
+        super(context, textViewResourceId, coupons);
+        mCoupons = coupons;
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     /*
-     * we are overriding the getView method here - this is what defines how each
-     * list item will look.
-     */
+         * we are overriding the getView method here - this is what defines how each
+         * list item will look.
+         */
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // assign the view we are converting to a local variable
@@ -54,16 +55,25 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
 		 *
 		 * Therefore, store refers to the current Store object.
 		 */
-        Coupon coupon = mObjects.get(position);
-
+        Coupon coupon = mCoupons.get(position);
         if (coupon != null) {
+            int storeId = coupon.getStoreid();
+            Store store = Store.find(Store.class, "storeid = ?", String.valueOf(storeId)).get(0);
+            int count = store.getCouponCount();
+
             TextView ttd = (TextView) view.findViewById(R.id.nameLabel);
             TextView mtd = (TextView) view.findViewById(R.id.secondaryLabel);
             if (ttd != null) {
                 ttd.setText(coupon.getStoreName());
             }
             if (mtd != null) {
-                mtd.setText(coupon.getCode());
+                String label;
+                if (count == 1) {
+                    label = "coupon";
+                } else {
+                    label = "coupons";
+                }
+                mtd.setText(count + " " + label);
             }
         }
         return view;

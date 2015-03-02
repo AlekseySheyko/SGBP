@@ -53,7 +53,7 @@ public class StoreListFragment extends ListFragment
 
     private ArrayList<Store> mStoreList = new ArrayList<>();
     private ArrayList<Notification> mNotificationList = new ArrayList<>();
-    private ArrayList<Coupon> mCouponList;
+    private ArrayList<Coupon> mCouponList = new ArrayList<>();
     private List<Store> mStores;
     private List<Notification> mNotifications;
     private List<Coupon> mCoupons;
@@ -108,15 +108,7 @@ public class StoreListFragment extends ListFragment
 
             mCoupons = Coupon.listAll(Coupon.class);
             if (mCoupons.size() > 0) {
-                mCouponList = new ArrayList<>();
-                for (Coupon coupon : mCoupons) {
-                    mCouponList.add(new Coupon(
-                            coupon.getStoreid(),
-                            coupon.getStoreName(),
-                            coupon.getCode(),
-                            coupon.getDesc(),
-                            coupon.getExpireDate()));
-                }
+                populateCouponsListAdapter();
                 return;
             }
             getActivity().setProgressBarIndeterminateVisibility(true);
@@ -130,18 +122,7 @@ public class StoreListFragment extends ListFragment
                         e.printStackTrace();
                     }
                     mCoupons = Coupon.listAll(Coupon.class);
-                    mCouponList = new ArrayList<>();
-                    for (Coupon coupon : mCoupons) {
-                        mCouponList.add(new Coupon(
-                                coupon.getStoreid(),
-                                coupon.getStoreName(),
-                                coupon.getCode(),
-                                coupon.getDesc(),
-                                coupon.getExpireDate()));
-                    }
-                    CouponAdapter adapter = new CouponAdapter(getActivity(),
-                            R.layout.store_list_item, mCouponList);
-                    setListAdapter(adapter);
+                    populateCouponsListAdapter();
                     getActivity().setProgressBarIndeterminateVisibility(false);
                 }
 
@@ -164,7 +145,7 @@ public class StoreListFragment extends ListFragment
                         e.printStackTrace();
                     }
                     mStores = Store.listAll(Store.class);
-                    populateListAdapter();
+                    populateStoresListAdapter();
                     getActivity().setProgressBarIndeterminateVisibility(false);
                 }
 
@@ -204,7 +185,7 @@ public class StoreListFragment extends ListFragment
         Location myLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (myLocation == null) {
-            populateListAdapter();
+            populateStoresListAdapter();
             return;
         }
         for (Store store : mStores) {
@@ -217,10 +198,10 @@ public class StoreListFragment extends ListFragment
             store.save();
         }
         mStores = Select.from(Store.class).orderBy("distance").list();
-        populateListAdapter();
+        populateStoresListAdapter();
     }
 
-    private void populateListAdapter() {
+    private void populateStoresListAdapter() {
         for (Store store : mStores) {
             mStoreList.add(new Store(
                     store.getStoreid(),
@@ -237,6 +218,20 @@ public class StoreListFragment extends ListFragment
         setListAdapter(adapter);
     }
 
+    private void populateCouponsListAdapter() {
+        for (Coupon coupon : mCoupons) {
+            mCouponList.add(new Coupon(
+                    coupon.getStoreid(),
+                    coupon.getStoreName(),
+                    coupon.getCode(),
+                    coupon.getDesc(),
+                    coupon.getExpireDate()));
+        }
+        CouponAdapter adapter = new CouponAdapter(getActivity(),
+                R.layout.store_list_item, mCouponList);
+        setListAdapter(adapter);
+    }
+
     @Override
     public void onConnectionSuspended(int i) {
     }
@@ -247,10 +242,6 @@ public class StoreListFragment extends ListFragment
             NotificationsAdapter mAdapter = new NotificationsAdapter(getActivity(),
                     R.layout.store_list_item, mNotificationList);
             setListAdapter(mAdapter);
-        } else if (mViewMode == Constants.VIEW_COUPONS) {
-            CouponAdapter adapter = new CouponAdapter(getActivity(),
-                    R.layout.store_list_item, mCouponList);
-            setListAdapter(adapter);
         } else {
             StoresAdapter mAdapter = new StoresAdapter(getActivity(),
                     R.layout.store_list_item, mStoreList);

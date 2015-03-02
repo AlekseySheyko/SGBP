@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.model.Coupon;
+import aleksey.sheyko.sgbp.model.Store;
 
 public class CouponsXmlParser {
     // We don't use namespaces
@@ -74,6 +75,9 @@ public class CouponsXmlParser {
             String tag = parser.getName();
             if (tag.equals("Store_Id")) {
                 storeid = readStoreId(parser);
+                Store store = Store.find(Store.class, "storeid = ?", String.valueOf(storeid)).get(0);
+                store.incrementCouponCount();
+                store.save();
             } else if (tag.equals("Store_Name")) {
                 storeName = readStoreName(parser);
             } else if (tag.equals("Coupon_Code")) {

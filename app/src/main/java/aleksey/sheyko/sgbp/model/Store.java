@@ -14,6 +14,7 @@ public class Store extends SugarRecord<Store> {
     private float distance;
     private boolean isParticipated;
     private long timeAllowNext;
+    private int couponCount;
 
     public Store() {
     }
@@ -90,5 +91,13 @@ public class Store extends SugarRecord<Store> {
 
     public void setTimeAllowNext(long timeAllowNext) {
         this.timeAllowNext = timeAllowNext;
+    }
+
+    public int getCouponCount() {
+        return couponCount;
+    }
+
+    public void incrementCouponCount() {
+        couponCount++;
     }
 }

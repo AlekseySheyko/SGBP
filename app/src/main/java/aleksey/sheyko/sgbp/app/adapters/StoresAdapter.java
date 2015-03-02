@@ -19,7 +19,7 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 
     private Context mContext;
     // declaring our ArrayList of items
-    private ArrayList<Store> mObjects;
+    private ArrayList<Store> mStores;
 
     private SharedPreferences mSharedPrefs;
 
@@ -27,17 +27,17 @@ public class StoresAdapter extends ArrayAdapter<Store> {
     * the only variable we care about now is ArrayList<Item> objects,
     * because it is the list of objects we want to display.
     */
-    public StoresAdapter(Context context, int textViewResourceId, ArrayList<Store> objects) {
-        super(context, textViewResourceId, objects);
+    public StoresAdapter(Context context, int textViewResourceId, ArrayList<Store> stores) {
+        super(context, textViewResourceId, stores);
         mContext = context;
-        mObjects = objects;
+        mStores = stores;
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
     /*
-     * we are overriding the getView method here - this is what defines how each
-     * list item will look.
-     */
+         * we are overriding the getView method here - this is what defines how each
+         * list item will look.
+         */
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // assign the view we are converting to a local variable
@@ -57,7 +57,7 @@ public class StoresAdapter extends ArrayAdapter<Store> {
 		 *
 		 * Therefore, store refers to the current Store object.
 		 */
-        Store store = mObjects.get(position);
+        Store store = mStores.get(position);
 
         if (store != null) {
             TextView ttd = (TextView) view.findViewById(R.id.nameLabel);
