@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Locale;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.app.helpers.Constants;
 import aleksey.sheyko.sgbp.model.Notification;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.rest.ApiService;
@@ -32,23 +31,26 @@ public class GeofenceService extends IntentService {
 
     public GeofenceService() {
         super("GeofenceReceiver");
-        Log.i(TAG, "Geofence service started");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent event = GeofencingEvent.fromIntent(intent);
-        Log.i(TAG, "Geofence triggered");
 
         int transitionType = event.getGeofenceTransition();
         switch (transitionType) {
             case Geofence.GEOFENCE_TRANSITION_ENTER:
                 Log.i(TAG, "Enters");
+                List<Geofence> geofences = event.getTriggeringGeofences();
+                for (Geofence geofence : geofences) {
+                    String id = geofence.getRequestId();
+                    Store store = Store.find(Store.class, "geofence_id = ?", id).get(0);
+
+                    showEnterNotification(store.getName(), "entered");
+                }
                 break;
             case Geofence.GEOFENCE_TRANSITION_DWELL:
-                // TODO Check whether geofence service is still get called
-                // (you can also download the working version from GitHub and test it out)
-                List<Geofence> geofences = event.getTriggeringGeofences();
+                geofences = event.getTriggeringGeofences();
                 for (Geofence geofence : geofences) {
                     String id = geofence.getRequestId();
                     String dateTime = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'").format(new Date());
@@ -60,11 +62,9 @@ public class GeofenceService extends IntentService {
 
                     final Store store = Store.find(Store.class, "geofence_id = ?", id).get(0);
                     int storeId = store.getStoreid();
-                    boolean isMobile;
-                    isMobile = store.getCategory().equals(Constants.CATEGORY_MOBILE);
 
                     ApiService service = new RestClient().getApiService();
-                    service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, isMobile, new ResponseCallback() {
+                    service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, false, new ResponseCallback() {
                         @Override public void success(Response response) {
                             showNotification(store.getName());
                             new Notification(store.getName(), getCurrentTime()).save();
@@ -78,6 +78,14 @@ public class GeofenceService extends IntentService {
                 break;
             case Geofence.GEOFENCE_TRANSITION_EXIT:
                 Log.i(TAG, "Went away");
+                Log.i(TAG, "Enters");
+                geofences = event.getTriggeringGeofences();
+                for (Geofence geofence : geofences) {
+                    String id = geofence.getRequestId();
+                    Store store = Store.find(Store.class, "geofence_id = ?", id).get(0);
+
+                    showEnterNotification(store.getName(), "left");
+                }
                 break;
         }
         // List<Geofence> geofences = event.getTriggeringGeofences();
@@ -92,6 +100,22 @@ public class GeofenceService extends IntentService {
         mBuilder.setAutoCancel(true);
         // Sets an ID for the notification
         int mNotificationId = 123;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+    }
+
+    private void showEnterNotification(String name, String action) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("SGBP")
+                        .setContentText("You " + action + " " + name);
+        mBuilder.setAutoCancel(true);
+        // Sets an ID for the notification
+        int mNotificationId = 101;
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

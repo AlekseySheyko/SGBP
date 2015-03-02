@@ -32,10 +32,6 @@ public class Store extends SugarRecord<Store> {
         return storeid;
     }
 
-    public void setStoreid(int storeid) {
-        this.storeid = storeid;
-    }
-
     public String getName() {
         return name;
     }
@@ -48,40 +44,20 @@ public class Store extends SugarRecord<Store> {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getPhone() {
         return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
     public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
     public String getCategory() {
         return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getGeofenceId() {

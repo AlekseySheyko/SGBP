@@ -33,12 +33,15 @@ import java.util.List;
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.app.activities.DetailActivity;
 import aleksey.sheyko.sgbp.app.activities.MapPane;
+import aleksey.sheyko.sgbp.app.adapters.CouponAdapter;
 import aleksey.sheyko.sgbp.app.adapters.NotificationsAdapter;
 import aleksey.sheyko.sgbp.app.adapters.StoresAdapter;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
+import aleksey.sheyko.sgbp.model.Coupon;
 import aleksey.sheyko.sgbp.model.Notification;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.CouponsXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.StoresXmlParser;
 import retrofit.ResponseCallback;
@@ -95,11 +98,41 @@ public class StoreListFragment extends ListFragment
                         notification.getStoreName(), notification.getDate()));
             }
             return;
-        } else if (mViewMode == Constants.VIEW_COUPONS) {
-            mStores = Store.listAll(Store.class);
         } else if (mViewMode == Constants.VIEW_NEAREST) {
             createLocationClient();
             mGoogleApiClient.connect();
+            return;
+        } else if (mViewMode == Constants.VIEW_COUPONS) {
+            getActivity().setProgressBarIndeterminateVisibility(true);
+            ApiService service = new RestClient().getApiService();
+            service.listCoupons(new ResponseCallback() {
+                @Override public void success(Response response) {
+                    try (InputStream in = response.getBody().in()) {
+                        CouponsXmlParser couponsXmlParser = new CouponsXmlParser();
+                        couponsXmlParser.parse(in);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    List<Coupon> coupons = Coupon.listAll(Coupon.class);
+                    ArrayList<Coupon> couponList = new ArrayList<>();
+                    for (Coupon coupon : coupons) {
+                        couponList.add(new Coupon(
+                                coupon.getStoreid(),
+                                coupon.getStoreName(),
+                                coupon.getCode(),
+                                coupon.getDesc(),
+                                coupon.getExpireDate()));
+                    }
+                    CouponAdapter adapter = new CouponAdapter(getActivity(),
+                            R.layout.store_list_item, couponList);
+                    setListAdapter(adapter);
+                    getActivity().setProgressBarIndeterminateVisibility(false);
+                }
+
+                @Override public void failure(RetrofitError e) {
+                    e.printStackTrace();
+                }
+            });
             return;
         }
 
@@ -183,9 +216,9 @@ public class StoreListFragment extends ListFragment
                     store.getCategory()));
             mSharedPrefs.edit().putFloat(store.getStoreid() + "", store.getDistance()).apply();
         }
-        StoresAdapter mAdapter = new StoresAdapter(getActivity(),
+        StoresAdapter adapter = new StoresAdapter(getActivity(),
                 R.layout.store_list_item, mStoreList);
-        setListAdapter(mAdapter);
+        setListAdapter(adapter);
     }
 
     @Override
