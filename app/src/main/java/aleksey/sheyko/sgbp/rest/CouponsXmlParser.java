@@ -7,8 +7,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import aleksey.sheyko.sgbp.model.Coupon;
 import aleksey.sheyko.sgbp.model.Store;
@@ -17,21 +15,19 @@ public class CouponsXmlParser {
     // We don't use namespaces
     private static final String ns = null;
 
-    public List parse(InputStream in) throws XmlPullParserException, IOException {
+    public void parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(in, null);
             parser.nextTag();
-            return readFeed(parser);
+            readFeed(parser);
         } finally {
             in.close();
         }
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List entries = new ArrayList();
-
+    private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "SGBP_Coupon_InfoRespose");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -56,7 +52,6 @@ public class CouponsXmlParser {
                 skip(parser);
             }
         }
-        return entries;
     }
 
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off

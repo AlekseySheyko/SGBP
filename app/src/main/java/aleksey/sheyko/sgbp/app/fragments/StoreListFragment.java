@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.app.activities.CouponActivity;
 import aleksey.sheyko.sgbp.app.activities.DetailActivity;
 import aleksey.sheyko.sgbp.app.activities.MapPane;
 import aleksey.sheyko.sgbp.app.adapters.CouponAdapter;
@@ -108,28 +108,35 @@ public class StoreListFragment extends ListFragment
 
             mCoupons = Coupon.listAll(Coupon.class);
             if (mCoupons.size() > 0) {
-                populateCouponsListAdapter();
-                return;
-            }
-            getActivity().setProgressBarIndeterminateVisibility(true);
-            ApiService service = new RestClient().getApiService();
-            service.listCoupons(new ResponseCallback() {
-                @Override public void success(Response response) {
-                    try (InputStream in = response.getBody().in()) {
-                        CouponsXmlParser couponsXmlParser = new CouponsXmlParser();
-                        couponsXmlParser.parse(in);
-                    } catch (Exception e) {
+                for (Coupon coupon : mCoupons) {
+                    mCouponList.add(new Coupon(
+                            coupon.getStoreid(),
+                            coupon.getStoreName(),
+                            coupon.getCode(),
+                            coupon.getDesc(),
+                            coupon.getExpireDate()));
+                }
+            } else {
+                getActivity().setProgressBarIndeterminateVisibility(true);
+                ApiService service = new RestClient().getApiService();
+                service.listCoupons(new ResponseCallback() {
+                    @Override public void success(Response response) {
+                        try (InputStream in = response.getBody().in()) {
+                            CouponsXmlParser couponsXmlParser = new CouponsXmlParser();
+                            couponsXmlParser.parse(in);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mCoupons = Coupon.listAll(Coupon.class);
+                        populateCouponsListAdapter();
+                        getActivity().setProgressBarIndeterminateVisibility(false);
+                    }
+
+                    @Override public void failure(RetrofitError e) {
                         e.printStackTrace();
                     }
-                    mCoupons = Coupon.listAll(Coupon.class);
-                    populateCouponsListAdapter();
-                    getActivity().setProgressBarIndeterminateVisibility(false);
-                }
-
-                @Override public void failure(RetrofitError e) {
-                    e.printStackTrace();
-                }
-            });
+                });
+            }
             return;
         }
 
@@ -242,6 +249,10 @@ public class StoreListFragment extends ListFragment
             NotificationsAdapter mAdapter = new NotificationsAdapter(getActivity(),
                     R.layout.store_list_item, mNotificationList);
             setListAdapter(mAdapter);
+        } else if (mViewMode == Constants.VIEW_COUPONS) {
+            CouponAdapter adapter = new CouponAdapter(getActivity(),
+                    R.layout.store_list_item, mCouponList);
+            setListAdapter(adapter);
         } else {
             StoresAdapter mAdapter = new StoresAdapter(getActivity(),
                     R.layout.store_list_item, mStoreList);
@@ -284,8 +295,7 @@ public class StoreListFragment extends ListFragment
             }
             startActivity(new Intent(this.getActivity(), DetailActivity.class));
         } else if (mViewMode == Constants.VIEW_COUPONS) {
-            Toast.makeText(this.getActivity(),
-                    "Coupons are coming soon", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getActivity(), CouponActivity.class));
         }
     }
 

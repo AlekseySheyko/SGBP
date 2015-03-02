@@ -62,7 +62,7 @@
             android:name=".app.activities.MainActivity"
             android:icon="@drawable/ic_launcher"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".app.activities.MapPane"
@@ -103,7 +103,7 @@
             android:name=".app.activities.DetailActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName=".app.activities.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="aleksey.sheyko.sgbp.app.activities.MainActivity" />
@@ -127,6 +127,14 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".app.activities.CouponActivity"
+            android:label="@string/title_activity_coupon"
+            android:parentActivityName=".app.activities.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="aleksey.sheyko.sgbp.app.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

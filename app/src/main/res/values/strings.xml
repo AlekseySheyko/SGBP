@@ -57,5 +57,6 @@
     <string name="title_activity_detail">Details</string>
     <string name="address_header">Address</string>
     <string name="phone_header">Phone</string>
+    <string name="title_activity_coupon">Coupon</string>
 
 </resources>
