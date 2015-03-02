@@ -116,49 +116,13 @@ public class StoreListFragment extends ListFragment
                             coupon.getExpireDate()));
                 }
             } else {
-                getActivity().setProgressBarIndeterminateVisibility(true);
-                ApiService service = new RestClient().getApiService();
-                service.listCoupons(new ResponseCallback() {
-                    @Override public void success(Response response) {
-                        try (InputStream in = response.getBody().in()) {
-                            CouponsXmlParser couponsXmlParser = new CouponsXmlParser();
-                            couponsXmlParser.parse(in);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        mCoupons = Coupon.listAll(Coupon.class);
-                        populateCouponsListAdapter();
-                        getActivity().setProgressBarIndeterminateVisibility(false);
-                    }
-
-                    @Override public void failure(RetrofitError e) {
-                        e.printStackTrace();
-                    }
-                });
+                loadCouponsFromNetwork();
             }
             return;
         }
 
         if (mStores != null && mStores.size() == 0 && mSearchQuery == null) {
-            getActivity().setProgressBarIndeterminateVisibility(true);
-            ApiService service = new RestClient().getApiService();
-            service.listAllStores(new ResponseCallback() {
-                @Override public void success(Response response) {
-                    try (InputStream in = response.getBody().in()) {
-                        StoresXmlParser storesXmlParser = new StoresXmlParser();
-                        storesXmlParser.parse(in);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    mStores = Store.listAll(Store.class);
-                    populateStoresListAdapter();
-                    getActivity().setProgressBarIndeterminateVisibility(false);
-                }
-
-                @Override public void failure(RetrofitError e) {
-                    e.printStackTrace();
-                }
-            });
+            loadStoresFromNetwork();
             return;
         }
 
@@ -172,6 +136,50 @@ public class StoreListFragment extends ListFragment
                     store.getLongitude(),
                     store.getCategory()));
         }
+    }
+
+    private void loadStoresFromNetwork() {
+        getActivity().setProgressBarIndeterminateVisibility(true);
+        ApiService service = new RestClient().getApiService();
+        service.listAllStores(new ResponseCallback() {
+            @Override public void success(Response response) {
+                try (InputStream in = response.getBody().in()) {
+                    StoresXmlParser storesXmlParser = new StoresXmlParser();
+                    storesXmlParser.parse(in);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mStores = Store.listAll(Store.class);
+                populateStoresListAdapter();
+                getActivity().setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override public void failure(RetrofitError e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void loadCouponsFromNetwork() {
+        getActivity().setProgressBarIndeterminateVisibility(true);
+        ApiService service = new RestClient().getApiService();
+        service.listCoupons(new ResponseCallback() {
+            @Override public void success(Response response) {
+                try (InputStream in = response.getBody().in()) {
+                    CouponsXmlParser couponsXmlParser = new CouponsXmlParser();
+                    couponsXmlParser.parse(in);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mCoupons = Coupon.listAll(Coupon.class);
+                populateCouponsListAdapter();
+                getActivity().setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override public void failure(RetrofitError e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private synchronized void createLocationClient() {

@@ -45,6 +45,11 @@ public class StoresXmlParser {
                     // Starts by looking for the entry tag
                     if (tag.equals("SGBP_Store_Info")) {
                         readStore(parser).save();
+//                        String tempName = readStore(parser).getName();
+//                        List<Store> existingStores = Store.find(Store.class, "name = ?", tempName);
+//                        if (existingStores.size() == 0) {
+//                            readStore(parser).save();
+//                        }
                     }
                 }
 

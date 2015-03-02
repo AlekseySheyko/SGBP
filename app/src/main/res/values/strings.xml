@@ -58,5 +58,6 @@
     <string name="address_header">Address</string>
     <string name="phone_header">Phone</string>
     <string name="title_activity_coupon">Coupon</string>
+    <string name="action_refresh">Refresh</string>
 
 </resources>
