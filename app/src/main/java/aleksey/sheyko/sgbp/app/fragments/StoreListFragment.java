@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.app.activities.CouponActivity;
 import aleksey.sheyko.sgbp.app.activities.DetailActivity;
 import aleksey.sheyko.sgbp.app.activities.MapPane;
 import aleksey.sheyko.sgbp.app.adapters.CouponAdapter;
@@ -295,7 +294,7 @@ public class StoreListFragment extends ListFragment
             }
             startActivity(new Intent(this.getActivity(), DetailActivity.class));
         } else if (mViewMode == Constants.VIEW_COUPONS) {
-            startActivity(new Intent(getActivity(), CouponActivity.class));
+            // TODO Show map or something
         }
     }
 

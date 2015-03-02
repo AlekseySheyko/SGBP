@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Coupon;
-import aleksey.sheyko.sgbp.model.Store;
 
 public class CouponAdapter extends ArrayAdapter<Coupon> {
 
@@ -45,7 +44,7 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
         // to inflate it basically means to render, or show, the view.
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.store_list_item, parent, false);
+            view = inflater.inflate(R.layout.coupon_list_item, parent, false);
         }
 
 		/*
@@ -57,24 +56,14 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
 		 */
         Coupon coupon = mCoupons.get(position);
         if (coupon != null) {
-            int storeId = coupon.getStoreid();
-            Store store = Store.find(Store.class, "storeid = ?", String.valueOf(storeId)).get(0);
-            int count = store.getCouponCount();
 
-            TextView ttd = (TextView) view.findViewById(R.id.nameLabel);
-            TextView mtd = (TextView) view.findViewById(R.id.secondaryLabel);
-            if (ttd != null) {
-                ttd.setText(coupon.getStoreName());
-            }
-            if (mtd != null) {
-                String label;
-                if (count == 1) {
-                    label = "coupon";
-                } else {
-                    label = "coupons";
-                }
-                mtd.setText(count + " " + label);
-            }
+            TextView nameTextView = (TextView) view.findViewById(R.id.name);
+            TextView codeTextView = (TextView) view.findViewById(R.id.code);
+            TextView dateTextView = (TextView) view.findViewById(R.id.date);
+
+            nameTextView.setText(coupon.getStoreName());
+            codeTextView.setText("Code: " + coupon.getCode());
+            dateTextView.setText("Use By " + coupon.getExpireDate());
         }
         return view;
     }
