@@ -1,11 +1,14 @@
 package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +22,17 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.model.Notification;
+import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.RestClient;
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class DetailActivity extends Activity {
 
@@ -31,7 +44,7 @@ public class DetailActivity extends Activity {
         setContentView(R.layout.activity_detail);
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String name = mSharedPrefs.getString("name", "");
+        final String name = mSharedPrefs.getString("name", "");
         String address = mSharedPrefs.getString("address", "");
         String phone = mSharedPrefs.getString("phone", "");
         final double latitude = Double.parseDouble(mSharedPrefs.getString("latitude", ""));
@@ -42,6 +55,27 @@ public class DetailActivity extends Activity {
         if (isMobile) {
             actionButton.setText("Participate");
             actionButton.setBackground(getResources().getDrawable(R.drawable.participate_button_selector));
+            actionButton.setOnClickListener(new OnClickListener() {
+                @Override public void onClick(View view) {
+                    int storeId = mSharedPrefs.getInt("storeId", -1);
+                    String dateTime = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'").format(new Date());
+                    String deviceId = mSharedPrefs.getString("device_id", "");
+                    int userId = mSharedPrefs.getInt("user_id", -1);
+                    int schoolId = mSharedPrefs.getInt("school_id", -1);
+
+                    ApiService service = new RestClient().getApiService();
+                    service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
+                        @Override public void success(Response response) {
+                            showNotification(name);
+                            new Notification(name, getCurrentTime()).save();
+                        }
+
+                        @Override public void failure(RetrofitError e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+            });
         } else {
             actionButton.setText("Make route");
             actionButton.setOnClickListener(new OnClickListener() {
@@ -109,5 +143,26 @@ public class DetailActivity extends Activity {
             super.onBackPressed();
         }
         return true;
+    }
+
+    private void showNotification(String name) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Thanks for visiting")
+                        .setContentText(name + " participation accepted");
+        mBuilder.setAutoCancel(true);
+        // Sets an ID for the notification
+        int mNotificationId = 123;
+        // Gets an instance of the NotificationManager service
+        NotificationManager mNotifyMgr =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+    }
+
+    public String getCurrentTime() {
+        return new SimpleDateFormat("dd MMM, hh:mm a", Locale.US)
+                .format(new Date());
     }
 }

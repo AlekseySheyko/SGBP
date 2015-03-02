@@ -32,11 +32,13 @@ public class GeofenceService extends IntentService {
 
     public GeofenceService() {
         super("GeofenceReceiver");
+        Log.i(TAG, "Geofence service started");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent event = GeofencingEvent.fromIntent(intent);
+        Log.i(TAG, "Geofence triggered");
 
         int transitionType = event.getGeofenceTransition();
         switch (transitionType) {
@@ -96,7 +98,7 @@ public class GeofenceService extends IntentService {
     }
 
     public String getCurrentTime() {
-        return new SimpleDateFormat("dd MMM, hh:mm", Locale.US)
-                .format(new Date()).toLowerCase();
+        return new SimpleDateFormat("dd MMM, hh:mm a", Locale.US)
+                .format(new Date());
     }
 }

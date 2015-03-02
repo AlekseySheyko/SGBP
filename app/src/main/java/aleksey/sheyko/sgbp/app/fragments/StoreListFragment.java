@@ -219,12 +219,14 @@ public class StoreListFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         if (mViewMode == Constants.VIEW_NEAREST || mViewMode == Constants.VIEW_CATEGORIES) {
+            int storeId = mStoreList.get(position).getStoreid();
             String name = mStoreList.get(position).getName();
             String address = mStoreList.get(position).getAddress();
             String phone = mStoreList.get(position).getPhone();
             String latitude = mStoreList.get(position).getLatitude();
             String longitude = mStoreList.get(position).getLongitude();
             mSharedPrefs.edit()
+                    .putInt("storeId", storeId)
                     .putString("name", name)
                     .putString("address", address)
                     .putString("phone", phone)

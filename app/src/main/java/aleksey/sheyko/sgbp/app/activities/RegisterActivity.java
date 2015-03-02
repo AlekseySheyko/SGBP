@@ -341,7 +341,7 @@ public class RegisterActivity extends Activity {
         boolean receiveCoupons = mCheckBoxCoupons.isChecked();
 
         ApiService service = new RestClient().getApiService();
-        service.register(deviceId, userId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
+        service.register(userId + "", userId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
                 IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
                     @Override public void success(Response response, Response response2) {
                         mSharedPrefs.edit()
