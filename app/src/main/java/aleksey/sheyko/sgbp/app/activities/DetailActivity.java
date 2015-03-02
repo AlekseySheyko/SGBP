@@ -29,7 +29,13 @@ import java.util.Date;
 import java.util.Locale;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.model.Notification;
 import aleksey.sheyko.sgbp.model.Store;
+import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.RestClient;
+import retrofit.ResponseCallback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class DetailActivity extends Activity {
 
@@ -122,30 +128,30 @@ public class DetailActivity extends Activity {
                 int userId = mSharedPrefs.getInt("user_id", -1);
                 int schoolId = mSharedPrefs.getInt("school_id", -1);
 
-                //                        ApiService service = new RestClient().getApiService();
-                //                        service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
-                //                            @Override public void success(Response response) {
-                currentStore.setParticipated(true);
+                ApiService service = new RestClient().getApiService();
+                service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
+                    @Override public void success(Response response) {
+                        currentStore.setParticipated(true);
 
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(new Date());
-                long currentTime = calendar.getTimeInMillis();
-                currentStore.setTimeAllowNext(currentTime + PARTICIPATE_INTERVAL);
-                currentStore.save();
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(new Date());
+                        long currentTime = calendar.getTimeInMillis();
+                        currentStore.setTimeAllowNext(currentTime + PARTICIPATE_INTERVAL);
+                        currentStore.save();
 
-                actionButton.setText("Participated");
-                actionButton.setEnabled(false);
+                        actionButton.setText("Participated");
+                        actionButton.setEnabled(false);
 
-                Toast.makeText(DetailActivity.this, "Thanks for participation", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailActivity.this, "Thanks for participation", Toast.LENGTH_SHORT).show();
 
-                showNotification(currentStore.getName());
-                //                                new Notification(name, getCurrentTime()).save();
-                //                            }
-                //
-                //                            @Override public void failure(RetrofitError e) {
-                //                                e.printStackTrace();
-                //                            }
-                //                        });
+                        showNotification(currentStore.getName());
+                        new Notification(currentStore.getName(), getCurrentTime()).save();
+                    }
+
+                    @Override public void failure(RetrofitError e) {
+                        e.printStackTrace();
+                    }
+                });
 
             }
         });
