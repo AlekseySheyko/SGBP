@@ -155,6 +155,62 @@ public class UserXmlParser {
         return lastName;
     }
 
+    // Processes school id tags in the feed.
+    private int readSchoolId(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "School_Id");
+        int schoolId = Integer.parseInt(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "School_Id");
+        return schoolId;
+    }
+
+    // Processes grade level tags in the feed.
+    private boolean readGradeLevel(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "Has_Multiple_Child");
+        boolean multipleGrade = Boolean.parseBoolean(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "Has_Multiple_Child");
+        return multipleGrade;
+    }
+
+    // Processes coupons tags in the feed.
+    private boolean readCoupons(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "Is_Coupon_Allowed");
+        boolean coupons = Boolean.parseBoolean(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "Is_Coupon_Allowed");
+        return coupons;
+    }
+
+    // Processes notifications tags in the feed.
+    private boolean readNotifications(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "Is_Notification_Allowed");
+        boolean notifications = Boolean.parseBoolean(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "Is_Notification_Allowed");
+        return notifications;
+    }
+
+    // Processes location tags in the feed.
+    private boolean readLocation(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "Is_Location_Service_Allowed");
+        boolean location = Boolean.parseBoolean(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "Is_Location_Service_Allowed");
+        return location;
+    }
+
+    // Processes age tags in the feed.
+    private boolean readAge(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "Is_User_Over_18_Year");
+        boolean is18 = Boolean.parseBoolean(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "Is_User_Over_18_Year");
+        return is18;
+    }
+
+    // Processes age tags in the feed.
+    private String readEmail(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "User_Email");
+        String email = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "User_Email");
+        return email;
+    }
+
     // For the tags title and summary, extracts their text values.
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
         String result = "";
