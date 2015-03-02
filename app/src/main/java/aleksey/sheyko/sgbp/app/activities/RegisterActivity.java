@@ -30,6 +30,8 @@ import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
+import aleksey.sheyko.sgbp.rest.UserXmlParser;
+import aleksey.sheyko.sgbp.rest.UserXmlParser.User;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.Callback;
@@ -66,14 +68,45 @@ public class RegisterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-//TODO        if (isRegistered) {
-            navigateToMainScreen();
-//        }
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_register);
+
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
+        if (isRegistered) {
+            navigateToMainScreen();
+        } else {
+            checkRegistration();
+        }
         ButterKnife.inject(this);
+    }
+
+    private boolean checkRegistration() {
+        setProgressBarIndeterminateVisibility(true);
+        Toast.makeText(this, "Checking whether device is registered...", Toast.LENGTH_LONG).show();
+        ApiService service = new RestClient().getApiService();
+        service.checkRegistration(getDeviceId(), new ResponseCallback() {
+            @Override public void success(Response response) {
+                try (InputStream in = response.getBody().in()) {
+                    UserXmlParser userInfoXmlParser = new UserXmlParser();
+                    List<User> userList = userInfoXmlParser.parse(in);
+                    if (userList == null) {
+                        return;
+                    }
+
+                    User user = userList.get(0);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override public void failure(RetrofitError e) {
+                e.printStackTrace();
+                // TODO Show dialog "need network"
+            }
+        });
     }
 
     List<School> mSchoolsList;
