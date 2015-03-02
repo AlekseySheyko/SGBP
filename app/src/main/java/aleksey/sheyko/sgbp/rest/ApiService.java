@@ -14,7 +14,10 @@ public interface ApiService {
     void listSchools(Callback<Response> callback);
 
     @GET("/GetStoresList")
-    void listStores(Callback<Response> callback);
+    void listAllStores(Callback<Response> callback);
+
+    @GET("/GetCouponCodeDetails")
+    void listCoupons(Callback<Response> callback);
 
     @FormUrlEncoded
     @POST("/SaveTeamMemberInfo")

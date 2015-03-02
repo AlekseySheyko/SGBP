@@ -46,6 +46,8 @@ public class GeofenceService extends IntentService {
                 Log.i(TAG, "Enters");
                 break;
             case Geofence.GEOFENCE_TRANSITION_DWELL:
+                // TODO Check whether geofence service is still get called
+                // (you can also download the working version from GitHub and test it out)
                 List<Geofence> geofences = event.getTriggeringGeofences();
                 for (Geofence geofence : geofences) {
                     String id = geofence.getRequestId();

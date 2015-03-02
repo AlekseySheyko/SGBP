@@ -83,7 +83,7 @@ public class MapPane extends Activity {
         if (mStores.size() == 0 && mSearchQuery == null) {
             setProgressBarIndeterminateVisibility(true);
             ApiService service = new RestClient().getApiService();
-            service.listStores(new ResponseCallback() {
+            service.listAllStores(new ResponseCallback() {
                 @Override public void success(Response response) {
                     try (InputStream in = response.getBody().in()) {
                         StoresXmlParser storesXmlParser = new StoresXmlParser();

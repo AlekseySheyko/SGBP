@@ -106,7 +106,7 @@ public class StoreListFragment extends ListFragment
         if (mStores != null && mStores.size() == 0 && mSearchQuery == null) {
             getActivity().setProgressBarIndeterminateVisibility(true);
             ApiService service = new RestClient().getApiService();
-            service.listStores(new ResponseCallback() {
+            service.listAllStores(new ResponseCallback() {
                 @Override public void success(Response response) {
                     try (InputStream in = response.getBody().in()) {
                         StoresXmlParser storesXmlParser = new StoresXmlParser();
@@ -232,8 +232,12 @@ public class StoreListFragment extends ListFragment
                     .putString("phone", phone)
                     .putString("latitude", latitude)
                     .putString("longitude", longitude)
-                    .putBoolean("isMobile", mCategory.equals(Constants.CATEGORY_MOBILE))
                     .apply();
+            if (mViewMode != Constants.VIEW_NEAREST) {
+                mSharedPrefs.edit().putBoolean("isMobile", mCategory.equals(Constants.CATEGORY_MOBILE)).apply();
+            } else {
+                mSharedPrefs.edit().putBoolean("isMobile", false).apply();
+            }
             startActivity(new Intent(this.getActivity(), DetailActivity.class));
         } else if (mViewMode == Constants.VIEW_COUPONS) {
             Toast.makeText(this.getActivity(),
