@@ -67,9 +67,7 @@ public class RegisterActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_register);
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
@@ -78,12 +76,12 @@ public class RegisterActivity extends Activity {
         } else {
             checkRegistration();
         }
+        setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
     }
 
     private void checkRegistration() {
         setProgressBarIndeterminateVisibility(true);
-        Toast.makeText(this, "Checking whether device is registered...", Toast.LENGTH_LONG).show();
         ApiService service = new RestClient().getApiService();
         service.checkRegistration(getDeviceId(), new ResponseCallback() {
             @Override public void success(Response response) {
@@ -164,23 +162,41 @@ public class RegisterActivity extends Activity {
         int schoolId = mSchoolSpinner.getSelectedItemPosition();
         int gradeId = mGradeSpinner.getSelectedItemPosition();
         boolean is18 = mCheckBoxAge.isChecked();
-        boolean isMultiGrade = mCheckBoxLevel.isChecked();
-        boolean getNotifications = mCheckBoxNotifications.isChecked();
-        boolean trackLocation = mCheckBoxLocation.isChecked();
-        boolean receiveCoupons = mCheckBoxCoupons.isChecked();
+        boolean multipleGrade = mCheckBoxLevel.isChecked();
+        boolean notifications = mCheckBoxNotifications.isChecked();
+        boolean location = mCheckBoxLocation.isChecked();
+        boolean coupons = mCheckBoxCoupons.isChecked();
 
-        mSharedPrefs.edit()
-                .putString("first_name", firstName)
-                .putString("last_name", lastName)
-                .putString("email", email)
-                .putInt("school_id", schoolId)
-                .putInt("grade_id", gradeId)
-                .putBoolean("is18", is18)
-                .putBoolean("notifications", getNotifications)
-                .putBoolean("location", trackLocation)
-                .putBoolean("coupons", receiveCoupons)
-                .putBoolean("multipleLevel", isMultiGrade)
-                .apply();
+        if (!firstName.isEmpty()) {
+            mSharedPrefs.edit().putString("first_name", firstName).apply();
+        }
+        if (!lastName.isEmpty()) {
+            mSharedPrefs.edit().putString("last_name", lastName).apply();
+        }
+        if (!email.isEmpty()) {
+            mSharedPrefs.edit().putString("email", email).apply();
+        }
+        if (schoolId != -1) {
+            mSharedPrefs.edit().putInt("school_id", schoolId).apply();
+        }
+        if (gradeId != -1) {
+            mSharedPrefs.edit().putInt("grade_id", gradeId).apply();
+        }
+        if (!is18) {
+            mSharedPrefs.edit().putBoolean("is18", is18).apply();
+        }
+        if (!notifications) {
+            mSharedPrefs.edit().putBoolean("notifications", notifications).apply();
+        }
+        if (!location) {
+            mSharedPrefs.edit().putBoolean("location", location).apply();
+        }
+        if (!coupons) {
+            mSharedPrefs.edit().putBoolean("coupons", coupons).apply();
+        }
+        if (multipleGrade) {
+            mSharedPrefs.edit().putBoolean("multipleGrade", multipleGrade).apply();
+        }
     }
 
     private void loadSchoolsListFromNetwork() {

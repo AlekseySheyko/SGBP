@@ -219,9 +219,6 @@ public class StoreListFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         if (mViewMode == Constants.VIEW_NEAREST || mViewMode == Constants.VIEW_CATEGORIES) {
-            if (mCategory != null && mCategory.equals(Constants.CATEGORY_MOBILE)) {
-                return;
-            }
             String name = mStoreList.get(position).getName();
             String address = mStoreList.get(position).getAddress();
             String phone = mStoreList.get(position).getPhone();
