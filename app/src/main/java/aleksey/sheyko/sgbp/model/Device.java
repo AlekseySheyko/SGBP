@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -53,8 +54,15 @@ public class Device {
         return Locale.getDefault().getDisplayName();
     }
 
-    public String getCurrentDateTime() {
-        return new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.US).format(new Date());
+    public String getStartDate() {
+        return new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'", Locale.US).format(new Date());
+    }
+
+    public String getEndDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.YEAR, 1);
+        return new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'", Locale.US).format(calendar.getTime());
     }
 
     public String getModelNumber() {

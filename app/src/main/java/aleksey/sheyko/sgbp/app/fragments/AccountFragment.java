@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -75,6 +76,32 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.inject(this, view);
+
+        view.findViewById(R.id.multigrade_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxLevel.setChecked(!mCheckBoxLevel.isChecked());
+            }
+        });
+        view.findViewById(R.id.age_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxAge.setChecked(!mCheckBoxAge.isChecked());
+            }
+        });
+        view.findViewById(R.id.notifications_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxNotifications.setChecked(!mCheckBoxNotifications.isChecked());
+            }
+        });
+        view.findViewById(R.id.location_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxLocation.setChecked(!mCheckBoxLocation.isChecked());
+            }
+        });
+        view.findViewById(R.id.coupons_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxCoupons.setChecked(!mCheckBoxCoupons.isChecked());
+            }
+        });
 
         ArrayAdapter<String> schoolAdapter = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item

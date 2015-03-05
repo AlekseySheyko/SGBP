@@ -13,8 +13,8 @@ public interface ApiService {
     @GET("/GetSchoolName")
     void listSchools(Callback<Response> callback);
 
-    @GET("/GetGradesList")
-    void listGrades(Callback<Response> callback);
+    @GET("/GetGradebySchool")
+    void getGrade(@Query("Key") String key, @Query("School_Id") int schoolId, Callback<Response> callback);
 
     @GET("/GetStoresList")
     void listAllStores(Callback<Response> callback);
@@ -46,6 +46,11 @@ public interface ApiService {
                       @Field("Is_Coupon_Allowed") boolean receiveCoupons, @Field("Is_Notification_Allowed") boolean getNotifications,
                       @Field("Is_Location_Service_Allowed") boolean trackLocation, @Field("Is_User_Over_18_Year") boolean is18,
                       @Field("Is_Device_Registered") boolean isDeviceRegistered, Callback<Response> callback);
+    @FormUrlEncoded
+    @POST("/SaveGradeInfo")
+    void saveGrade(@Field("Key") String key, @Field("Grade_Id") int gradeId,
+                      @Field("School_Id") int schoolId, @Field("Grade_Name") String gradeName,
+                      @Field("Eff_Date") String startDate, @Field("End_Date") String endDate, Callback<Response> callback);
 
     @FormUrlEncoded
     @POST("/UpdateTeamMemberInfo")

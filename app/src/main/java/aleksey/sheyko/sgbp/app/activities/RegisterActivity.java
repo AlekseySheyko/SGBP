@@ -18,6 +18,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -42,7 +44,6 @@ import aleksey.sheyko.sgbp.rest.UserXmlParser;
 import aleksey.sheyko.sgbp.rest.UserXmlParser.User;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.Callback;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -72,6 +73,8 @@ public class RegisterActivity extends Activity {
     @InjectView(R.id.multipleGrade)
     CheckBox mCheckBoxLevel;
     private ArrayAdapter<String> mGradeAdapter;
+    private String[] mGradeStrings;
+    private ArrayAdapter<String> mSchoolAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,14 +83,11 @@ public class RegisterActivity extends Activity {
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-        /*
-        TODO Uncomment before production
-        if (isRegistered) {
-            navigateToMainScreen();
-        } else {
-            checkRegistration();
-        }
-        */
+//        if (isRegistered) {
+//            navigateToMainScreen();
+//        } else {
+//            checkRegistration();
+//        }
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
 
@@ -293,7 +293,7 @@ public class RegisterActivity extends Activity {
     }
 
     private void setupSpinners() {
-        ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
+        mSchoolAdapter = new ArrayAdapter<String>(
                 RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
             @Override
@@ -311,13 +311,39 @@ public class RegisterActivity extends Activity {
                 return super.getCount() - 1; // you don't display last item. It is used as hint.
             }
         };
-        schoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSchoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         for (School school : mSchoolsList) {
-            schoolAdapter.add(school.getName());
+            mSchoolAdapter.add(school.getName());
         }
-        schoolAdapter.add("School");
-        mSchoolSpinner.setAdapter(schoolAdapter);
-        mSchoolSpinner.setSelection(schoolAdapter.getCount());
+        mSchoolAdapter.add("School");
+        mSchoolSpinner.setAdapter(mSchoolAdapter);
+        mSchoolSpinner.setSelection(mSchoolAdapter.getCount());
+
+        final int[] i = new int[1];
+        mSchoolSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mSchoolSpinner.getSelectedItemPosition() == mSchoolAdapter.getCount()) {
+                    mGradeSpinner.setEnabled(false);
+                } else {
+                    mGradeSpinner.setEnabled(true);
+
+                    ApiService service = new RestClient().getApiService();
+                    String userId = getDeviceId().replaceAll("[^0-9]", "");
+                    service.getGrade(userId, position+1, new ResponseCallback() {
+                        @Override public void success(Response response) {
+
+                        }
+
+                        @Override public void failure(RetrofitError e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         mGradeAdapter = new ArrayAdapter<String>(
                 RegisterActivity.this, android.R.layout.simple_spinner_item) {
@@ -338,8 +364,8 @@ public class RegisterActivity extends Activity {
             }
         };
         mGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        String[] gradeStrings = getResources().getStringArray(R.array.grade_levels);
-        for (String gradeString : gradeStrings) {
+        mGradeStrings = getResources().getStringArray(R.array.grade_levels);
+        for (String gradeString : mGradeStrings) {
             mGradeAdapter.add(gradeString);
         }
         mGradeAdapter.add("Grade level");
@@ -354,6 +380,7 @@ public class RegisterActivity extends Activity {
         String lastName = mLastNameField.getText().toString();
         String email = mEmailField.getText().toString();
         int schoolId = mSchoolSpinner.getSelectedItemPosition();
+        int gradeId = mGradeSpinner.getSelectedItemPosition();
 
         if (!mCheckBoxAge.isChecked()) {
             Toast.makeText(this, "You must be 18 or older to enter program", Toast.LENGTH_SHORT).show();
@@ -381,20 +408,21 @@ public class RegisterActivity extends Activity {
         setProgressBarIndeterminateVisibility(true);
 
         try {
-            register(firstName, lastName, email, schoolId);
+            register(firstName, lastName, email, schoolId, gradeId);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(RegisterActivity.this, "Failed to sign up", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void register(final String firstName, final String lastName, final String email, final int schoolId) throws Exception {
+    public void register(final String firstName, final String lastName, final String email, final int schoolId, final int gradeId) throws Exception {
 
         final int USER_TYPE = 1;
         final boolean IS_REGISTERED = true;
 
         final String deviceId = getDeviceId();
         final String userId = deviceId.replaceAll("[^0-9]", "");
+
         final boolean is18 = mCheckBoxAge.isChecked();
         final boolean isMultiGrade = mCheckBoxLevel.isChecked();
         final boolean getNotifications = mCheckBoxNotifications.isChecked();
@@ -413,7 +441,7 @@ public class RegisterActivity extends Activity {
                             DeviceXmlParser deviceXmlParser = new DeviceXmlParser();
                             int deviceInfoId = deviceXmlParser.parse(in);
                             mSharedPrefs.edit().putInt("device_info_id", deviceInfoId).apply();
-                            registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
+                            registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, gradeId, email, USER_TYPE, isMultiGrade,
                                     IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -426,17 +454,30 @@ public class RegisterActivity extends Activity {
                 });
     }
 
-    private void registerUser(final String userId, int deviceInfoId, String firstName, String lastName, final String deviceId, int schoolId, String email, int USER_TYPE, boolean isMultiGrade, boolean IS_REGISTERED, boolean receiveCoupons, boolean getNotifications, boolean trackLocation, boolean is18, boolean is_registered) {
-        ApiService service = new RestClient().getApiService();
+    private void registerUser(final String userId, int deviceInfoId, String firstName, String lastName, final String deviceId, final int schoolId, final int gradeId, String email, int USER_TYPE, boolean isMultiGrade, boolean IS_REGISTERED, boolean receiveCoupons, boolean getNotifications, boolean trackLocation, boolean is18, boolean is_registered) {
+        final ApiService service = new RestClient().getApiService();
         service.registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
-                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
-                    @Override public void success(Response response, Response response2) {
+                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new ResponseCallback() {
+                    @Override public void success(Response response) {
                         mSharedPrefs.edit()
                                 .putBoolean("registered", true)
                                 .putString("device_id", deviceId)
                                 .putString("user_id", userId)
                                 .apply();
                         setProgressBarIndeterminateVisibility(false);
+
+                        Device device = new Device(RegisterActivity.this);
+                        String startDate = device.getStartDate();
+                        String endDate = device.getEndDate();
+
+                        service.saveGrade(userId, gradeId, schoolId, mGradeStrings[gradeId], startDate, endDate, new ResponseCallback() {
+                            @Override public void success(Response response) {
+                            }
+
+                            @Override public void failure(RetrofitError e) {
+                                e.printStackTrace();
+                            }
+                        });
                         navigateToMainScreen();
                     }
 
