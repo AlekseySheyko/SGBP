@@ -320,16 +320,8 @@ public class RegisterActivity extends Activity {
         String email = mEmailField.getText().toString();
         int schoolId = mSchoolSpinner.getSelectedItemPosition();
 
-        if (firstName.isEmpty()) {
-            showError(mFirstNameField);
-            return;
-        }
-        if (lastName.isEmpty()) {
-            showError(mLastNameField);
-            return;
-        }
-        if (email.isEmpty()) {
-            showError(mEmailField);
+        if (!mCheckBoxAge.isChecked()) {
+            Toast.makeText(this, "You must be 18 or older to enter program", Toast.LENGTH_SHORT).show();
             return;
         }
         if (schoolId == -1) {
@@ -341,6 +333,10 @@ public class RegisterActivity extends Activity {
         }
         if (mGradeSpinner.getSelectedItem().equals("Grade level")) {
             Toast.makeText(this, "Please select your grade level", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (email.isEmpty()) {
+            showError(mEmailField);
             return;
         }
         setProgressBarIndeterminateVisibility(true);

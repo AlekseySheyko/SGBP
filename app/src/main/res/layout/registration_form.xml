@@ -3,11 +3,19 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:paddingTop="20dp"
+              android:paddingTop="16dp"
               android:paddingBottom="16dp"
               android:paddingLeft="12dp"
               android:paddingRight="12dp"
               android:background="@drawable/container">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Required fields"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        style="?android:attr/listSeparatorTextViewStyle"/>
 
     <Spinner
         android:id="@+id/school"
@@ -35,7 +43,6 @@
         style="@style/RegistrationSpinner"/>
 
     <EditText
-        android:layout_marginTop="30dp"
         android:id="@+id/email"
         style="@style/EmailField"/>
 
@@ -54,6 +61,14 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Optional"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        style="?android:attr/listSeparatorTextViewStyle"/>
+
     <EditText
         android:id="@+id/firstName"
         style="@style/FirstNameField"/>
@@ -64,7 +79,8 @@
 
     <LinearLayout
         android:id="@+id/notifications_container"
-        style="@style/CheckBoxContainer">
+        style="@style/CheckBoxContainer"
+        android:layout_marginTop="16dp">
 
         <TextView
             android:text="@string/preference_notifications"
