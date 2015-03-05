@@ -1,7 +1,9 @@
 package aleksey.sheyko.sgbp.app.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,10 +31,8 @@ import java.util.List;
 import java.util.Random;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.model.Grade;
 import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
-import aleksey.sheyko.sgbp.rest.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.UserXmlParser;
@@ -121,6 +121,35 @@ public class RegisterActivity extends Activity {
                     disableNameFields();
                 } else {
                     enableNameFields();
+                    Toast.makeText(RegisterActivity.this, getResources().getString(R.string.age_dialog_message), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        mCheckBoxLevel.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    showInfoDialog(mCheckBoxLevel);
+                }
+            }
+        });
+        mCheckBoxLocation.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    showInfoDialog(mCheckBoxLocation);
+                }
+            }
+        });
+        mCheckBoxNotifications.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    showInfoDialog(mCheckBoxNotifications);
+                }
+            }
+        });
+        mCheckBoxCoupons.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    showInfoDialog(mCheckBoxCoupons);
                 }
             }
         });
@@ -183,12 +212,10 @@ public class RegisterActivity extends Activity {
     }
 
     List<School> mSchoolsList;
-    List<Grade> mGradesList;
 
     @Override protected void onResume() {
         super.onResume();
         mSchoolsList = School.listAll(School.class);
-        mGradesList = Grade.listAll(Grade.class);
         if (mSchoolsList.size() == 0) {
             loadSchoolsFromNetwork();
         } else {
@@ -250,33 +277,6 @@ public class RegisterActivity extends Activity {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
                     schoolsXmlParser.parse(in);
                     mSchoolsList = School.listAll(School.class);
-                    loadGradesFromNetwork();
-                    setupSpinners();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override public void failure(RetrofitError e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private void loadGradesFromNetwork() {
-        ApiService service = new RestClient().getApiService();
-        service.listGrades(new ResponseCallback() {
-            @Override public void success(Response response) {
-                try (InputStream in = response.getBody().in()) {
-                    GradesXmlParser gradesXmlParser = new GradesXmlParser();
-                    gradesXmlParser.parse(in);
-                    mGradesList = Grade.listAll(Grade.class);
-                    List<Grade> grades = Grade.find(Grade.class, "school_id = ?", String.valueOf(1));
-                    if (grades == null) return;
-                    for (Grade grade : grades) {
-                        mGradeAdapter.add(grade.getName());
-                    }
-                    mGradeAdapter.notifyDataSetChanged();
                     setupSpinners();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -290,7 +290,7 @@ public class RegisterActivity extends Activity {
     }
 
     private void setupSpinners() {
-        final ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
                 RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
             @Override
@@ -316,7 +316,7 @@ public class RegisterActivity extends Activity {
         mSchoolSpinner.setAdapter(schoolAdapter);
         mSchoolSpinner.setSelection(schoolAdapter.getCount());
 
-        mGradeAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(
                 RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
             @Override
@@ -334,13 +334,14 @@ public class RegisterActivity extends Activity {
                 return super.getCount() - 1; // you don't display last item. It is used as hint.
             }
         };
-        mGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        for (Grade grade : mGradesList) {
-            mGradeAdapter.add(grade.getName());
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] gradeStrings = getResources().getStringArray(R.array.grade_levels);
+        for (String gradeString : gradeStrings) {
+            gradeAdapter.add(gradeString);
         }
-        mGradeAdapter.add("Grade level");
-        mGradeSpinner.setAdapter(mGradeAdapter);
-        mGradeSpinner.setSelection(mGradeAdapter.getCount());
+        gradeAdapter.add("Grade level");
+        mGradeSpinner.setAdapter(gradeAdapter);
+        mGradeSpinner.setSelection(gradeAdapter.getCount());
     }
 
     private void register() {
@@ -445,6 +446,38 @@ public class RegisterActivity extends Activity {
 
     public void register(View v) {
         register();
+    }
+
+    private void showInfoDialog(CheckBox checkBox) {
+        String title = null;
+        String message = null;
+        switch (checkBox.getId()) {
+            case R.id.multipleGrade:
+                title = getResources().getString(R.string.multigrade_dialog_title);
+                message = getResources().getString(R.string.multigrade_dialog_message);
+                break;
+            case R.id.notifications:
+                title = getResources().getString(R.string.notifications_dialog_title);
+                message = getResources().getString(R.string.notifications_dialog_message);
+                break;
+            case R.id.location:
+                title = getResources().getString(R.string.location_dialog_title);
+                message = getResources().getString(R.string.location_dialog_message);
+                break;
+            case R.id.coupons:
+                title = getResources().getString(R.string.coupons_dialog_title);
+                message = getResources().getString(R.string.coupons_dialog_message);
+                break;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     private void hideKeyboard() {

@@ -13,8 +13,13 @@
         <item>About Program</item>
     </string-array>
     <string-array name="grade_levels">
-        <item>Elementary school</item>
-        <item>Middle school</item>
-        <item>High school</item>
+        <item>Kindergarten (A.M.)</item>
+        <item>Kindergarten (P.M.)</item>
+        <item>Grade 1</item>
+        <item>Grade 2</item>
+        <item>Grade 3</item>
+        <item>Grade 4</item>
+        <item>Grade 5</item>
+        <item>Grade 6</item>
     </string-array>
 </resources>
