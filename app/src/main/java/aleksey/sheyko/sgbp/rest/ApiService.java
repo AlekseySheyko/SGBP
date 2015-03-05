@@ -13,6 +13,9 @@ public interface ApiService {
     @GET("/GetSchoolName")
     void listSchools(Callback<Response> callback);
 
+    @GET("/GetGradesList")
+    void listGrades(Callback<Response> callback);
+
     @GET("/GetStoresList")
     void listAllStores(Callback<Response> callback);
 

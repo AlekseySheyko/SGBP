@@ -29,8 +29,10 @@ import java.util.List;
 import java.util.Random;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.model.Grade;
 import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.UserXmlParser;
@@ -66,6 +68,7 @@ public class RegisterActivity extends Activity {
     CheckBox mCheckBoxCoupons;
     @InjectView(R.id.multipleGrade)
     CheckBox mCheckBoxLevel;
+    private ArrayAdapter<String> mGradeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,14 +183,16 @@ public class RegisterActivity extends Activity {
     }
 
     List<School> mSchoolsList;
+    List<Grade> mGradesList;
 
     @Override protected void onResume() {
         super.onResume();
         mSchoolsList = School.listAll(School.class);
+        mGradesList = Grade.listAll(Grade.class);
         if (mSchoolsList.size() == 0) {
-            loadSchoolsListFromNetwork();
+            loadSchoolsFromNetwork();
         } else {
-            setupSpinner();
+            setupSpinners();
         }
     }
 
@@ -237,7 +242,7 @@ public class RegisterActivity extends Activity {
         }
     }
 
-    private void loadSchoolsListFromNetwork() {
+    private void loadSchoolsFromNetwork() {
         ApiService service = new RestClient().getApiService();
         service.listSchools(new ResponseCallback() {
             @Override public void success(Response response) {
@@ -245,7 +250,8 @@ public class RegisterActivity extends Activity {
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
                     schoolsXmlParser.parse(in);
                     mSchoolsList = School.listAll(School.class);
-                    setupSpinner();
+                    loadGradesFromNetwork();
+                    setupSpinners();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -257,8 +263,34 @@ public class RegisterActivity extends Activity {
         });
     }
 
-    private void setupSpinner() {
-        ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
+    private void loadGradesFromNetwork() {
+        ApiService service = new RestClient().getApiService();
+        service.listGrades(new ResponseCallback() {
+            @Override public void success(Response response) {
+                try (InputStream in = response.getBody().in()) {
+                    GradesXmlParser gradesXmlParser = new GradesXmlParser();
+                    gradesXmlParser.parse(in);
+                    mGradesList = Grade.listAll(Grade.class);
+                    List<Grade> grades = Grade.find(Grade.class, "school_id = ?", String.valueOf(1));
+                    if (grades == null) return;
+                    for (Grade grade : grades) {
+                        mGradeAdapter.add(grade.getName());
+                    }
+                    mGradeAdapter.notifyDataSetChanged();
+                    setupSpinners();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override public void failure(RetrofitError e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void setupSpinners() {
+        final ArrayAdapter<String> schoolAdapter = new ArrayAdapter<String>(
                 RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
             @Override
@@ -284,7 +316,7 @@ public class RegisterActivity extends Activity {
         mSchoolSpinner.setAdapter(schoolAdapter);
         mSchoolSpinner.setSelection(schoolAdapter.getCount());
 
-        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(
+        mGradeAdapter = new ArrayAdapter<String>(
                 RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
             @Override
@@ -302,14 +334,13 @@ public class RegisterActivity extends Activity {
                 return super.getCount() - 1; // you don't display last item. It is used as hint.
             }
         };
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        String[] gradeStrings = getResources().getStringArray(R.array.grade_levels);
-        for (String gradeString : gradeStrings) {
-            gradeAdapter.add(gradeString);
+        mGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for (Grade grade : mGradesList) {
+            mGradeAdapter.add(grade.getName());
         }
-        gradeAdapter.add("Grade level");
-        mGradeSpinner.setAdapter(gradeAdapter);
-        mGradeSpinner.setSelection(gradeAdapter.getCount());
+        mGradeAdapter.add("Grade level");
+        mGradeSpinner.setAdapter(mGradeAdapter);
+        mGradeSpinner.setSelection(mGradeAdapter.getCount());
     }
 
     private void register() {
