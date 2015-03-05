@@ -1,122 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_height="match_parent"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:paddingTop="16dp"
-              android:paddingBottom="16dp"
-              android:paddingLeft="12dp"
-              android:paddingRight="12dp"
-              android:background="@drawable/container">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Required fields"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        style="?android:attr/listSeparatorTextViewStyle"/>
-
-    <Spinner
-        android:id="@+id/school"
-        style="@style/RegistrationSpinner"/>
-
-    <requestFocus/>
+              android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/multigrade_container"
-        style="@style/CheckBoxContainer">
+        style="@style/RegistrationFormContainer">
 
         <TextView
-            android:text="@string/preference_level"
-            style="@style/CheckBoxTextLabel"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Required fields"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <CheckBox
-            android:id="@+id/multipleGrade"
-            style="@style/CheckBox"
-            android:checked="false"/>
+        <Spinner
+            android:id="@+id/school"
+            style="@style/RegistrationSpinner"/>
+
+        <requestFocus/>
+
+        <LinearLayout
+            android:id="@+id/multigrade_container"
+            style="@style/CheckBoxContainer">
+
+            <TextView
+                android:text="@string/preference_level"
+                style="@style/CheckBoxTextLabel"/>
+
+            <CheckBox
+                android:id="@+id/multipleGrade"
+                style="@style/CheckBox"
+                android:checked="false"/>
+
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/grade"
+            style="@style/RegistrationSpinner"/>
+
+        <EditText
+            android:id="@+id/email"
+            style="@style/EmailField"/>
+
+        <LinearLayout
+            android:id="@+id/age_container"
+            style="@style/CheckBoxContainer">
+
+            <TextView
+                android:text="@string/preference_age"
+                style="@style/CheckBoxTextLabel"/>
+
+            <CheckBox
+                android:id="@+id/age"
+                style="@style/CheckBox"
+                android:checked="false"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <Spinner
-        android:id="@+id/grade"
-        style="@style/RegistrationSpinner"/>
-
-    <EditText
-        android:id="@+id/email"
-        style="@style/EmailField"/>
-
     <LinearLayout
-        android:id="@+id/age_container"
-        style="@style/CheckBoxContainer">
-
-        <TextView
-            android:text="@string/preference_age"
-            style="@style/CheckBoxTextLabel"/>
-
-        <CheckBox
-            android:id="@+id/age"
-            style="@style/CheckBox"
-            android:checked="false"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Optional"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="8dp"
-        style="?android:attr/listSeparatorTextViewStyle"/>
-
-    <EditText
-        android:id="@+id/firstName"
-        style="@style/FirstNameField"/>
-
-    <EditText
-        android:id="@+id/lastName"
-        style="@style/LastNameField"/>
-
-    <LinearLayout
-        android:id="@+id/notifications_container"
-        style="@style/CheckBoxContainer"
+        style="@style/RegistrationFormContainer"
+        android:paddingTop="8dp"
         android:layout_marginTop="16dp">
 
         <TextView
-            android:text="@string/preference_notifications"
-            style="@style/CheckBoxTextLabel"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Optional"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            style="?android:attr/listSeparatorTextViewStyle"/>
 
-        <CheckBox
-            android:id="@+id/notifications"
-            style="@style/CheckBox"/>
+        <EditText
+            android:id="@+id/firstName"
+            style="@style/FirstNameField"/>
 
-    </LinearLayout>
+        <EditText
+            android:id="@+id/lastName"
+            style="@style/LastNameField"/>
 
-    <LinearLayout
-        android:id="@+id/location_container"
-        style="@style/CheckBoxContainer">
+        <LinearLayout
+            android:id="@+id/notifications_container"
+            style="@style/CheckBoxContainer"
+            android:layout_marginTop="16dp">
 
-        <TextView
-            android:text="@string/preference_location"
-            style="@style/CheckBoxTextLabel"/>
+            <TextView
+                android:text="@string/preference_notifications"
+                style="@style/CheckBoxTextLabel"/>
 
-        <CheckBox
-            android:id="@+id/location"
-            style="@style/CheckBox"/>
+            <CheckBox
+                android:id="@+id/notifications"
+                style="@style/CheckBox"/>
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/coupons_container"
-        style="@style/CheckBoxContainer">
+        <LinearLayout
+            android:id="@+id/location_container"
+            style="@style/CheckBoxContainer">
 
-        <TextView
-            android:text="@string/preference_coupons"
-            style="@style/CheckBoxTextLabel"/>
+            <TextView
+                android:text="@string/preference_location"
+                style="@style/CheckBoxTextLabel"/>
 
-        <CheckBox
-            android:id="@+id/coupons"
-            style="@style/CheckBox"/>
+            <CheckBox
+                android:id="@+id/location"
+                style="@style/CheckBox"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/coupons_container"
+            style="@style/CheckBoxContainer">
+
+            <TextView
+                android:text="@string/preference_coupons"
+                style="@style/CheckBoxTextLabel"/>
+
+            <CheckBox
+                android:id="@+id/coupons"
+                style="@style/CheckBox"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
