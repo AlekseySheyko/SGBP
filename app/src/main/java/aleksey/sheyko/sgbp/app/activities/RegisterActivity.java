@@ -32,14 +32,17 @@ import java.util.List;
 import java.util.Random;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.model.Device;
 import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.DeviceXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.UserXmlParser;
 import aleksey.sheyko.sgbp.rest.UserXmlParser.User;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -385,36 +388,62 @@ public class RegisterActivity extends Activity {
         }
     }
 
-    public void register(String firstName, String lastName, String email, int schoolId) throws Exception {
+    public void register(final String firstName, final String lastName, final String email, final int schoolId) throws Exception {
 
-//        final int USER_TYPE = 1;
-//        final boolean IS_REGISTERED = true;
-//
-//        final String deviceId = getDeviceId();
-//        final int userId = Integer.parseInt(deviceId.replaceAll("[^0-9]", ""));
-//        boolean is18 = mCheckBoxAge.isChecked();
-//        boolean isMultiGrade = mCheckBoxLevel.isChecked();
-//        boolean getNotifications = mCheckBoxNotifications.isChecked();
-//        boolean trackLocation = mCheckBoxLocation.isChecked();
-//        boolean receiveCoupons = mCheckBoxCoupons.isChecked();
-//
-//        ApiService service = new RestClient().getApiService();
-//        service.register(userId + "", userId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
-//                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
-//                    @Override public void success(Response response, Response response2) {
-//                        mSharedPrefs.edit()
-//                                .putBoolean("registered", true)
-//                                .putString("device_id", deviceId)
-//                                .putInt("user_id", userId)
-//                                .apply();
-//                        setProgressBarIndeterminateVisibility(false);
-//                        navigateToMainScreen();
-//                    }
-//
-//                    @Override public void failure(RetrofitError e) {
-//                        e.printStackTrace();
-//                    }
-//                });
+        final int USER_TYPE = 1;
+        final boolean IS_REGISTERED = true;
+
+        final String deviceId = getDeviceId();
+        final String userId = deviceId.replaceAll("[^0-9]", "");
+        final boolean is18 = mCheckBoxAge.isChecked();
+        final boolean isMultiGrade = mCheckBoxLevel.isChecked();
+        final boolean getNotifications = mCheckBoxNotifications.isChecked();
+        final boolean trackLocation = mCheckBoxLocation.isChecked();
+        final boolean receiveCoupons = mCheckBoxCoupons.isChecked();
+
+        ApiService service = new RestClient().getApiService();
+        Device device = new Device(this);
+        service.registerDevice(userId, deviceId, device.getModelName(), device.getDeviceType(), device.getManufacturer(),
+                device.getModelName(), device.getModelNumber(), device.getModelNumber(), device.getSystemName(),
+                device.getSoftwareVersion(), device.getAndroidVersion(), device.getAndroidVersion(),
+                device.getDeviceOs(), device.getTimeZone(), device.getLocale(), device.isCameraAvailable(), false, true,
+                userId, IS_REGISTERED, userId, new ResponseCallback() {
+                    @Override public void success(Response response) {
+                        try (InputStream in = response.getBody().in()) {
+                            DeviceXmlParser deviceXmlParser = new DeviceXmlParser();
+                            int deviceInfoId = deviceXmlParser.parse(in);
+                            mSharedPrefs.edit().putInt("device_info_id", deviceInfoId).apply();
+                            registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
+                                    IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override public void failure(RetrofitError e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    private void registerUser(final String userId, int deviceInfoId, String firstName, String lastName, final String deviceId, int schoolId, String email, int USER_TYPE, boolean isMultiGrade, boolean IS_REGISTERED, boolean receiveCoupons, boolean getNotifications, boolean trackLocation, boolean is18, boolean is_registered) {
+        ApiService service = new RestClient().getApiService();
+        service.registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
+                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
+                    @Override public void success(Response response, Response response2) {
+                        mSharedPrefs.edit()
+                                .putBoolean("registered", true)
+                                .putString("device_id", deviceId)
+                                .putString("user_id", userId)
+                                .apply();
+                        setProgressBarIndeterminateVisibility(false);
+                        navigateToMainScreen();
+                    }
+
+                    @Override public void failure(RetrofitError e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     private String getDeviceId() {
