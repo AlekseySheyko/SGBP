@@ -3,29 +3,21 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:paddingTop="16dp"
+              android:paddingTop="20dp"
               android:paddingBottom="16dp"
               android:paddingLeft="12dp"
               android:paddingRight="12dp"
               android:background="@drawable/container">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/info_header_label"
-        android:layout_marginBottom="8dp"
-        style="?android:attr/listSeparatorTextViewStyle"/>
-
     <Spinner
         android:id="@+id/school"
         style="@style/RegistrationSpinner"/>
 
+    <requestFocus/>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:clickable="true"
-        android:id="@+id/multigrade_container">
+        android:id="@+id/multigrade_container"
+        style="@style/CheckBoxContainer">
 
         <TextView
             android:text="@string/preference_level"
@@ -43,15 +35,13 @@
         style="@style/RegistrationSpinner"/>
 
     <EditText
+        android:layout_marginTop="30dp"
         android:id="@+id/email"
         style="@style/EmailField"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:clickable="true"
-        android:id="@+id/age_container">
+        android:id="@+id/age_container"
+        style="@style/CheckBoxContainer">
 
         <TextView
             android:text="@string/preference_age"
@@ -59,7 +49,8 @@
 
         <CheckBox
             android:id="@+id/age"
-            style="@style/CheckBox"/>
+            style="@style/CheckBox"
+            android:checked="false"/>
 
     </LinearLayout>
 
@@ -71,20 +62,9 @@
         android:id="@+id/lastName"
         style="@style/LastNameField"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/prefs_header_label"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        style="?android:attr/listSeparatorTextViewStyle"/>
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:clickable="true"
-        android:id="@+id/notifications_container">
+        android:id="@+id/notifications_container"
+        style="@style/CheckBoxContainer">
 
         <TextView
             android:text="@string/preference_notifications"
@@ -97,11 +77,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:clickable="true"
-        android:id="@+id/location_container">
+        android:id="@+id/location_container"
+        style="@style/CheckBoxContainer">
 
         <TextView
             android:text="@string/preference_location"
@@ -114,11 +91,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:clickable="true"
-        android:id="@+id/coupons_container">
+        android:id="@+id/coupons_container"
+        style="@style/CheckBoxContainer">
 
         <TextView
             android:text="@string/preference_coupons"

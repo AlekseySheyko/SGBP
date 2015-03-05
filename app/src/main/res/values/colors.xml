@@ -9,4 +9,6 @@
     <color name="participate_button_focused">#9b59b6</color>
     <color name="participate_button_pressed">#85509f</color>
     <color name="participate_button_disabled">#fff9c3ff</color>
+    <color name="hint_disabled">#bdc3c7</color>
+    <color name="hint_enabled">#808080</color>
 </resources>

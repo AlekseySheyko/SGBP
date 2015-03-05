@@ -17,6 +17,8 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -108,6 +110,35 @@ public class RegisterActivity extends Activity {
                 mCheckBoxCoupons.setChecked(!mCheckBoxCoupons.isChecked());
             }
         });
+
+        disableNameFields();
+        mCheckBoxAge.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    disableNameFields();
+                } else {
+                    enableNameFields();
+                }
+            }
+        });
+    }
+
+    private void disableNameFields() {
+        mFirstNameField.setEnabled(false);
+        mLastNameField.setEnabled(false);
+        mFirstNameField.setFocusable(false);
+        mLastNameField.setFocusable(false);
+        mFirstNameField.setHintTextColor(getResources().getColor(R.color.hint_disabled));
+        mLastNameField.setHintTextColor(getResources().getColor(R.color.hint_disabled));
+    }
+
+    private void enableNameFields() {
+        mFirstNameField.setEnabled(true);
+        mLastNameField.setEnabled(true);
+        mFirstNameField.setFocusable(true);
+        mLastNameField.setFocusable(true);
+        mFirstNameField.setHintTextColor(getResources().getColor(R.color.hint_enabled));
+        mLastNameField.setHintTextColor(getResources().getColor(R.color.hint_enabled));
     }
 
     private void checkRegistration() {
