@@ -11,6 +11,7 @@ import android.provider.Settings.Secure;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -71,13 +72,42 @@ public class RegisterActivity extends Activity {
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
+        /*
+        TODO Uncomment before production
         if (isRegistered) {
             navigateToMainScreen();
         } else {
             checkRegistration();
         }
+        */
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
+
+        findViewById(R.id.multigrade_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxLevel.setChecked(!mCheckBoxLevel.isChecked());
+            }
+        });
+        findViewById(R.id.age_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxAge.setChecked(!mCheckBoxAge.isChecked());
+            }
+        });
+        findViewById(R.id.notifications_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxNotifications.setChecked(!mCheckBoxNotifications.isChecked());
+            }
+        });
+        findViewById(R.id.location_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxLocation.setChecked(!mCheckBoxLocation.isChecked());
+            }
+        });
+        findViewById(R.id.coupons_container).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View view) {
+                mCheckBoxCoupons.setChecked(!mCheckBoxCoupons.isChecked());
+            }
+        });
     }
 
     private void checkRegistration() {
@@ -128,29 +158,6 @@ public class RegisterActivity extends Activity {
         } else {
             setupSpinner();
         }
-        String firstName = mSharedPrefs.getString("first_name", "");
-        String lastName = mSharedPrefs.getString("last_name", "");
-        String email = mSharedPrefs.getString("email", "");
-        boolean is18 = mSharedPrefs.getBoolean("is18", true);
-        boolean isMultiGrade = mSharedPrefs.getBoolean("multipleLevel", false);
-        boolean notifications = mSharedPrefs.getBoolean("notifications", true);
-        boolean location = mSharedPrefs.getBoolean("location", true);
-        boolean coupons = mSharedPrefs.getBoolean("coupons", true);
-
-        if (!firstName.isEmpty()) {
-            mFirstNameField.setText(firstName);
-        }
-        if (!lastName.isEmpty()) {
-            mLastNameField.setText(lastName);
-        }
-        if (!email.isEmpty()) {
-            mEmailField.setText(email);
-        }
-        mCheckBoxAge.setChecked(is18);
-        mCheckBoxLevel.setChecked(isMultiGrade);
-        mCheckBoxNotifications.setChecked(notifications);
-        mCheckBoxLocation.setChecked(location);
-        mCheckBoxCoupons.setChecked(coupons);
     }
 
     @Override protected void onPause() {
@@ -244,13 +251,7 @@ public class RegisterActivity extends Activity {
         }
         schoolAdapter.add("School");
         mSchoolSpinner.setAdapter(schoolAdapter);
-
-        int schoolId = mSharedPrefs.getInt("school_id", -1);
-        if (schoolId == -1) {
-            mSchoolSpinner.setSelection(schoolAdapter.getCount());
-        } else {
-            mSchoolSpinner.setSelection(schoolId);
-        }
+        mSchoolSpinner.setSelection(schoolAdapter.getCount());
 
         ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(
                 RegisterActivity.this, android.R.layout.simple_spinner_item) {
@@ -277,13 +278,7 @@ public class RegisterActivity extends Activity {
         }
         gradeAdapter.add("Grade level");
         mGradeSpinner.setAdapter(gradeAdapter);
-
-        int gradeId = mSharedPrefs.getInt("grade_id", -1);
-        if (gradeId == -1) {
-            mGradeSpinner.setSelection(gradeAdapter.getCount());
-        } else {
-            mGradeSpinner.setSelection(gradeId);
-        }
+        mGradeSpinner.setSelection(gradeAdapter.getCount());
     }
 
     private void register() {
