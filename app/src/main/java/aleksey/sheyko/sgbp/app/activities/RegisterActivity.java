@@ -35,9 +35,11 @@ import java.util.Random;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Device;
+import aleksey.sheyko.sgbp.model.Grade;
 import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.DeviceXmlParser;
+import aleksey.sheyko.sgbp.rest.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.rest.UserXmlParser;
@@ -215,6 +217,7 @@ public class RegisterActivity extends Activity {
     }
 
     List<School> mSchoolsList;
+    List<Grade> mGradesList;
 
     @Override protected void onResume() {
         super.onResume();
@@ -331,7 +334,20 @@ public class RegisterActivity extends Activity {
                     String userId = getDeviceId().replaceAll("[^0-9]", "");
                     service.getGrade(userId, position+1, new ResponseCallback() {
                         @Override public void success(Response response) {
-
+                            try (InputStream in = response.getBody().in()) {
+                                Grade.deleteAll(Grade.class);
+                                GradesXmlParser gradesXmlParser = new GradesXmlParser();
+                                gradesXmlParser.parse(in);
+                                mGradesList = Grade.listAll(Grade.class);
+                                mGradeAdapter.clear();
+                                for (Grade grade : mGradesList) {
+                                    mGradeAdapter.add(grade.getName());
+                                }
+                                mGradeSpinner.setSelection(0);
+                                mGradeAdapter.notifyDataSetChanged();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override public void failure(RetrofitError e) {
@@ -364,10 +380,7 @@ public class RegisterActivity extends Activity {
             }
         };
         mGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mGradeStrings = getResources().getStringArray(R.array.grade_levels);
-        for (String gradeString : mGradeStrings) {
-            mGradeAdapter.add(gradeString);
-        }
+        mGradeAdapter.add("Grade level");
         mGradeAdapter.add("Grade level");
         mGradeSpinner.setAdapter(mGradeAdapter);
         mGradeSpinner.setSelection(mGradeAdapter.getCount());
