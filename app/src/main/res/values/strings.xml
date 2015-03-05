@@ -61,13 +61,13 @@
     <string name="action_refresh">Refresh</string>
     <string name="multigrade_dialog_title">Allow Multiple Child</string>
     <string name="multigrade_dialog_message">If you have multiple children at different grade levels, please check this box. Each grade level selected from the dropdown menu will receive credit for your participation.</string>
-    <string name="notifications_dialog_title">Allow Push Notification</string>
+    <string name="notifications_dialog_title">Allow Push Notifications</string>
     <string name="notifications_dialog_message">When push notification is checked, School Give Back Program will keep you up to date and informed. We will also send you Exclusive Money Saving offers from participating businesses.</string>
     <string name="location_dialog_title">Allow App To Use Location</string>
     <string name="location_dialog_message">The Location Service is required to be checked to participate in School Give Back Program. Location Services allow us to provide map directions to participating businesses and enable auto check in features.</string>
     <string name="coupons_dialog_title">Receive Coupon Codes</string>
     <string name="coupons_dialog_message">When Receive Coupon Codes is checked, the School Give Back Program can send you great saving offers from the participating businesses. These coupon codes are only available thought the School Give Back Program.</string>
-    <string name="age_dialog_message">Enter your First &amp; Last name</string>
+    <string name="age_dialog_message">Now please enter your First &amp; Last name</string>
 
 
 </resources>

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +40,6 @@ import aleksey.sheyko.sgbp.rest.UserXmlParser;
 import aleksey.sheyko.sgbp.rest.UserXmlParser.User;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.Callback;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -316,7 +316,7 @@ public class RegisterActivity extends Activity {
         mSchoolSpinner.setAdapter(schoolAdapter);
         mSchoolSpinner.setSelection(schoolAdapter.getCount());
 
-        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<String>(
+        mGradeAdapter = new ArrayAdapter<String>(
                 RegisterActivity.this, android.R.layout.simple_spinner_item) {
 
             @Override
@@ -334,14 +334,14 @@ public class RegisterActivity extends Activity {
                 return super.getCount() - 1; // you don't display last item. It is used as hint.
             }
         };
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         String[] gradeStrings = getResources().getStringArray(R.array.grade_levels);
         for (String gradeString : gradeStrings) {
-            gradeAdapter.add(gradeString);
+            mGradeAdapter.add(gradeString);
         }
-        gradeAdapter.add("Grade level");
-        mGradeSpinner.setAdapter(gradeAdapter);
-        mGradeSpinner.setSelection(gradeAdapter.getCount());
+        mGradeAdapter.add("Grade level");
+        mGradeSpinner.setAdapter(mGradeAdapter);
+        mGradeSpinner.setSelection(mGradeAdapter.getCount());
     }
 
     private void register() {
@@ -371,6 +371,10 @@ public class RegisterActivity extends Activity {
             showError(mEmailField);
             return;
         }
+        if (!isValidEmail(email)) {
+            Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
         setProgressBarIndeterminateVisibility(true);
 
         try {
@@ -383,34 +387,34 @@ public class RegisterActivity extends Activity {
 
     public void register(String firstName, String lastName, String email, int schoolId) throws Exception {
 
-        final int USER_TYPE = 1;
-        final boolean IS_REGISTERED = true;
-
-        final String deviceId = getDeviceId();
-        final int userId = Integer.parseInt(deviceId.replaceAll("[^0-9]", ""));
-        boolean is18 = mCheckBoxAge.isChecked();
-        boolean isMultiGrade = mCheckBoxLevel.isChecked();
-        boolean getNotifications = mCheckBoxNotifications.isChecked();
-        boolean trackLocation = mCheckBoxLocation.isChecked();
-        boolean receiveCoupons = mCheckBoxCoupons.isChecked();
-
-        ApiService service = new RestClient().getApiService();
-        service.register(userId + "", userId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
-                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
-                    @Override public void success(Response response, Response response2) {
-                        mSharedPrefs.edit()
-                                .putBoolean("registered", true)
-                                .putString("device_id", deviceId)
-                                .putInt("user_id", userId)
-                                .apply();
-                        setProgressBarIndeterminateVisibility(false);
-                        navigateToMainScreen();
-                    }
-
-                    @Override public void failure(RetrofitError e) {
-                        e.printStackTrace();
-                    }
-                });
+//        final int USER_TYPE = 1;
+//        final boolean IS_REGISTERED = true;
+//
+//        final String deviceId = getDeviceId();
+//        final int userId = Integer.parseInt(deviceId.replaceAll("[^0-9]", ""));
+//        boolean is18 = mCheckBoxAge.isChecked();
+//        boolean isMultiGrade = mCheckBoxLevel.isChecked();
+//        boolean getNotifications = mCheckBoxNotifications.isChecked();
+//        boolean trackLocation = mCheckBoxLocation.isChecked();
+//        boolean receiveCoupons = mCheckBoxCoupons.isChecked();
+//
+//        ApiService service = new RestClient().getApiService();
+//        service.register(userId + "", userId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
+//                IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new Callback<Response>() {
+//                    @Override public void success(Response response, Response response2) {
+//                        mSharedPrefs.edit()
+//                                .putBoolean("registered", true)
+//                                .putString("device_id", deviceId)
+//                                .putInt("user_id", userId)
+//                                .apply();
+//                        setProgressBarIndeterminateVisibility(false);
+//                        navigateToMainScreen();
+//                    }
+//
+//                    @Override public void failure(RetrofitError e) {
+//                        e.printStackTrace();
+//                    }
+//                });
     }
 
     private String getDeviceId() {
@@ -442,6 +446,7 @@ public class RegisterActivity extends Activity {
         String error = getResources().getString(R.string.empty_field_error);
         editText.setError(
                 editText.getHint().toString() + " " + error);
+        Toast.makeText(this, editText.getHint().toString() + " " + error, Toast.LENGTH_SHORT).show();
     }
 
     public void register(View v) {
@@ -484,5 +489,9 @@ public class RegisterActivity extends Activity {
         InputMethodManager imm = (InputMethodManager)
                 getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSchoolSpinner.getWindowToken(), 0);
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }
