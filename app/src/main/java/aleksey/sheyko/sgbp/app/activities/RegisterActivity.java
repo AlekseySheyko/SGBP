@@ -30,10 +30,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import aleksey.sheyko.sgbp.R;
+import aleksey.sheyko.sgbp.app.helpers.MultiSpinner;
+import aleksey.sheyko.sgbp.app.helpers.MultiSpinner.MultiSpinnerListener;
 import aleksey.sheyko.sgbp.model.Device;
 import aleksey.sheyko.sgbp.model.Grade;
 import aleksey.sheyko.sgbp.model.School;
@@ -50,7 +53,8 @@ import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity
+implements MultiSpinnerListener {
 
     private SharedPreferences mSharedPrefs;
 
@@ -63,7 +67,7 @@ public class RegisterActivity extends Activity {
     @InjectView(R.id.school)
     Spinner mSchoolSpinner;
     @InjectView(R.id.grade)
-    Spinner mGradeSpinner;
+    MultiSpinner mGradeSpinner;
     @InjectView(R.id.age)
     CheckBox mCheckBoxAge;
     @InjectView(R.id.notifications)
@@ -75,7 +79,6 @@ public class RegisterActivity extends Activity {
     @InjectView(R.id.multipleGrade)
     CheckBox mCheckBoxLevel;
     private ArrayAdapter<String> mGradeAdapter;
-    private String[] mGradeStrings;
     private ArrayAdapter<String> mSchoolAdapter;
 
     @Override
@@ -93,6 +96,11 @@ public class RegisterActivity extends Activity {
 //        }
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
+
+        List<String> items = new ArrayList<>();
+        items.add("Red");
+        items.add("Blue");
+        items.add("Green");
 
         findViewById(R.id.multigrade_container).setOnClickListener(new OnClickListener() {
             @Override public void onClick(View view) {
@@ -159,6 +167,10 @@ public class RegisterActivity extends Activity {
                 }
             }
         });
+    }
+
+    @Override public void onItemsSelected(boolean[] selected) {
+
     }
 
     private void disableNameFields() {

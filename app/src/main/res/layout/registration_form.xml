@@ -36,10 +36,9 @@
 
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/grade"
-            android:spinnerMode="dialog"
-            style="@style/RegistrationSpinner"/>
+        <aleksey.sheyko.sgbp.app.helpers.MultiSpinner
+            style="@style/RegistrationSpinner"
+            android:id="@+id/grade" />
 
         <EditText
             android:id="@+id/email"
