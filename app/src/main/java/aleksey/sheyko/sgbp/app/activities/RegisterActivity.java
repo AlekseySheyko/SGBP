@@ -85,6 +85,7 @@ public class RegisterActivity extends Activity {
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
+//        TODO: Uncomment
 //        if (isRegistered) {
 //            navigateToMainScreen();
 //        } else {
@@ -483,15 +484,21 @@ public class RegisterActivity extends Activity {
                         String startDate = device.getStartDate();
                         String endDate = device.getEndDate();
 
-                        service.saveGrade(userId, gradeId, schoolId, mGradeStrings[gradeId], startDate, endDate, new ResponseCallback() {
-                            @Override public void success(Response response) {
-                            }
+                        // TODO: Populate mGradeStrings with selected grade values
+                        if (mGradeStrings != null) {
+                            service.saveGrade(userId, gradeId, schoolId, mGradeStrings[gradeId], startDate, endDate, new ResponseCallback() {
+                                @Override public void success(Response response) {
+                                }
 
-                            @Override public void failure(RetrofitError e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        navigateToMainScreen();
+                                @Override public void failure(RetrofitError e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                            navigateToMainScreen();
+                        } else {
+                            Toast.makeText(RegisterActivity.this,
+                                    "Failed to sign up", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override public void failure(RetrofitError e) {

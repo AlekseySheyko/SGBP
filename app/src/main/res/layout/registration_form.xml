@@ -38,6 +38,7 @@
 
         <Spinner
             android:id="@+id/grade"
+            android:spinnerMode="dialog"
             style="@style/RegistrationSpinner"/>
 
         <EditText
