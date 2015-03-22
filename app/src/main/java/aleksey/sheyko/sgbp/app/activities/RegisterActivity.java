@@ -78,7 +78,6 @@ implements MultiSpinnerListener {
     CheckBox mCheckBoxCoupons;
     @InjectView(R.id.multipleGrade)
     CheckBox mCheckBoxLevel;
-    private ArrayAdapter<String> mGradeAdapter;
     private ArrayAdapter<String> mSchoolAdapter;
 
     @Override
@@ -96,11 +95,6 @@ implements MultiSpinnerListener {
 //        }
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
-
-        List<String> items = new ArrayList<>();
-        items.add("Red");
-        items.add("Blue");
-        items.add("Green");
 
         findViewById(R.id.multigrade_container).setOnClickListener(new OnClickListener() {
             @Override public void onClick(View view) {
@@ -178,6 +172,8 @@ implements MultiSpinnerListener {
         mLastNameField.setEnabled(false);
         mFirstNameField.setFocusable(false);
         mLastNameField.setFocusable(false);
+        mFirstNameField.setFocusableInTouchMode(false);
+        mLastNameField.setFocusableInTouchMode(false);
         mFirstNameField.setHintTextColor(getResources().getColor(R.color.hint_disabled));
         mLastNameField.setHintTextColor(getResources().getColor(R.color.hint_disabled));
     }
@@ -187,6 +183,8 @@ implements MultiSpinnerListener {
         mLastNameField.setEnabled(true);
         mFirstNameField.setFocusable(true);
         mLastNameField.setFocusable(true);
+        mFirstNameField.setFocusableInTouchMode(true);
+        mLastNameField.setFocusableInTouchMode(true);
         mFirstNameField.setHintTextColor(getResources().getColor(R.color.hint_enabled));
         mLastNameField.setHintTextColor(getResources().getColor(R.color.hint_enabled));
     }
@@ -352,12 +350,13 @@ implements MultiSpinnerListener {
                                 GradesXmlParser gradesXmlParser = new GradesXmlParser();
                                 gradesXmlParser.parse(in);
                                 mGradesList = Grade.listAll(Grade.class);
-                                mGradeAdapter.clear();
+                                List<String> gradeStrings = new ArrayList<>();
                                 for (Grade grade : mGradesList) {
-                                    mGradeAdapter.add(grade.getName());
+                                    gradeStrings.add(grade.getName());
                                 }
-                                mGradeSpinner.setSelection(0);
-                                mGradeAdapter.notifyDataSetChanged();
+                                mGradeSpinner.setItems(gradeStrings, "Grade level",
+                                        RegisterActivity.this);
+
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -373,30 +372,6 @@ implements MultiSpinnerListener {
             @Override public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-
-        mGradeAdapter = new ArrayAdapter<String>(
-                RegisterActivity.this, android.R.layout.simple_spinner_item) {
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-                if (position == getCount()) {
-                    ((TextView) v.findViewById(android.R.id.text1)).setText("");
-                    ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
-                }
-                return v;
-            }
-
-            @Override
-            public int getCount() {
-                return super.getCount() - 1; // you don't display last item. It is used as hint.
-            }
-        };
-        mGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mGradeAdapter.add("Grade level");
-        mGradeAdapter.add("Grade level");
-        mGradeSpinner.setAdapter(mGradeAdapter);
-        mGradeSpinner.setSelection(mGradeAdapter.getCount());
     }
 
     private void register() {
@@ -497,20 +472,15 @@ implements MultiSpinnerListener {
                         String endDate = device.getEndDate();
 
                         // TODO: Populate mGradeStrings with selected grade values
-                        if (mGradeStrings != null) {
-                            service.saveGrade(userId, gradeId, schoolId, mGradeStrings[gradeId], startDate, endDate, new ResponseCallback() {
-                                @Override public void success(Response response) {
-                                }
-
-                                @Override public void failure(RetrofitError e) {
-                                    e.printStackTrace();
-                                }
-                            });
+//                            service.saveGrade(userId, gradeId, schoolId, mGradeStrings[gradeId], startDate, endDate, new ResponseCallback() {
+//                                @Override public void success(Response response) {
+//                                }
+//
+//                                @Override public void failure(RetrofitError e) {
+//                                    e.printStackTrace();
+//                                }
+//                            });
                             navigateToMainScreen();
-                        } else {
-                            Toast.makeText(RegisterActivity.this,
-                                    "Failed to sign up", Toast.LENGTH_SHORT).show();
-                        }
                     }
 
                     @Override public void failure(RetrofitError e) {

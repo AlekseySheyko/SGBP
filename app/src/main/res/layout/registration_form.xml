@@ -23,7 +23,8 @@
 
         <LinearLayout
             android:id="@+id/multigrade_container"
-            style="@style/CheckBoxContainer">
+            style="@style/CheckBoxContainer"
+            android:visibility="gone">
 
             <TextView
                 android:text="@string/preference_level"

@@ -60,7 +60,7 @@ public class MultiSpinner extends Spinner implements
         } else {
             spinnerText = defaultText;
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item,
                 new String[] { spinnerText });
         setAdapter(adapter);
@@ -69,6 +69,7 @@ public class MultiSpinner extends Spinner implements
 
     @Override
     public boolean performClick() {
+        if (items == null) return false;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMultiChoiceItems(
                 items.toArray(new CharSequence[items.size()]), selected, this);
@@ -93,11 +94,9 @@ public class MultiSpinner extends Spinner implements
 
         // all selected by default
         selected = new boolean[items.size()];
-        for (int i = 0; i < selected.length; i++)
-            selected[i] = true;
 
         // all text on the spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_item, new String[] { allText });
         setAdapter(adapter);
     }
