@@ -54,9 +54,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class RegisterActivity extends Activity
-implements MultiSpinnerListener {
-
-    private SharedPreferences mSharedPrefs;
+        implements MultiSpinnerListener {
 
     @InjectView(R.id.firstName)
     EditText mFirstNameField;
@@ -78,7 +76,19 @@ implements MultiSpinnerListener {
     CheckBox mCheckBoxCoupons;
     @InjectView(R.id.multipleGrade)
     CheckBox mCheckBoxLevel;
+    List<School> mSchoolsList;
+    List<Grade> mGradesList;
+    private SharedPreferences mSharedPrefs;
     private ArrayAdapter<String> mSchoolAdapter;
+
+    private static int randInt(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,34 +107,40 @@ implements MultiSpinnerListener {
         ButterKnife.inject(this);
 
         findViewById(R.id.multigrade_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxLevel.setChecked(!mCheckBoxLevel.isChecked());
             }
         });
         findViewById(R.id.age_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxAge.setChecked(!mCheckBoxAge.isChecked());
             }
         });
         findViewById(R.id.notifications_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxNotifications.setChecked(!mCheckBoxNotifications.isChecked());
             }
         });
         findViewById(R.id.location_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxLocation.setChecked(!mCheckBoxLocation.isChecked());
             }
         });
         findViewById(R.id.coupons_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxCoupons.setChecked(!mCheckBoxCoupons.isChecked());
             }
         });
 
         disableNameFields();
         mCheckBoxAge.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
                     disableNameFields();
                 } else {
@@ -134,36 +150,33 @@ implements MultiSpinnerListener {
             }
         });
         mCheckBoxLevel.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    showInfoDialog(mCheckBoxLevel);
-                }
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                showInfoDialog(mCheckBoxLevel);
             }
         });
         mCheckBoxLocation.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    showInfoDialog(mCheckBoxLocation);
-                }
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                showInfoDialog(mCheckBoxLocation);
             }
         });
         mCheckBoxNotifications.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    showInfoDialog(mCheckBoxNotifications);
-                }
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                showInfoDialog(mCheckBoxNotifications);
             }
         });
         mCheckBoxCoupons.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    showInfoDialog(mCheckBoxCoupons);
-                }
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                showInfoDialog(mCheckBoxCoupons);
             }
         });
     }
 
-    @Override public void onItemsSelected(boolean[] selected) {
+    @Override
+    public void onItemsSelected(boolean[] selected) {
 
     }
 
@@ -193,8 +206,10 @@ implements MultiSpinnerListener {
         setProgressBarIndeterminateVisibility(true);
         ApiService service = new RestClient().getApiService();
         service.checkRegistration(getDeviceId(), new ResponseCallback() {
-            @Override public void success(Response response) {
-                try (InputStream in = response.getBody().in()) {
+            @Override
+            public void success(Response response) {
+                try {
+                    InputStream in = response.getBody().in();
                     UserXmlParser userInfoXmlParser = new UserXmlParser();
                     List<User> userList = userInfoXmlParser.parse(in);
                     if (userList == null) {
@@ -220,27 +235,22 @@ implements MultiSpinnerListener {
                 }
             }
 
-            @Override public void failure(RetrofitError e) {
+            @Override
+            public void failure(RetrofitError e) {
                 e.printStackTrace();
                 Toast.makeText(RegisterActivity.this, "Please check network connection", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    List<School> mSchoolsList;
-    List<Grade> mGradesList;
-
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
-        mSchoolsList = School.listAll(School.class);
-        if (mSchoolsList.size() == 0) {
-            loadSchoolsFromNetwork();
-        } else {
-            setupSpinners();
-        }
+        loadSchoolsFromNetwork();
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
 
         String firstName = mFirstNameField.getText().toString();
@@ -289,8 +299,10 @@ implements MultiSpinnerListener {
     private void loadSchoolsFromNetwork() {
         ApiService service = new RestClient().getApiService();
         service.listSchools(new ResponseCallback() {
-            @Override public void success(Response response) {
-                try (InputStream in = response.getBody().in()) {
+            @Override
+            public void success(Response response) {
+                try {
+                    InputStream in = response.getBody().in();
                     SchoolsXmlParser schoolsXmlParser = new SchoolsXmlParser();
                     schoolsXmlParser.parse(in);
                     mSchoolsList = School.listAll(School.class);
@@ -300,7 +312,8 @@ implements MultiSpinnerListener {
                 }
             }
 
-            @Override public void failure(RetrofitError e) {
+            @Override
+            public void failure(RetrofitError e) {
                 e.printStackTrace();
             }
         });
@@ -335,7 +348,8 @@ implements MultiSpinnerListener {
 
         final int[] i = new int[1];
         mSchoolSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mSchoolSpinner.getSelectedItemPosition() == mSchoolAdapter.getCount()) {
                     mGradeSpinner.setEnabled(false);
                 } else {
@@ -343,9 +357,11 @@ implements MultiSpinnerListener {
 
                     ApiService service = new RestClient().getApiService();
                     String userId = getDeviceId().replaceAll("[^0-9]", "");
-                    service.getGrade(userId, position+1, new ResponseCallback() {
-                        @Override public void success(Response response) {
-                            try (InputStream in = response.getBody().in()) {
+                    service.getGrade(userId, position + 1, new ResponseCallback() {
+                        @Override
+                        public void success(Response response) {
+                            try {
+                                InputStream in = response.getBody().in();
                                 Grade.deleteAll(Grade.class);
                                 GradesXmlParser gradesXmlParser = new GradesXmlParser();
                                 gradesXmlParser.parse(in);
@@ -362,14 +378,16 @@ implements MultiSpinnerListener {
                             }
                         }
 
-                        @Override public void failure(RetrofitError e) {
+                        @Override
+                        public void failure(RetrofitError e) {
                             e.printStackTrace();
                         }
                     });
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> adapterView) {
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
     }
@@ -437,8 +455,10 @@ implements MultiSpinnerListener {
                 device.getSoftwareVersion(), device.getAndroidVersion(), device.getAndroidVersion(),
                 device.getDeviceOs(), device.getTimeZone(), device.getLocale(), device.isCameraAvailable(), false, true,
                 userId, IS_REGISTERED, userId, new ResponseCallback() {
-                    @Override public void success(Response response) {
-                        try (InputStream in = response.getBody().in()) {
+                    @Override
+                    public void success(Response response) {
+                        try {
+                            InputStream in = response.getBody().in();
                             DeviceXmlParser deviceXmlParser = new DeviceXmlParser();
                             int deviceInfoId = deviceXmlParser.parse(in);
                             mSharedPrefs.edit().putInt("device_info_id", deviceInfoId).apply();
@@ -449,7 +469,8 @@ implements MultiSpinnerListener {
                         }
                     }
 
-                    @Override public void failure(RetrofitError e) {
+                    @Override
+                    public void failure(RetrofitError e) {
                         e.printStackTrace();
                     }
                 });
@@ -459,7 +480,8 @@ implements MultiSpinnerListener {
         final ApiService service = new RestClient().getApiService();
         service.registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, email, USER_TYPE, isMultiGrade,
                 IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED, new ResponseCallback() {
-                    @Override public void success(Response response) {
+                    @Override
+                    public void success(Response response) {
                         mSharedPrefs.edit()
                                 .putBoolean("registered", true)
                                 .putString("device_id", deviceId)
@@ -480,10 +502,11 @@ implements MultiSpinnerListener {
 //                                    e.printStackTrace();
 //                                }
 //                            });
-                            navigateToMainScreen();
+                        navigateToMainScreen();
                     }
 
-                    @Override public void failure(RetrofitError e) {
+                    @Override
+                    public void failure(RetrofitError e) {
                         e.printStackTrace();
                     }
                 });
@@ -491,11 +514,6 @@ implements MultiSpinnerListener {
 
     private String getDeviceId() {
         return Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-    }
-
-    private static int randInt(int min, int max) {
-        Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;
     }
 
     @Override
@@ -561,9 +579,5 @@ implements MultiSpinnerListener {
         InputMethodManager imm = (InputMethodManager)
                 getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSchoolSpinner.getWindowToken(), 0);
-    }
-
-    public static boolean isValidEmail(CharSequence target) {
-        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }
