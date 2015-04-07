@@ -60,10 +60,12 @@ public class CouponAdapter extends ArrayAdapter<Coupon> {
             TextView nameTextView = (TextView) view.findViewById(R.id.name);
             TextView codeTextView = (TextView) view.findViewById(R.id.code);
             TextView dateTextView = (TextView) view.findViewById(R.id.date);
+            TextView descTextView = (TextView) view.findViewById(R.id.desc);
 
             nameTextView.setText(coupon.getStoreName());
             codeTextView.setText("Code: " + coupon.getCode());
             dateTextView.setText("Use By " + coupon.getExpireDate());
+            descTextView.setText(coupon.getDesc());
         }
         return view;
     }

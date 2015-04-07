@@ -42,6 +42,7 @@ public class MainActivity extends FragmentActivity {
 
     // TODO: Fix search menu item configuration
     // TODO: Set «hasMultipleGrade» param depending on grade string
+    // TODO: Change notification icon
 
     private String[] mNavItems;
     private DrawerLayout mDrawerLayout;

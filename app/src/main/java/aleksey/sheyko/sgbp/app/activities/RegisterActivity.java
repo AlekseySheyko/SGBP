@@ -55,6 +55,8 @@ import retrofit.client.Response;
 public class RegisterActivity extends Activity
         implements MultiSpinnerListener {
 
+    // TODO: Open multi-spinner on «Manage account» screen too
+
     @InjectView(R.id.firstName)
     EditText mFirstNameField;
     @InjectView(R.id.lastName)

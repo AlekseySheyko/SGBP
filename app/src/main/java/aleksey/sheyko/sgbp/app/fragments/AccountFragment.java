@@ -163,19 +163,6 @@ public class AccountFragment extends Fragment {
         String email = mEmailField.getText().toString();
         int schoolId = mSchoolSpinner.getSelectedItemPosition();
 
-        if (firstName.isEmpty()) {
-            showError(mFirstNameField);
-            return;
-        }
-        if (lastName.isEmpty()) {
-            showError(mLastNameField);
-            return;
-        }
-        if (email.isEmpty()) {
-            showError(mEmailField);
-            return;
-        }
-
         try {
             update(firstName, lastName, schoolId);
         } catch (Exception e) {
