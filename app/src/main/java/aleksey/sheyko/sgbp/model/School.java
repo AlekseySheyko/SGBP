@@ -14,8 +14,6 @@ public class School extends SugarRecord<School> {
         this.name = name;
     }
 
-
-
     public String getName() {
         return name;
     }

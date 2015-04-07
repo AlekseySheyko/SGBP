@@ -40,6 +40,8 @@ public class CouponsXmlParser {
                     if (parser.getEventType() != XmlPullParser.START_TAG) {
                         continue;
                     }
+                    Coupon.deleteAll(Coupon.class);
+
                     String tag = parser.getName();
                     // Starts by looking for the entry tag
                     if (tag.equals("CouponCodeDetails")) {

@@ -40,6 +40,9 @@ import aleksey.sheyko.sgbp.app.service.LocationService;
 
 public class MainActivity extends FragmentActivity {
 
+    // TODO: Fix search menu item configuration
+    // TODO: Set «hasMultipleGrade» param depending on grade string
+
     private String[] mNavItems;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;

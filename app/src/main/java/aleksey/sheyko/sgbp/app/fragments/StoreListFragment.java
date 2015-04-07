@@ -104,20 +104,7 @@ public class StoreListFragment extends ListFragment
             mGoogleApiClient.connect();
             return;
         } else if (mViewMode == Constants.VIEW_COUPONS) {
-
-            mCoupons = Coupon.listAll(Coupon.class);
-            if (mCoupons.size() > 0) {
-                for (Coupon coupon : mCoupons) {
-                    mCouponList.add(new Coupon(
-                            coupon.getStoreid(),
-                            coupon.getStoreName(),
-                            coupon.getCode(),
-                            coupon.getDesc(),
-                            coupon.getExpireDate()));
-                }
-            } else {
-                loadCouponsFromNetwork();
-            }
+            loadCouponsFromNetwork();
             return;
         }
 
@@ -142,7 +129,8 @@ public class StoreListFragment extends ListFragment
         getActivity().setProgressBarIndeterminateVisibility(true);
         ApiService service = new RestClient().getApiService();
         service.listAllStores(new ResponseCallback() {
-            @Override public void success(Response response) {
+            @Override
+            public void success(Response response) {
                 try (InputStream in = response.getBody().in()) {
                     StoresXmlParser storesXmlParser = new StoresXmlParser();
                     storesXmlParser.parse(in);
@@ -154,7 +142,8 @@ public class StoreListFragment extends ListFragment
                 getActivity().setProgressBarIndeterminateVisibility(false);
             }
 
-            @Override public void failure(RetrofitError e) {
+            @Override
+            public void failure(RetrofitError e) {
                 e.printStackTrace();
             }
         });
@@ -164,8 +153,10 @@ public class StoreListFragment extends ListFragment
         getActivity().setProgressBarIndeterminateVisibility(true);
         ApiService service = new RestClient().getApiService();
         service.listCoupons(new ResponseCallback() {
-            @Override public void success(Response response) {
-                try (InputStream in = response.getBody().in()) {
+            @Override
+            public void success(Response response) {
+                try {
+                    InputStream in = response.getBody().in();
                     CouponsXmlParser couponsXmlParser = new CouponsXmlParser();
                     couponsXmlParser.parse(in);
                 } catch (Exception e) {
@@ -176,7 +167,8 @@ public class StoreListFragment extends ListFragment
                 getActivity().setProgressBarIndeterminateVisibility(false);
             }
 
-            @Override public void failure(RetrofitError e) {
+            @Override
+            public void failure(RetrofitError e) {
                 e.printStackTrace();
             }
         });

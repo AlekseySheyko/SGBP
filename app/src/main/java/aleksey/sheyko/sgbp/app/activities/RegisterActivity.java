@@ -32,7 +32,6 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.app.helpers.MultiSpinner;
@@ -81,11 +80,6 @@ public class RegisterActivity extends Activity
     private SharedPreferences mSharedPrefs;
     private ArrayAdapter<String> mSchoolAdapter;
 
-    private static int randInt(int min, int max) {
-        Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;
-    }
-
     public static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
@@ -99,7 +93,7 @@ public class RegisterActivity extends Activity
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
 //        TODO: Uncomment
 //        if (isRegistered) {
-//            navigateToMainScreen();
+            navigateToMainScreen();
 //        } else {
 //            checkRegistration();
 //        }

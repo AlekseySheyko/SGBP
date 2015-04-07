@@ -36,6 +36,8 @@ public class SchoolsXmlParser {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
+            School.deleteAll(School.class);
+
             String name = parser.getName();
             // Starts by looking for the entry tag
             if (name.equals("SchoolInfo")) {

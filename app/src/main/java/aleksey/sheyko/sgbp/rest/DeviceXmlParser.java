@@ -40,6 +40,7 @@ public class DeviceXmlParser {
                     if (parser.getEventType() != XmlPullParser.START_TAG) {
                         continue;
                     }
+
                     String tag = parser.getName();
                     // Starts by looking for the entry tag
                     if (tag.equals("Device_Info_Id")) {

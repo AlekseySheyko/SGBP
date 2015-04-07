@@ -40,6 +40,8 @@ public class GradesXmlParser {
                     if (parser.getEventType() != XmlPullParser.START_TAG) {
                         continue;
                     }
+                    Grade.deleteAll(Grade.class);
+
                     String tag = parser.getName();
                     // Starts by looking for the entry tag
                     if (tag.equals("SGBP_Grade_Info")) {

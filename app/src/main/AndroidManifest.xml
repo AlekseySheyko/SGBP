@@ -82,7 +82,6 @@
         <activity
             android:name=".app.activities.SearchActivity"
             android:label="@string/title_activity_search"
-            android:launchMode="singleTop"
             android:parentActivityName=".app.activities.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -96,7 +95,7 @@
                 android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="aleksey.sheyko.sgbp.app.activities.MainActivity" />
+                android:value=".app.activities.MainActivity" />
         </activity>
         <activity
             android:name=".app.activities.DetailActivity"
