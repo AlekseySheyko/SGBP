@@ -20,16 +20,12 @@ public class MultiSpinner extends Spinner implements
     private MultiSpinnerListener listener;
     private String spinnerText;
 
-    public MultiSpinner(Context context) {
-        super(context);
-    }
-
     public MultiSpinner(Context context, AttributeSet attrSet) {
         super(context, attrSet);
-    }
 
-    public MultiSpinner(Context context, AttributeSet attrSet, int defStyleAttr) {
-        super(context, attrSet, defStyleAttr);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, new String[] { "Grade level" });
+        setAdapter(adapter);
     }
 
     @Override
