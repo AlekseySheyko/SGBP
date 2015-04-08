@@ -267,9 +267,6 @@ public class RegisterActivity extends Activity
         if (schoolId != -1) {
             mSchoolSpinner.setSelection(schoolId);
         }
-        if (gradeId != -1) {
-            mGradeSpinner.setSelection(gradeId);
-        }
         mCheckBoxAge.setChecked(is18);
         mCheckBoxNotifications.setChecked(notifications);
         mCheckBoxLocation.setChecked(location);
@@ -357,9 +354,8 @@ public class RegisterActivity extends Activity
         }
         mSchoolAdapter.add("School");
         mSchoolSpinner.setAdapter(mSchoolAdapter);
-        if (mSharedPrefs.getInt("school_id", -1) == -1) {
-            mSchoolSpinner.setSelection(mSchoolAdapter.getCount());
-        }
+        int selectedSchool = mSharedPrefs.getInt("school_id", mSchoolAdapter.getCount());
+        mSchoolSpinner.setSelection(selectedSchool);
 
         mSchoolSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -454,7 +450,10 @@ public class RegisterActivity extends Activity
         final boolean IS_REGISTERED = true;
 
         final String deviceId = getDeviceId();
-        final String userId = deviceId.replaceAll("[^0-9]", "");
+        final String userId = deviceId.replaceAll("[^0-9]", "")
+                .substring(0, Math.min(
+                        deviceId.replaceAll("[^0-9]", "").length(), 5));
+        ;
 
         final boolean is18 = mCheckBoxAge.isChecked();
         final boolean isMultiGrade = mGradeSpinner.isMultipleSelected();
@@ -496,7 +495,7 @@ public class RegisterActivity extends Activity
                     public void failure(RetrofitError e) {
                         setProgressBarIndeterminateVisibility(false);
                         Toast.makeText(RegisterActivity.this,
-                                "Failed to register. Check your network connection",
+                                "Failed to register device. Check your network connection",
                                 Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
@@ -531,6 +530,10 @@ public class RegisterActivity extends Activity
 
                     @Override
                     public void failure(RetrofitError e) {
+                        setProgressBarIndeterminateVisibility(false);
+                        Toast.makeText(RegisterActivity.this,
+                                "Failed to register user. Check your network connection",
+                                Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 });

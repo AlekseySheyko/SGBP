@@ -111,18 +111,20 @@ public class MultiSpinner extends Spinner implements
                 mSharedPrefs.getStringSet("selectedGradePositions", new HashSet<String>());
 
         selected = new boolean[items.size()];
-            if (selectedGradePositions.size() > 0) {
-                for (String gradePositionStr : selectedGradePositions) {
-                    int gradePosition = Integer.parseInt(gradePositionStr);
-                    selected[gradePosition] = true;
-                }
+        if (selectedGradePositions.size() > 0) {
+            for (String gradePositionStr : selectedGradePositions) {
+                int gradePosition = Integer.parseInt(gradePositionStr);
+                selected[gradePosition] = true;
             }
+        }
 
-        // all text on the spinner
-        setSpinnerAdapter(new String[]{allText});
-        listener.onItemsSelected(selected);
-
+        if (selectedGradePositions.size() > 0) {
             onCancel();
+        } else {
+            // all text on the spinner
+            setSpinnerAdapter(new String[]{"Grade level"});
+            listener.onItemsSelected(selected);
+        }
     }
 
     public interface MultiSpinnerListener {
