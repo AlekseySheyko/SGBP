@@ -95,7 +95,7 @@ public class RegisterActivity extends Activity
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
 //        TODO: Uncomment
 //        if (isRegistered) {
-            navigateToMainScreen();
+//            navigateToMainScreen();
 //        } else {
 //            checkRegistration();
 //        }
@@ -173,7 +173,6 @@ public class RegisterActivity extends Activity
 
     @Override
     public void onItemsSelected(boolean[] selected) {
-
     }
 
     private void disableNameFields() {
@@ -342,7 +341,6 @@ public class RegisterActivity extends Activity
         mSchoolSpinner.setAdapter(mSchoolAdapter);
         mSchoolSpinner.setSelection(mSchoolAdapter.getCount());
 
-        final int[] i = new int[1];
         mSchoolSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -358,7 +356,6 @@ public class RegisterActivity extends Activity
                         public void success(Response response) {
                             try {
                                 InputStream in = response.getBody().in();
-                                Grade.deleteAll(Grade.class);
                                 GradesXmlParser gradesXmlParser = new GradesXmlParser();
                                 gradesXmlParser.parse(in);
                                 mGradesList = Grade.listAll(Grade.class);
@@ -430,7 +427,8 @@ public class RegisterActivity extends Activity
         }
     }
 
-    public void register(final String firstName, final String lastName, final String email, final int schoolId, final int gradeId) throws Exception {
+    public void register(final String firstName, final String lastName,
+                         final String email, final int schoolId, final int gradeId) throws Exception {
 
         final int USER_TYPE = 1;
         final boolean IS_REGISTERED = true;

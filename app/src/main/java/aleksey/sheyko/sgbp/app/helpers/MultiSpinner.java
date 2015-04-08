@@ -23,29 +23,26 @@ public class MultiSpinner extends Spinner implements
         super(context);
     }
 
-    public MultiSpinner(Context arg0, AttributeSet arg1) {
-        super(arg0, arg1);
+    public MultiSpinner(Context context, AttributeSet attrSet) {
+        super(context, attrSet);
     }
 
-    public MultiSpinner(Context arg0, AttributeSet arg1, int arg2) {
-        super(arg0, arg1, arg2);
+    public MultiSpinner(Context context, AttributeSet attrSet, int defStyleAttr) {
+        super(context, attrSet, defStyleAttr);
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-        if (isChecked)
-            selected[which] = true;
-        else
-            selected[which] = false;
+        selected[which] = isChecked;
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
         // refresh text on spinner
-        StringBuffer spinnerBuffer = new StringBuffer();
+        StringBuilder spinnerBuffer = new StringBuilder();
         boolean someUnselected = false;
         for (int i = 0; i < items.size(); i++) {
-            if (selected[i] == true) {
+            if (selected[i]) {
                 spinnerBuffer.append(items.get(i));
                 spinnerBuffer.append(", ");
             } else {
@@ -102,6 +99,6 @@ public class MultiSpinner extends Spinner implements
     }
 
     public interface MultiSpinnerListener {
-        public void onItemsSelected(boolean[] selected);
+        void onItemsSelected(boolean[] selected);
     }
 }
