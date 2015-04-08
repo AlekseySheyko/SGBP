@@ -1,5 +1,8 @@
 package aleksey.sheyko.sgbp.rest;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -11,6 +14,12 @@ import java.io.InputStream;
 public class DeviceXmlParser {
     // We don't use namespaces
     private static final String ns = null;
+
+    private SharedPreferences mSharedPrefs;
+
+    public DeviceXmlParser(Context context) {
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    }
 
     public int parse(InputStream in) throws XmlPullParserException, IOException {
         try {
@@ -50,10 +59,18 @@ public class DeviceXmlParser {
                     }
                 }
 
+            } else if (name.equals("Message")) {
+
+                String message = readText(parser);
+                mSharedPrefs.edit()
+                        .putString("DeviceXmlParser_error_msg", message)
+                        .apply();
+
             } else {
                 skip(parser);
             }
         }
+
         return deviceInfoId;
     }
 

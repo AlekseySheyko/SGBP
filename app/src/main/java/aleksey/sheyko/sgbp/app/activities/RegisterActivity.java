@@ -55,8 +55,6 @@ import retrofit.client.Response;
 public class RegisterActivity extends Activity
         implements MultiSpinnerListener {
 
-    // TODO: Remember selected grades and show 'em on "Manage account" screen
-
     @InjectView(R.id.firstName)
     EditText mFirstNameField;
     @InjectView(R.id.lastName)
@@ -96,7 +94,7 @@ public class RegisterActivity extends Activity
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
 //        TODO: Uncomment
 //        if (isRegistered) {
-            navigateToMainScreen();
+//            navigateToMainScreen();
 //        } else {
 //            checkRegistration();
 //        }
@@ -361,7 +359,7 @@ public class RegisterActivity extends Activity
                                     gradeStrings.add(grade.getName());
                                 }
                                 mGradeSpinner.setItems(gradeStrings, "Grade level",
-                                        RegisterActivity.this);
+                                        RegisterActivity.this, false);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -450,8 +448,17 @@ public class RegisterActivity extends Activity
                     public void success(Response response) {
                         try {
                             InputStream in = response.getBody().in();
-                            DeviceXmlParser deviceXmlParser = new DeviceXmlParser();
+                            DeviceXmlParser deviceXmlParser = new DeviceXmlParser(RegisterActivity.this);
                             int deviceInfoId = deviceXmlParser.parse(in);
+
+                            String errorMessage = mSharedPrefs.getString("DeviceXmlParser_error_msg", null);
+                            if (errorMessage != null) {
+                                Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                mSharedPrefs.edit().putString("DeviceXmlParser_error_msg", null).apply();
+                                setProgressBarIndeterminateVisibility(false);
+                                return;
+                            };
+
                             mSharedPrefs.edit().putInt("device_info_id", deviceInfoId).apply();
                             registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, gradeId, email, USER_TYPE, isMultiGrade,
                                     IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED);

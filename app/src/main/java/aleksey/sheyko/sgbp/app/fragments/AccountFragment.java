@@ -207,7 +207,7 @@ public class AccountFragment extends Fragment
                                     gradeStrings.add(grade.getName());
                                 }
                                 mGradeSpinner.setItems(gradeStrings, "Grade level",
-                                        AccountFragment.this);
+                                        AccountFragment.this, true);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
