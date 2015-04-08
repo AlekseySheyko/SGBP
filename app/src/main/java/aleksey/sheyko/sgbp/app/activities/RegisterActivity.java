@@ -201,6 +201,7 @@ public class RegisterActivity extends Activity
         service.checkRegistration(getDeviceId(), new ResponseCallback() {
             @Override
             public void success(Response response) {
+                setProgressBarIndeterminateVisibility(false);
                 try {
                     InputStream in = response.getBody().in();
                     UserXmlParser userInfoXmlParser = new UserXmlParser();

@@ -183,6 +183,7 @@ public class StoreListFragment extends ListFragment
                                     "category like '%" + mSearchQuery + "%'");
                 }
 
+                if (mStores == null) return;
 
                 for (Store store : mStores) {
                     mStoreList.add(new Store(

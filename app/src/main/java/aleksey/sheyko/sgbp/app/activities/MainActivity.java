@@ -41,8 +41,6 @@ import aleksey.sheyko.sgbp.app.service.LocationService;
 public class MainActivity extends FragmentActivity {
 
     // TODO: Fix search menu item configuration
-    // TODO: Update stores every 2 hours
-    // TODO: Implement categories
 
     private String[] mNavItems;
     private DrawerLayout mDrawerLayout;
