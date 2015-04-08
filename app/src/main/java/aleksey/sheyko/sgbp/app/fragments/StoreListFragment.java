@@ -2,9 +2,12 @@ package aleksey.sheyko.sgbp.app.fragments;
 
 import android.app.ListFragment;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -108,7 +111,7 @@ public class StoreListFragment extends ListFragment
             return;
         }
 
-        if (mStores != null && mStores.size() == 0 && mSearchQuery == null) {
+        if (isOnline() && mSearchQuery == null) {
             loadStoresFromNetwork();
             return;
         }
@@ -123,6 +126,15 @@ public class StoreListFragment extends ListFragment
                     store.getLongitude(),
                     store.getCategory()));
         }
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 
     private void loadStoresFromNetwork() {

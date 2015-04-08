@@ -30,10 +30,12 @@ public class StoresXmlParser {
 
     private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "SGBP_Store_Info_List");
+        Store.deleteAll(Store.class);
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
+
             String name = parser.getName();
             // Starts by looking for the entry tag
             if (name.equals("StoreInfo")) {
