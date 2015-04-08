@@ -97,7 +97,7 @@ public class DetailActivity extends Activity {
 
         if (map == null) {
             Toast.makeText(this,
-                    "You need to install Google Play to see places on map",
+                    "Install Google Play Services to see places on map",
                     Toast.LENGTH_SHORT).show();
             finish();
             return;

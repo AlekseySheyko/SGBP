@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -34,6 +35,7 @@ import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.app.activities.DetailActivity;
+import aleksey.sheyko.sgbp.app.activities.MainActivity;
 import aleksey.sheyko.sgbp.app.activities.MapPane;
 import aleksey.sheyko.sgbp.app.adapters.CouponAdapter;
 import aleksey.sheyko.sgbp.app.adapters.NotificationsAdapter;
@@ -113,6 +115,16 @@ public class StoreListFragment extends ListFragment
             }
             return;
         } else if (mViewMode == Constants.VIEW_NEAREST) {
+
+            if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) != ConnectionResult.SUCCESS) {
+                Toast.makeText(getActivity(),
+                        "Install Google Play Services to see nearest places",
+                        Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), MainActivity.class));
+                getActivity().finish();
+                return;
+            }
+
             createLocationClient();
             mGoogleApiClient.connect();
             return;
