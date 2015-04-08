@@ -88,7 +88,17 @@ public class StoreListFragment extends ListFragment
         }
 
         if (mCategory != null) {
-            mStores = Store.find(Store.class, "category = ?", mCategory);
+            switch (mCategory) {
+                case "Participating Physical Store":
+                    mStores = Store.find(Store.class, "is_mobile = ?", "false");
+                    break;
+                case "Participating Mobile Business":
+                    mStores = Store.find(Store.class, "is_mobile = ?", "true");
+                    break;
+                default:
+                    mStores = Store.find(Store.class, "category = ?", mCategory);
+                    break;
+            }
         } else if (mSearchQuery != null) {
             mStores = Store.findWithQuery(Store.class,
                     "Select * from Store where " +
@@ -124,7 +134,8 @@ public class StoreListFragment extends ListFragment
                     store.getPhone(),
                     store.getLatitude(),
                     store.getLongitude(),
-                    store.getCategory()));
+                    store.getCategory(),
+                    store.isMobile()));
         }
     }
 
@@ -143,6 +154,7 @@ public class StoreListFragment extends ListFragment
         service.listAllStores(new ResponseCallback() {
             @Override
             public void success(Response response) {
+                getActivity().setProgressBarIndeterminateVisibility(false);
                 try {
                     InputStream in = response.getBody().in();
                     StoresXmlParser storesXmlParser = new StoresXmlParser();
@@ -150,8 +162,19 @@ public class StoreListFragment extends ListFragment
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 if (mCategory != null) {
-                    mStores = Store.find(Store.class, "category = ?", mCategory);
+                    switch (mCategory) {
+                        case "Participating Physical Store":
+                            mStores = Store.find(Store.class, "is_mobile = ?", "false");
+                            break;
+                        case "Participating Mobile Business":
+                            mStores = Store.find(Store.class, "is_mobile = ?", "true");
+                            break;
+                        default:
+                            mStores = Store.find(Store.class, "category = ?", mCategory);
+                            break;
+                    }
                 } else if (mSearchQuery != null) {
                     mStores = Store.findWithQuery(Store.class,
                             "Select * from Store where " +
@@ -159,6 +182,7 @@ public class StoreListFragment extends ListFragment
                                     "address like '%" + mSearchQuery + "%' or " +
                                     "category like '%" + mSearchQuery + "%'");
                 }
+
 
                 for (Store store : mStores) {
                     mStoreList.add(new Store(
@@ -168,7 +192,8 @@ public class StoreListFragment extends ListFragment
                             store.getPhone(),
                             store.getLatitude(),
                             store.getLongitude(),
-                            store.getCategory()));
+                            store.getCategory(),
+                            store.isMobile()));
                     mSharedPrefs.edit().putFloat(store.getStoreId() + "", store.getDistance()).apply();
                 }
                 StoresAdapter adapter = new StoresAdapter(getActivity(),
@@ -256,7 +281,8 @@ public class StoreListFragment extends ListFragment
                     store.getPhone(),
                     store.getLatitude(),
                     store.getLongitude(),
-                    store.getCategory()));
+                    store.getCategory(),
+                    store.isMobile()));
             mSharedPrefs.edit().putFloat(store.getStoreId() + "", store.getDistance()).apply();
         }
         StoresAdapter adapter = new StoresAdapter(getActivity(),

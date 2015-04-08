@@ -9,7 +9,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import aleksey.sheyko.sgbp.app.helpers.Constants;
 import aleksey.sheyko.sgbp.model.Store;
 
 public class StoresXmlParser {
@@ -73,6 +72,7 @@ public class StoresXmlParser {
         String latitude = null;
         String longitude = null;
         String category = null;
+        String isMobile = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -91,10 +91,7 @@ public class StoresXmlParser {
             } else if (tag.equals("Store_Address_Longitude")) {
                 longitude = readLongitude(parser);
             } else if (tag.equals("Is_Store_Location_Physical")) {
-                boolean isMobile = readIsMobile(parser);
-                if (isMobile) {
-                    category = Constants.CATEGORY_MOBILE;
-                }
+                isMobile = readIsMobile(parser);
             } else if (tag.equals("Store_Group_Name")) {
                 category = WordUtils.capitalizeFully(
                         readText(parser));
@@ -102,7 +99,7 @@ public class StoresXmlParser {
                 skip(parser);
             }
         }
-        return new Store(id, name, address, phone, latitude, longitude, category);
+        return new Store(id, name, address, phone, latitude, longitude, category, isMobile);
     }
 
     // Processes id tags in the feed.
@@ -156,11 +153,11 @@ public class StoresXmlParser {
     }
 
     // Processes mobile tags in the feed.
-    private boolean readIsMobile(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private String readIsMobile(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "Is_Store_Location_Physical");
         boolean isMobile = !Boolean.parseBoolean(readText(parser));
         parser.require(XmlPullParser.END_TAG, ns, "Is_Store_Location_Physical");
-        return isMobile;
+        return isMobile + "";
     }
 
     // For the tags title and summary, extracts their text values.

@@ -10,6 +10,7 @@ public class Store extends SugarRecord<Store> {
     private String latitude;
     private String longitude;
     private String category;
+    private String isMobile;
     private String geofenceId;
     private float distance;
     private boolean isParticipated;
@@ -18,7 +19,7 @@ public class Store extends SugarRecord<Store> {
     public Store() {
     }
 
-    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category) {
+    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category, String isMobile) {
         this.storeid = storeid;
         this.name = name;
         this.address = address;
@@ -26,6 +27,7 @@ public class Store extends SugarRecord<Store> {
         this.latitude = latitude;
         this.longitude = longitude;
         this.category = category;
+        this.isMobile = isMobile;
     }
 
     public int getStoreId() {
@@ -58,6 +60,10 @@ public class Store extends SugarRecord<Store> {
 
     public String getCategory() {
         return category;
+    }
+
+    public String isMobile() {
+        return isMobile;
     }
 
     public String getGeofenceId() {
