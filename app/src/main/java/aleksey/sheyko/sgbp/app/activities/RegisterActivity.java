@@ -357,7 +357,9 @@ public class RegisterActivity extends Activity
         }
         mSchoolAdapter.add("School");
         mSchoolSpinner.setAdapter(mSchoolAdapter);
-        mSchoolSpinner.setSelection(mSchoolAdapter.getCount());
+        if (mSharedPrefs.getInt("school_id", -1) == -1) {
+            mSchoolSpinner.setSelection(mSchoolAdapter.getCount());
+        }
 
         mSchoolSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
