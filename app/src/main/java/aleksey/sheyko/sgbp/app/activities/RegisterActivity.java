@@ -90,6 +90,7 @@ public class RegisterActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        getActionBar().setTitle(getString(R.string.title_activity_register));
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
