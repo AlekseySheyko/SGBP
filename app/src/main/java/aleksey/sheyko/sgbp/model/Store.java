@@ -28,7 +28,7 @@ public class Store extends SugarRecord<Store> {
         this.category = category;
     }
 
-    public int getStoreid() {
+    public int getStoreId() {
         return storeid;
     }
 

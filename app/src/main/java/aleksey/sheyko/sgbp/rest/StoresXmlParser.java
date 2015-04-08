@@ -2,6 +2,7 @@ package aleksey.sheyko.sgbp.rest;
 
 import android.util.Xml;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -79,42 +80,6 @@ public class StoresXmlParser {
                 id = readId(parser);
             } else if (tag.equals("Store_Name")) {
                 name = readName(parser);
-                switch (name) {
-                    case "AR Performance":
-                        category = Constants.CATEGORY_SOUND;
-                        break;
-                    case "Import Garage":
-                        category = Constants.CATEGORY_AUTO;
-                        break;
-                    case "Starbucks":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "Thai Chilli":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "Maharani India Restaurant":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "Mike's Sound Solutions":
-                        category = Constants.CATEGORY_SOUND;
-                        break;
-                    case "Chuck E Cheese's":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "La Fuente":
-                        category = Constants.CATEGORY_HOTELS;
-                        break;
-                    case "O’Reilly Auto Parts":
-                        category = Constants.CATEGORY_AUTO;
-                        break;
-                    case "Bubbles Car Wash":
-                        category = Constants.CATEGORY_AUTO;
-                        break;
-                    default:
-                        category = Constants.CATEGORY_OTHER;
-                        break;
-                }
-
             } else if (tag.equals("Store_Address_Line1")) {
                 address = readAddress(parser);
             } else if (tag.equals("Store_Phone")) {
@@ -128,6 +93,9 @@ public class StoresXmlParser {
                 if (isMobile) {
                     category = Constants.CATEGORY_MOBILE;
                 }
+            } else if (tag.equals("Store_Group_Name")) {
+                category = WordUtils.capitalizeFully(
+                        readText(parser));
             } else {
                 skip(parser);
             }

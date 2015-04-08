@@ -61,7 +61,7 @@ public class GeofenceService extends IntentService {
                     int schoolId = sharedPrefs.getInt("school_id", -1);
 
                     final Store store = Store.find(Store.class, "geofence_id = ?", id).get(0);
-                    int storeId = store.getStoreid();
+                    int storeId = store.getStoreId();
 
                     ApiService service = new RestClient().getApiService();
                     service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, false, new ResponseCallback() {

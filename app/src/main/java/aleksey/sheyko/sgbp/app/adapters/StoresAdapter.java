@@ -74,7 +74,7 @@ public class StoresAdapter extends ArrayAdapter<Store> {
                     break;
                 case Constants.VIEW_NEAREST:
                     String distance = String.format("%.1f%n",
-                            mSharedPrefs.getFloat(store.getStoreid() + "", -1))
+                            mSharedPrefs.getFloat(store.getStoreId() + "", -1))
                             .replace(".0", "") + "miles";
                     if (!distance.equals("0\nmiles")) {
                         mtd.setText(distance);

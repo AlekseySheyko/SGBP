@@ -115,7 +115,7 @@ public class StoreListFragment extends ListFragment
 
         for (Store store : mStores) {
             mStoreList.add(new Store(
-                    store.getStoreid(),
+                    store.getStoreId(),
                     store.getName(),
                     store.getAddress(),
                     store.getPhone(),
@@ -196,13 +196,17 @@ public class StoreListFragment extends ListFragment
             return;
         }
         for (Store store : mStores) {
-            Location storeLocation = new Location("store");
-            storeLocation.setLatitude(Double.parseDouble(store.getLatitude()));
-            storeLocation.setLongitude(Double.parseDouble(store.getLongitude()));
+            try {
+                Location storeLocation = new Location("store");
+                storeLocation.setLatitude(Double.parseDouble(store.getLatitude()));
+                storeLocation.setLongitude(Double.parseDouble(store.getLongitude()));
 
-            float distance = myLocation.distanceTo(storeLocation) * 0.000621371f;
-            store.setDistance(distance);
-            store.save();
+                float distance = myLocation.distanceTo(storeLocation) * 0.000621371f;
+                store.setDistance(distance);
+                store.save();
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
         mStores = Select.from(Store.class).orderBy("distance").list();
         populateStoresListAdapter();
@@ -211,14 +215,14 @@ public class StoreListFragment extends ListFragment
     private void populateStoresListAdapter() {
         for (Store store : mStores) {
             mStoreList.add(new Store(
-                    store.getStoreid(),
+                    store.getStoreId(),
                     store.getName(),
                     store.getAddress(),
                     store.getPhone(),
                     store.getLatitude(),
                     store.getLongitude(),
                     store.getCategory()));
-            mSharedPrefs.edit().putFloat(store.getStoreid() + "", store.getDistance()).apply();
+            mSharedPrefs.edit().putFloat(store.getStoreId() + "", store.getDistance()).apply();
         }
         StoresAdapter adapter = new StoresAdapter(getActivity(),
                 R.layout.store_list_item, mStoreList);
@@ -274,7 +278,7 @@ public class StoreListFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         if (mViewMode == Constants.VIEW_NEAREST || mViewMode == Constants.VIEW_CATEGORIES) {
-            int storeId = mStoreList.get(position).getStoreid();
+            int storeId = mStoreList.get(position).getStoreId();
             String name = mStoreList.get(position).getName();
             String address = mStoreList.get(position).getAddress();
             String phone = mStoreList.get(position).getPhone();
