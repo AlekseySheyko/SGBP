@@ -46,11 +46,17 @@ public class MultiSpinner extends Spinner implements
 
     @Override
     public void onCancel(DialogInterface dialog) {
+        onCancel();
+    }
+
+    private void onCancel() {
         // refresh text on spinner
         StringBuilder spinnerBuffer = new StringBuilder();
         boolean someUnselected = false;
 
-        Set<String> selectedGradePositions = new HashSet<>();
+        Set<String> selectedGradePositions =
+                mSharedPrefs.getStringSet("selectedGradePositions", new HashSet<String>());
+
         for (int i = 0; i < items.size(); i++) {
             if (selected[i]) {
                 selectedGradePositions.add(
@@ -115,6 +121,8 @@ public class MultiSpinner extends Spinner implements
         // all text on the spinner
         setSpinnerAdapter(new String[]{allText});
         listener.onItemsSelected(selected);
+
+        onCancel();
     }
 
     public interface MultiSpinnerListener {
