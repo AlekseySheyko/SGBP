@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MultiSpinner extends Spinner implements
         OnMultiChoiceClickListener, OnCancelListener {
@@ -23,8 +27,12 @@ public class MultiSpinner extends Spinner implements
     public MultiSpinner(Context context, AttributeSet attrSet) {
         super(context, attrSet);
 
+        setSpinnerAdapter(new String[]{"Grade level"});
+    }
+
+    private void setSpinnerAdapter(String[] strings) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, new String[] { "Grade level" });
+                android.R.layout.simple_spinner_item, strings);
         setAdapter(adapter);
     }
 
@@ -38,14 +46,24 @@ public class MultiSpinner extends Spinner implements
         // refresh text on spinner
         StringBuilder spinnerBuffer = new StringBuilder();
         boolean someUnselected = false;
+
+        Set<String> selectedGradePositions = new HashSet<>();
         for (int i = 0; i < items.size(); i++) {
             if (selected[i]) {
+                selectedGradePositions.add(
+                        String.valueOf(i));
                 spinnerBuffer.append(items.get(i));
                 spinnerBuffer.append(", ");
             } else {
                 someUnselected = true;
             }
         }
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(getContext());
+        sharedPrefs.edit()
+                .putStringSet("selectedGradePositions", selectedGradePositions)
+                .apply();
+
         if (someUnselected) {
             spinnerText = spinnerBuffer.toString();
             if (spinnerText.length() > 2)
@@ -53,10 +71,7 @@ public class MultiSpinner extends Spinner implements
         } else {
             spinnerText = defaultText;
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item,
-                new String[] { spinnerText });
-        setAdapter(adapter);
+        setSpinnerAdapter(new String[]{spinnerText});
         listener.onItemsSelected(selected);
     }
 
@@ -89,9 +104,7 @@ public class MultiSpinner extends Spinner implements
         selected = new boolean[items.size()];
 
         // all text on the spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, new String[] { allText });
-        setAdapter(adapter);
+        setSpinnerAdapter(new String[]{allText});
     }
 
     public interface MultiSpinnerListener {

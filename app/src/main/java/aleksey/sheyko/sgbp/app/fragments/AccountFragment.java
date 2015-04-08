@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,18 +16,25 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
+import aleksey.sheyko.sgbp.app.helpers.MultiSpinner;
+import aleksey.sheyko.sgbp.model.Grade;
 import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -34,7 +42,8 @@ import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class AccountFragment extends Fragment {
+public class AccountFragment extends Fragment
+        implements MultiSpinner.MultiSpinnerListener {
 
     private SharedPreferences mSharedPrefs;
 
@@ -47,7 +56,7 @@ public class AccountFragment extends Fragment {
     @InjectView(R.id.school)
     Spinner mSchoolSpinner;
     @InjectView(R.id.grade)
-    Spinner mGradeSpinner;
+    MultiSpinner mGradeSpinner;
     @InjectView(R.id.age)
     CheckBox mCheckBoxAge;
     @InjectView(R.id.notifications)
@@ -58,6 +67,10 @@ public class AccountFragment extends Fragment {
     CheckBox mCheckBoxCoupons;
     @InjectView(R.id.multipleGrade)
     CheckBox mCheckBoxLevel;
+
+    private List<School> mSchoolsList;
+    private List<Grade> mGradesList;
+    private ArrayAdapter<String> mSchoolAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,19 +119,8 @@ public class AccountFragment extends Fragment {
         ArrayAdapter<String> schoolAdapter = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item
         );
-        List<School> schoolList = School.listAll(School.class);
-        for (School school : schoolList) {
-            schoolAdapter.add(school.getName());
-        }
-        schoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSchoolSpinner.setAdapter(schoolAdapter);
-
-        ArrayAdapter<String> gradeAdapter = new ArrayAdapter<>(
-                getActivity(),
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.grade_levels));
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mGradeSpinner.setAdapter(gradeAdapter);
+        mSchoolsList = School.listAll(School.class);
+        setupSpinners();
 
         mSharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
@@ -153,6 +155,77 @@ public class AccountFragment extends Fragment {
         mCheckBoxLocation.setChecked(location);
         mCheckBoxCoupons.setChecked(coupons);
         mCheckBoxLevel.setChecked(isMultiGrade);
+    }
+
+    private void setupSpinners() {
+        mSchoolAdapter = new ArrayAdapter<String>(
+                getActivity(), android.R.layout.simple_spinner_item) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                if (position == getCount()) {
+                    ((TextView) v.findViewById(android.R.id.text1)).setText("");
+                    ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount()));
+                }
+                return v;
+            }
+
+            @Override
+            public int getCount() {
+                return super.getCount() - 1; // you don't display last item. It is used as hint.
+            }
+        };
+        mSchoolAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        for (School school : mSchoolsList) {
+            mSchoolAdapter.add(school.getName());
+        }
+        mSchoolAdapter.add("School");
+        mSchoolSpinner.setAdapter(mSchoolAdapter);
+        mSchoolSpinner.setSelection(mSchoolAdapter.getCount());
+
+        mSchoolSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (mSchoolSpinner.getSelectedItemPosition() == mSchoolAdapter.getCount()) {
+                    mGradeSpinner.setEnabled(false);
+                } else {
+                    mGradeSpinner.setEnabled(true);
+
+                    ApiService service = new RestClient().getApiService();
+                    String userId = getDeviceId().replaceAll("[^0-9]", "");
+                    service.getGrade(userId, position + 1, new ResponseCallback() {
+                        @Override
+                        public void success(Response response) {
+                            try {
+                                InputStream in = response.getBody().in();
+                                GradesXmlParser gradesXmlParser = new GradesXmlParser();
+                                gradesXmlParser.parse(in);
+                                mGradesList = Grade.listAll(Grade.class);
+                                List<String> gradeStrings = new ArrayList<>();
+                                for (Grade grade : mGradesList) {
+                                    gradeStrings.add(grade.getName());
+                                }
+                                mGradeSpinner.setItems(gradeStrings, "Grade level",
+                                        AccountFragment.this);
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void failure(RetrofitError e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
 
     private void update() {
@@ -293,5 +366,15 @@ public class AccountFragment extends Fragment {
         InputMethodManager imm = (InputMethodManager)
                 getActivity().getSystemService(Service.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSchoolSpinner.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onItemsSelected(boolean[] selected) {
+    }
+
+    private String getDeviceId() {
+        return Settings.Secure.getString(
+                getActivity().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
     }
 }

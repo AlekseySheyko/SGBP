@@ -55,7 +55,7 @@ import retrofit.client.Response;
 public class RegisterActivity extends Activity
         implements MultiSpinnerListener {
 
-    // TODO: Open multi-spinner on «Manage account» screen too
+    // TODO: Remember selected grades and show 'em on "Manage account" screen
 
     @InjectView(R.id.firstName)
     EditText mFirstNameField;
@@ -96,7 +96,7 @@ public class RegisterActivity extends Activity
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
 //        TODO: Uncomment
 //        if (isRegistered) {
-//            navigateToMainScreen();
+            navigateToMainScreen();
 //        } else {
 //            checkRegistration();
 //        }
@@ -253,7 +253,6 @@ public class RegisterActivity extends Activity
         String lastName = mLastNameField.getText().toString();
         String email = mEmailField.getText().toString();
         int schoolId = mSchoolSpinner.getSelectedItemPosition();
-        int gradeId = mGradeSpinner.getSelectedItemPosition();
         boolean is18 = mCheckBoxAge.isChecked();
         boolean multipleGrade = mCheckBoxLevel.isChecked();
         boolean notifications = mCheckBoxNotifications.isChecked();
@@ -271,9 +270,6 @@ public class RegisterActivity extends Activity
         }
         if (schoolId != -1) {
             mSharedPrefs.edit().putInt("school_id", schoolId).apply();
-        }
-        if (gradeId != -1) {
-            mSharedPrefs.edit().putInt("grade_id", gradeId).apply();
         }
         if (!is18) {
             mSharedPrefs.edit().putBoolean("is18", is18).apply();
@@ -324,7 +320,7 @@ public class RegisterActivity extends Activity
                 View v = super.getView(position, convertView, parent);
                 if (position == getCount()) {
                     ((TextView) v.findViewById(android.R.id.text1)).setText("");
-                    ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount())); //"Hint to be displayed"
+                    ((TextView) v.findViewById(android.R.id.text1)).setHint(getItem(getCount()));
                 }
                 return v;
             }

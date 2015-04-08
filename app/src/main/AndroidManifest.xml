@@ -50,7 +50,8 @@
         <activity
             android:name=".app.activities.RegisterActivity"
             android:noHistory="true"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -68,7 +69,8 @@
         <activity
             android:name=".app.activities.MapPane"
             android:label="@string/title_activity_map"
-            android:parentActivityName=".app.activities.DetailActivity">
+            android:parentActivityName=".app.activities.DetailActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".app.activities.DetailActivity" />
@@ -76,7 +78,8 @@
         <activity
             android:name=".app.activities.CategoryActivity"
             android:label="@string/title_activity_category"
-            android:parentActivityName=".app.activities.MainActivity">
+            android:parentActivityName=".app.activities.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="aleksey.sheyko.sgbp.app.activities.MainActivity" />
@@ -84,7 +87,8 @@
         <activity
             android:name=".app.activities.SearchActivity"
             android:label="@string/title_activity_search"
-            android:parentActivityName=".app.activities.MainActivity">
+            android:parentActivityName=".app.activities.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
