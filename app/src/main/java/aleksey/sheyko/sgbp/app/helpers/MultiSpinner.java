@@ -18,6 +18,7 @@ import java.util.Set;
 public class MultiSpinner extends Spinner implements
         OnMultiChoiceClickListener, OnCancelListener {
 
+    private SharedPreferences mSharedPrefs;
     private List<String> items;
     private boolean[] selected;
     private String defaultText;
@@ -28,6 +29,8 @@ public class MultiSpinner extends Spinner implements
         super(context, attrSet);
 
         setSpinnerAdapter(new String[]{"Grade level"});
+
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     private void setSpinnerAdapter(String[] strings) {
@@ -58,9 +61,7 @@ public class MultiSpinner extends Spinner implements
                 someUnselected = true;
             }
         }
-        SharedPreferences sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(getContext());
-        sharedPrefs.edit()
+        mSharedPrefs.edit()
                 .putStringSet("selectedGradePositions", selectedGradePositions)
                 .apply();
 
@@ -100,11 +101,20 @@ public class MultiSpinner extends Spinner implements
         this.defaultText = allText;
         this.listener = listener;
 
-        // all selected by default
+        Set<String> selectedGradePositions =
+                mSharedPrefs.getStringSet("selectedGradePositions", new HashSet<String>());
+
         selected = new boolean[items.size()];
+        if (selectedGradePositions.size() > 0) {
+            for (String gradePositionStr : selectedGradePositions) {
+                int gradePosition = Integer.parseInt(gradePositionStr);
+                selected[gradePosition] = true;
+            }
+        }
 
         // all text on the spinner
         setSpinnerAdapter(new String[]{allText});
+        listener.onItemsSelected(selected);
     }
 
     public interface MultiSpinnerListener {
