@@ -150,8 +150,31 @@ public class StoreListFragment extends ListFragment
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                mStores = Store.listAll(Store.class);
-                populateStoresListAdapter();
+                if (mCategory != null) {
+                    mStores = Store.find(Store.class, "category = ?", mCategory);
+                } else if (mSearchQuery != null) {
+                    mStores = Store.findWithQuery(Store.class,
+                            "Select * from Store where " +
+                                    "name like '%" + mSearchQuery + "%' or " +
+                                    "address like '%" + mSearchQuery + "%' or " +
+                                    "category like '%" + mSearchQuery + "%'");
+                }
+
+                for (Store store : mStores) {
+                    mStoreList.add(new Store(
+                            store.getStoreId(),
+                            store.getName(),
+                            store.getAddress(),
+                            store.getPhone(),
+                            store.getLatitude(),
+                            store.getLongitude(),
+                            store.getCategory()));
+                    mSharedPrefs.edit().putFloat(store.getStoreId() + "", store.getDistance()).apply();
+                }
+                StoresAdapter adapter = new StoresAdapter(getActivity(),
+                        R.layout.store_list_item, mStoreList);
+                setListAdapter(adapter);
+
                 getActivity().setProgressBarIndeterminateVisibility(false);
             }
 

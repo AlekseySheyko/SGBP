@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
-    public static final String CATEGORY_FOOD = "Food & drink";
-    public static final String CATEGORY_AUTO = "Auto services";
-    public static final String CATEGORY_SOUND = "Sound systems";
+    public static final String CATEGORY_FOOD = "Food & Drink";
+    public static final String CATEGORY_AUTO = "Auto Services";
+    public static final String CATEGORY_SOUND = "Sound Systems";
     public static final String CATEGORY_HOTELS = "Hotels";
     public static final String CATEGORY_OTHER = "Participating Physical Store";
     public static final String CATEGORY_MOBILE = "Participating Mobile Business";
