@@ -8,7 +8,7 @@ public class Constants {
     public static final String CATEGORY_AUTO = "Auto services";
     public static final String CATEGORY_SOUND = "Sound systems";
     public static final String CATEGORY_HOTELS = "Hotels";
-    public static final String CATEGORY_OTHER = "Participating Business";
+    public static final String CATEGORY_OTHER = "Participating Physical Store";
     public static final String CATEGORY_MOBILE = "Participating Mobile Business";
 
     public static final int VIEW_CATEGORIES = -1;

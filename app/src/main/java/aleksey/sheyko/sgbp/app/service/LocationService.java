@@ -67,7 +67,8 @@ public class LocationService extends Service
             ApiService service = new RestClient().getApiService();
             service.listAllStores(new ResponseCallback() {
                 @Override public void success(Response response) {
-                    try (InputStream in = response.getBody().in()) {
+                    try {
+                        InputStream in = response.getBody().in();
                         StoresXmlParser storesXmlParser = new StoresXmlParser();
                         storesXmlParser.parse(in);
                     } catch (Exception e) {
@@ -86,15 +87,19 @@ public class LocationService extends Service
 
         for (Store store : mStores) {
             if (store.getGeofenceId() == null) {
-                Geofence geofence = createGeofence(
-                        "aleksey.sheyko.sgbp.GEOFENCE_" + store.getId(),
-                        Double.parseDouble(store.getLatitude()),
-                        Double.parseDouble(store.getLongitude())
-                );
-                mGeofenceList.add(geofence);
-                String id = geofence.getRequestId();
-                store.setGeofenceId(id);
-                store.save();
+                try {
+                    Geofence geofence = createGeofence(
+                            "aleksey.sheyko.sgbp.GEOFENCE_" + store.getId(),
+                            Double.parseDouble(store.getLatitude()),
+                            Double.parseDouble(store.getLongitude())
+                    );
+                    mGeofenceList.add(geofence);
+                    String id = geofence.getRequestId();
+                    store.setGeofenceId(id);
+                    store.save();
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             } else {
                 Geofence geofence = createGeofence(store.getGeofenceId(),
                         Double.parseDouble(store.getLatitude()),

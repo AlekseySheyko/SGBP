@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="aleksey.sheyko.sgbp"
-    android:installLocation="internalOnly" >
+    android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -24,10 +24,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="android.app.default_searchable"
-            android:value=".ui.activities.SearchActivity" />
+            android:value=".app.activities.SearchActivity" />
         <meta-data
             android:name="DATABASE"
             android:value="stores.db" />
@@ -51,7 +51,7 @@
             android:name=".app.activities.RegisterActivity"
             android:label="@string/title_activity_register"
             android:noHistory="true"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -61,12 +61,15 @@
             android:name=".app.activities.MainActivity"
             android:icon="@drawable/ic_launcher"
             android:label="@string/title_activity_main"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name=".app.activities.MapPane"
             android:label="@string/title_activity_map"
-            android:parentActivityName=".app.activities.DetailActivity" >
+            android:parentActivityName=".app.activities.DetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".app.activities.DetailActivity" />
@@ -74,7 +77,7 @@
         <activity
             android:name=".app.activities.CategoryActivity"
             android:label="@string/title_activity_category"
-            android:parentActivityName=".app.activities.MainActivity" >
+            android:parentActivityName=".app.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="aleksey.sheyko.sgbp.app.activities.MainActivity" />
@@ -82,17 +85,10 @@
         <activity
             android:name=".app.activities.SearchActivity"
             android:label="@string/title_activity_search"
-            android:parentActivityName=".app.activities.MainActivity" >
+            android:parentActivityName=".app.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".app.activities.MainActivity" />
@@ -101,7 +97,7 @@
             android:name=".app.activities.DetailActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName=".app.activities.MainActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="aleksey.sheyko.sgbp.app.activities.MainActivity" />
@@ -113,13 +109,13 @@
         <service
             android:name=".app.service.GeofenceService"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.aol.android.geofence.ACTION_RECEIVE_GEOFENCE" />
             </intent-filter>
         </service>
 
-        <receiver android:name=".app.service.BootReceiver" >
+        <receiver android:name=".app.service.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
