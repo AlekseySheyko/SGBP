@@ -483,19 +483,16 @@ public class RegisterActivity extends Activity
                                 .apply();
                         setProgressBarIndeterminateVisibility(false);
 
-                        Device device = new Device(RegisterActivity.this);
-                        String startDate = device.getStartDate();
-                        String endDate = device.getEndDate();
+                        service.saveGrade(userId, Integer.parseInt(userId), mGradeSpinner.getSpinnerText(), new ResponseCallback() {
+                            @Override
+                            public void success(Response response) {
+                            }
 
-                        // TODO: Populate mGradeStrings with selected grade values
-//                            service.saveGrade(userId, gradeId, schoolId, mGradeStrings[gradeId], startDate, endDate, new ResponseCallback() {
-//                                @Override public void success(Response response) {
-//                                }
-//
-//                                @Override public void failure(RetrofitError e) {
-//                                    e.printStackTrace();
-//                                }
-//                            });
+                            @Override
+                            public void failure(RetrofitError e) {
+                                e.printStackTrace();
+                            }
+                        });
                         navigateToMainScreen();
                     }
 

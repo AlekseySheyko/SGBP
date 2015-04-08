@@ -105,4 +105,8 @@ public class MultiSpinner extends Spinner implements
     public boolean isMultipleSelected() {
         return spinnerText.contains(",");
     }
+
+    public String getSpinnerText() {
+        return spinnerText;
+    }
 }

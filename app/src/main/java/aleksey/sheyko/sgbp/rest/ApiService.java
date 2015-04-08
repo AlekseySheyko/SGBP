@@ -25,16 +25,16 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("/SaveDeviceInfo")
     void registerDevice(@Field("Key") String key, @Field("Device_UID") String deviceId,
-                  @Field("Device_Name") String deviceName, @Field("Device_Type") String deviceType,
-                  @Field("Device_Manufacturer_Name") String manufacturerName, @Field("Device_Model_Name") String modelName,
-                  @Field("Device_Model_Number") String modelNumber, @Field("Device_System_Name") String systemName,
-                  @Field("Device_System_Version") String systemVersion, @Field("Device_Software_Version") String softwareVersion,
-                  @Field("Device_Platform_Version") String platformVersion, @Field("Device_Firmware_Version") String firmwareVersion,
-                  @Field("Device_OS") String operatingSystem, @Field("Device_Timezone") String timezone,
-                  @Field("Language_Used_On_Device") String language, @Field("Has_Camera") boolean hasCamera,
-                  @Field("Is_Backlight_On") boolean backlightOn, @Field("Is_Battery_Removable") boolean batteryRemovable,
-                  @Field("UserId") String userId, @Field("Is_Device_Registered") boolean isDeviceRegistered,
-                  @Field("Device_Token_Registration_Id") String registrationId, Callback<Response> callback);
+                        @Field("Device_Name") String deviceName, @Field("Device_Type") String deviceType,
+                        @Field("Device_Manufacturer_Name") String manufacturerName, @Field("Device_Model_Name") String modelName,
+                        @Field("Device_Model_Number") String modelNumber, @Field("Device_System_Name") String systemName,
+                        @Field("Device_System_Version") String systemVersion, @Field("Device_Software_Version") String softwareVersion,
+                        @Field("Device_Platform_Version") String platformVersion, @Field("Device_Firmware_Version") String firmwareVersion,
+                        @Field("Device_OS") String operatingSystem, @Field("Device_Timezone") String timezone,
+                        @Field("Language_Used_On_Device") String language, @Field("Has_Camera") boolean hasCamera,
+                        @Field("Is_Backlight_On") boolean backlightOn, @Field("Is_Battery_Removable") boolean batteryRemovable,
+                        @Field("UserId") String userId, @Field("Is_Device_Registered") boolean isDeviceRegistered,
+                        @Field("Device_Token_Registration_Id") String registrationId, Callback<Response> callback);
 
     @FormUrlEncoded
     @POST("/SaveTeamMemberInfo")
@@ -46,11 +46,11 @@ public interface ApiService {
                       @Field("Is_Coupon_Allowed") boolean receiveCoupons, @Field("Is_Notification_Allowed") boolean getNotifications,
                       @Field("Is_Location_Service_Allowed") boolean trackLocation, @Field("Is_User_Over_18_Year") boolean is18,
                       @Field("Is_Device_Registered") boolean isDeviceRegistered, Callback<Response> callback);
+
     @FormUrlEncoded
-    @POST("/SaveGradeInfo")
-    void saveGrade(@Field("Key") String key, @Field("Grade_Id") int gradeId,
-                      @Field("School_Id") int schoolId, @Field("Grade_Name") String gradeName,
-                      @Field("Eff_Date") String startDate, @Field("End_Date") String endDate, Callback<Response> callback);
+    @POST("/SaveUserGrade")
+    void saveGrade(@Field("Key") String key, @Field("UserID") int userId,
+                   @Field("RegGradeInfoInput[]") String gradesStr, Callback<Response> callback);
 
     @FormUrlEncoded
     @POST("/UpdateTeamMemberInfo")
