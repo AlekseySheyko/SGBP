@@ -18,6 +18,7 @@ public class MultiSpinner extends Spinner implements
     private boolean[] selected;
     private String defaultText;
     private MultiSpinnerListener listener;
+    private String spinnerText;
 
     public MultiSpinner(Context context) {
         super(context);
@@ -49,7 +50,6 @@ public class MultiSpinner extends Spinner implements
                 someUnselected = true;
             }
         }
-        String spinnerText;
         if (someUnselected) {
             spinnerText = spinnerBuffer.toString();
             if (spinnerText.length() > 2)
@@ -100,5 +100,9 @@ public class MultiSpinner extends Spinner implements
 
     public interface MultiSpinnerListener {
         void onItemsSelected(boolean[] selected);
+    }
+
+    public boolean isMultipleSelected() {
+        return spinnerText.contains(",");
     }
 }

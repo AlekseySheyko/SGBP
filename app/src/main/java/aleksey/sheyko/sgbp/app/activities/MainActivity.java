@@ -41,7 +41,6 @@ import aleksey.sheyko.sgbp.app.service.LocationService;
 public class MainActivity extends FragmentActivity {
 
     // TODO: Fix search menu item configuration
-    // TODO: Set "hasMultipleGrade" param depending on grade string
     // TODO: Update stores every 2 hours
     // TODO: Show address instead of distance on "Nearest" screen when no GPS
     // TODO: Read reg response and prompt their error if reg is failed

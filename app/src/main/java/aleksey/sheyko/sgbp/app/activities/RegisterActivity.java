@@ -437,7 +437,7 @@ public class RegisterActivity extends Activity
         final String userId = deviceId.replaceAll("[^0-9]", "");
 
         final boolean is18 = mCheckBoxAge.isChecked();
-        final boolean isMultiGrade = mCheckBoxLevel.isChecked();
+        final boolean isMultiGrade = mGradeSpinner.isMultipleSelected();
         final boolean getNotifications = mCheckBoxNotifications.isChecked();
         final boolean trackLocation = mCheckBoxLocation.isChecked();
         final boolean receiveCoupons = mCheckBoxCoupons.isChecked();
