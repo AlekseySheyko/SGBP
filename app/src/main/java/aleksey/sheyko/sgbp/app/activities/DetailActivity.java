@@ -119,7 +119,7 @@ public class DetailActivity extends Activity {
 
     private void enableButton(final Button actionButton, final Store currentStore) {
         actionButton.setText("Participate");
-        actionButton.setBackground(getResources().getDrawable(R.drawable.participate_button_selector));
+        actionButton.setBackgroundResource(R.drawable.participate_button_selector);
         actionButton.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View view) {
                 int storeId = mSharedPrefs.getInt("storeId", -1);

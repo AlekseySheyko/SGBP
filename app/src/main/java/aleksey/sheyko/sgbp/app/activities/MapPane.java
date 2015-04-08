@@ -85,7 +85,8 @@ public class MapPane extends Activity {
             ApiService service = new RestClient().getApiService();
             service.listAllStores(new ResponseCallback() {
                 @Override public void success(Response response) {
-                    try (InputStream in = response.getBody().in()) {
+                    try {
+                        InputStream in = response.getBody().in();
                         StoresXmlParser storesXmlParser = new StoresXmlParser();
                         storesXmlParser.parse(in);
                     } catch (Exception e) {
