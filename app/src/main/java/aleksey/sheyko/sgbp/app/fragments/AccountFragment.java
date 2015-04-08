@@ -116,9 +116,6 @@ public class AccountFragment extends Fragment
             }
         });
 
-        ArrayAdapter<String> schoolAdapter = new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_spinner_item
-        );
         mSchoolsList = School.listAll(School.class);
         setupSpinners();
 
@@ -207,7 +204,7 @@ public class AccountFragment extends Fragment
                                     gradeStrings.add(grade.getName());
                                 }
                                 mGradeSpinner.setItems(gradeStrings, "Grade level",
-                                        AccountFragment.this, true);
+                                        AccountFragment.this);
 
                             } catch (Exception e) {
                                 e.printStackTrace();

@@ -102,7 +102,7 @@ public class MultiSpinner extends Spinner implements
     }
 
     public void setItems(List<String> items, String allText,
-                         MultiSpinnerListener listener, boolean useShared) {
+                         MultiSpinnerListener listener) {
         this.items = items;
         this.defaultText = allText;
         this.listener = listener;
@@ -111,22 +111,18 @@ public class MultiSpinner extends Spinner implements
                 mSharedPrefs.getStringSet("selectedGradePositions", new HashSet<String>());
 
         selected = new boolean[items.size()];
-        if (useShared) {
             if (selectedGradePositions.size() > 0) {
                 for (String gradePositionStr : selectedGradePositions) {
                     int gradePosition = Integer.parseInt(gradePositionStr);
                     selected[gradePosition] = true;
                 }
             }
-        }
 
         // all text on the spinner
         setSpinnerAdapter(new String[]{allText});
         listener.onItemsSelected(selected);
 
-        if (useShared) {
             onCancel();
-        }
     }
 
     public interface MultiSpinnerListener {

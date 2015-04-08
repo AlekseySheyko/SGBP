@@ -241,6 +241,40 @@ public class RegisterActivity extends Activity
     protected void onResume() {
         super.onResume();
         loadSchoolsFromNetwork();
+
+        mSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
+        String firstName = mSharedPrefs.getString("first_name", "");
+        String lastName = mSharedPrefs.getString("last_name", "");
+        String email = mSharedPrefs.getString("email", "");
+        int schoolId = mSharedPrefs.getInt("school_id", -1);
+        int gradeId = mSharedPrefs.getInt("grade_id", -1);
+        boolean is18 = mSharedPrefs.getBoolean("is18", true);
+        boolean isMultiGrade = mSharedPrefs.getBoolean("multipleLevel", false);
+        boolean notifications = mSharedPrefs.getBoolean("notifications", true);
+        boolean location = mSharedPrefs.getBoolean("location", true);
+        boolean coupons = mSharedPrefs.getBoolean("coupons", true);
+
+        if (!firstName.isEmpty()) {
+            mFirstNameField.setText(firstName);
+        }
+        if (!lastName.isEmpty()) {
+            mLastNameField.setText(lastName);
+        }
+        if (!email.isEmpty()) {
+            mEmailField.setText(email);
+        }
+        if (schoolId != -1) {
+            mSchoolSpinner.setSelection(schoolId);
+        }
+        if (gradeId != -1) {
+            mGradeSpinner.setSelection(gradeId);
+        }
+        mCheckBoxAge.setChecked(is18);
+        mCheckBoxNotifications.setChecked(notifications);
+        mCheckBoxLocation.setChecked(location);
+        mCheckBoxCoupons.setChecked(coupons);
+        mCheckBoxLevel.setChecked(isMultiGrade);
     }
 
     @Override
@@ -348,7 +382,7 @@ public class RegisterActivity extends Activity
                                     gradeStrings.add(grade.getName());
                                 }
                                 mGradeSpinner.setItems(gradeStrings, "Grade level",
-                                        RegisterActivity.this, false);
+                                        RegisterActivity.this);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -435,6 +469,7 @@ public class RegisterActivity extends Activity
                 userId, IS_REGISTERED, userId, new ResponseCallback() {
                     @Override
                     public void success(Response response) {
+                        setProgressBarIndeterminateVisibility(false);
                         try {
                             InputStream in = response.getBody().in();
                             DeviceXmlParser deviceXmlParser = new DeviceXmlParser(RegisterActivity.this);
@@ -444,10 +479,8 @@ public class RegisterActivity extends Activity
                             if (errorMessage != null) {
                                 Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                                 mSharedPrefs.edit().putString("DeviceXmlParser_error_msg", null).apply();
-                                setProgressBarIndeterminateVisibility(false);
                                 return;
                             }
-                            ;
 
                             mSharedPrefs.edit().putInt("device_info_id", deviceInfoId).apply();
                             registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, gradeId, email, USER_TYPE, isMultiGrade,
@@ -459,6 +492,10 @@ public class RegisterActivity extends Activity
 
                     @Override
                     public void failure(RetrofitError e) {
+                        setProgressBarIndeterminateVisibility(false);
+                        Toast.makeText(RegisterActivity.this,
+                                "Failed to register. Check your network connection",
+                                Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 });
