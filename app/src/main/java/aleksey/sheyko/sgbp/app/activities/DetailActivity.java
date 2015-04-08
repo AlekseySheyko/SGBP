@@ -94,6 +94,15 @@ public class DetailActivity extends Activity {
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         GoogleMap map = mapFragment.getMap();
+
+        if (map == null) {
+            Toast.makeText(this,
+                    "You need to install Google Play to see places on map",
+                    Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         map.getUiSettings().setAllGesturesEnabled(false);
         map.setMyLocationEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);

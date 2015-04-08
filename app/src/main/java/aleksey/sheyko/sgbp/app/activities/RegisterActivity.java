@@ -44,8 +44,6 @@ import aleksey.sheyko.sgbp.rest.DeviceXmlParser;
 import aleksey.sheyko.sgbp.rest.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
-import aleksey.sheyko.sgbp.rest.UserXmlParser;
-import aleksey.sheyko.sgbp.rest.UserXmlParser.User;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.ResponseCallback;
@@ -201,38 +199,40 @@ public class RegisterActivity extends Activity
         service.checkRegistration(getDeviceId(), new ResponseCallback() {
             @Override
             public void success(Response response) {
+                // TODO: Wait for web developer to fix login webservice and uncomment user set code
+
                 setProgressBarIndeterminateVisibility(false);
-                try {
-                    InputStream in = response.getBody().in();
-                    UserXmlParser userInfoXmlParser = new UserXmlParser();
-                    List<User> userList = userInfoXmlParser.parse(in);
-                    if (userList == null) {
-                        return;
-                    }
-                    User user = userList.get(0);
-                    mSharedPrefs.edit()
-                            .putBoolean("registered", true)
-                            .putString("device_id", getDeviceId())
-                            .putInt("user_id", user.id)
-                            .putString("first_name", user.firstName)
-                            .putString("last_name", user.lastName)
-                            .putString("email", user.email)
-                            .putBoolean("multipleLevel", user.multipleGrade)
-                            .putBoolean("notifications", user.notifications)
-                            .putBoolean("location", user.location)
-                            .putBoolean("coupons", user.coupons)
-                            .apply();
-                    setProgressBarIndeterminateVisibility(false);
+//                try {
+//                    InputStream in = response.getBody().in();
+//                    UserXmlParser userInfoXmlParser = new UserXmlParser();
+//                    List<User> userList = userInfoXmlParser.parse(in);
+//                    if (userList == null) {
+//                        return;
+//                    }
+//                    User user = userList.get(0);
+//                    mSharedPrefs.edit()
+//                            .putBoolean("registered", true)
+//                            .putString("device_id", getDeviceId())
+//                            .putInt("user_id", user.id)
+//                            .putString("first_name", user.firstName)
+//                            .putString("last_name", user.lastName)
+//                            .putString("email", user.email)
+//                            .putBoolean("multipleLevel", user.multipleGrade)
+//                            .putBoolean("notifications", user.notifications)
+//                            .putBoolean("location", user.location)
+//                            .putBoolean("coupons", user.coupons)
+//                            .apply();
+//                    setProgressBarIndeterminateVisibility(false);
                     navigateToMainScreen();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             }
 
             @Override
             public void failure(RetrofitError e) {
                 e.printStackTrace();
-                Toast.makeText(RegisterActivity.this, "Please check network connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Failed to check registration. Check your network connection", Toast.LENGTH_SHORT).show();
             }
         });
     }
