@@ -57,7 +57,6 @@ public class CategoriesFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.categories_fragment, menu);
 
         // Associate searchable configuration with the SearchView
@@ -67,6 +66,8 @@ public class CategoriesFragment extends Fragment {
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
