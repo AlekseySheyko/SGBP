@@ -42,7 +42,7 @@ public class MainActivity extends FragmentActivity {
 
     // TODO: Fix search menu item configuration
     // TODO: Update stores every 2 hours
-    // TODO: Show address instead of distance on "Nearest" screen when no GPS
+    // TODO: Implement categories
 
     private String[] mNavItems;
     private DrawerLayout mDrawerLayout;

@@ -92,12 +92,11 @@ public class RegisterActivity extends Activity
 
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
-//        TODO: Uncomment
-//        if (isRegistered) {
-//            navigateToMainScreen();
-//        } else {
-//            checkRegistration();
-//        }
+        if (isRegistered) {
+            navigateToMainScreen();
+        } else {
+            checkRegistration();
+        }
         setContentView(R.layout.activity_register);
         ButterKnife.inject(this);
 
@@ -269,21 +268,10 @@ public class RegisterActivity extends Activity
         if (schoolId != -1) {
             mSharedPrefs.edit().putInt("school_id", schoolId).apply();
         }
-        if (!is18) {
-            mSharedPrefs.edit().putBoolean("is18", is18).apply();
-        }
-        if (!notifications) {
-            mSharedPrefs.edit().putBoolean("notifications", notifications).apply();
-        }
-        if (!location) {
-            mSharedPrefs.edit().putBoolean("location", location).apply();
-        }
-        if (!coupons) {
-            mSharedPrefs.edit().putBoolean("coupons", coupons).apply();
-        }
-        if (multipleGrade) {
-            mSharedPrefs.edit().putBoolean("multipleGrade", multipleGrade).apply();
-        }
+        mSharedPrefs.edit().putBoolean("is18", is18).apply();
+        mSharedPrefs.edit().putBoolean("notifications", notifications).apply();
+        mSharedPrefs.edit().putBoolean("location", location).apply();
+        mSharedPrefs.edit().putBoolean("coupons", coupons).apply();
     }
 
     private void loadSchoolsFromNetwork() {
@@ -457,7 +445,8 @@ public class RegisterActivity extends Activity
                                 mSharedPrefs.edit().putString("DeviceXmlParser_error_msg", null).apply();
                                 setProgressBarIndeterminateVisibility(false);
                                 return;
-                            };
+                            }
+                            ;
 
                             mSharedPrefs.edit().putInt("device_info_id", deviceInfoId).apply();
                             registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, gradeId, email, USER_TYPE, isMultiGrade,

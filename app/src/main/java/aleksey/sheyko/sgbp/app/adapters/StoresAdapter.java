@@ -12,8 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
+import aleksey.sheyko.sgbp.model.Store;
 
 public class StoresAdapter extends ArrayAdapter<Store> {
 
@@ -76,7 +76,11 @@ public class StoresAdapter extends ArrayAdapter<Store> {
                     String distance = String.format("%.1f%n",
                             mSharedPrefs.getFloat(store.getStoreid() + "", -1))
                             .replace(".0", "") + "miles";
-                    mtd.setText(distance);
+                    if (!distance.equals("0\nmiles")) {
+                        mtd.setText(distance);
+                    } else {
+                        mtd.setText(store.getAddress());
+                    }
                     break;
                 case Constants.VIEW_NOTIFICATIONS:
                     mtd.setText("23 dec, 4:02 PM");
