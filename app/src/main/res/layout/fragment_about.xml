@@ -4,97 +4,56 @@
             android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingTop="@dimen/activity_vertical_margin">
 
 
         <TextView
             android:id="@+id/header1"
-            android:text="@string/header1"
             style="@style/TextHeader"
-            android:layout_marginTop="0dp"/>
+            android:layout_marginTop="8dp"
+            android:text="@string/header1"
+            android:textAllCaps="true"/>
 
         <TextView
-            android:id="@+id/body1"
-            android:text="@string/body1"
-            style="@style/TextBody"/>
+            style="@style/TextBody"
+            android:text="@string/body1"/>
 
         <TextView
-            android:id="@+id/header2"
-            android:text="@string/header2"
-            style="@style/TextHeader"/>
+            style="@style/TextHeader"
+            android:text="@string/header2"/>
 
         <TextView
-            android:id="@+id/body2"
-            android:text="@string/body2"
-            style="@style/TextBody"/>
+            style="@style/TextBody"
+            android:text="• Our Schools - Our Children!"/>
 
         <TextView
-            android:id="@+id/header3"
-            android:text="@string/header3"
-            style="@style/TextHeader"/>
+            style="@style/TextBody"
+            android:text="• Our Community - Local Business!"/>
 
         <TextView
-            android:id="@+id/body3"
-            android:text="@string/body3"
-            style="@style/TextBody"/>
+            style="@style/TextBody"
+            android:text="• You – Exclusive Money Saving Offers!"/>
 
         <TextView
-            android:id="@+id/header4"
-            android:text="@string/header4"
-            style="@style/TextHeader"/>
+            style="@style/TextHeader"
+            android:text="@string/header6"/>
 
         <TextView
-            android:id="@+id/body4"
-            android:text="@string/body4"
-            style="@style/TextBody"/>
-
-        <TextView
-            android:id="@+id/header5"
-            android:text="@string/header5"
-            style="@style/TextHeader"/>
-
-        <TextView
-            android:id="@+id/body5"
-            android:text="@string/body5"
-            style="@style/TextBody"/>
-
-        <TextView
-            android:id="@+id/header6"
-            android:text="@string/header6"
-            style="@style/TextHeader"/>
-
-        <TextView
-            android:id="@+id/body6"
-            android:text="@string/body6"
-            style="@style/TextBody"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(916) 533-5518"
-                android:textSize="18sp"
-                android:textColor="#2980b9"
-                android:clickable="true"
-                android:onClick="dial"
-                android:layout_marginTop="24dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="robert@schoolgivebackprogram.com"
-                android:singleLine="true"
-                android:textSize="14sp"
-                android:textColor="#2980b9"
-                android:clickable="true"
-                android:onClick="sendEmail"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="4dp"/>
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="0dp"
+            style="@style/TextHeader"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:autoLink="web"
+            android:singleLine="true"
+            android:text="www.schoolgivebackprogram.com"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
