@@ -2,15 +2,14 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/Container"
     android:orientation="vertical"
     android:padding="4dp"
     tools:context=".MainActivity">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="@dimen/mobile_section_height"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:paddingBottom="2dp">
@@ -29,17 +28,16 @@
             android:orientation="vertical">
 
             <View
-                android:layout_width="180dp"
+                android:layout_width="200dp"
                 android:layout_gravity="center_horizontal"
                 style="@style/TextDivider"/>
 
             <TextView
                 style="@style/CategoryLabel"
-                android:textSize="15sp"
                 android:text="M\u200ao\u200ab\u2009i\u2009l\u200ae\u2009\u200a B\u200au\u200as\u200ai\u200an\u200ae\u200as\u200as\u200ae\u200as"/>
 
             <View
-                android:layout_width="180dp"
+                android:layout_width="200dp"
                 android:layout_gravity="center_horizontal"
                 style="@style/TextDivider"/>
 
@@ -118,7 +116,6 @@
 
                 <TextView
                     style="@style/CategoryLabel"
-                    android:textSize="15sp"
                     android:text="A\u200au\u200at\u200ao\u200am\u200ao\u200at\u200ai\u200av\u200ae"/>
 
                 <View
@@ -193,7 +190,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:background="#27000000"
+                android:background="#79000000"
                 android:orientation="vertical">
 
                 <View
@@ -201,7 +198,6 @@
 
                 <TextView
                     style="@style/CategoryLabel"
-                    android:textSize="15sp"
                     android:text="S\u200ae\u200ar\u200av\u200ai\u200ac\u200ae\u200as"/>
 
                 <View
@@ -247,7 +243,6 @@
 
                 <TextView
                     style="@style/CategoryLabel"
-                    android:textSize="15sp"
                     android:text="S\u200ah\u200ao\u200ap\u200ap\u200ai\u200an\u200ag"/>
 
                 <View
@@ -276,7 +271,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:background="#29000000"
+                android:background="#64000000"
                 android:orientation="vertical">
 
                 <View

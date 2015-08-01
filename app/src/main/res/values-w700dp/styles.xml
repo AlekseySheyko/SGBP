@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:dropDownListViewStyle">@style/SpinnerDropdown</item>
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:actionBarSize">72dp</item>
+    </style>
+
+    <style name="Container">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginTop">18dp</item>
+        <item name="android:layout_marginBottom">22dp</item>
+        <item name="android:layout_marginLeft">41dp</item>
+        <item name="android:layout_marginRight">41dp</item>
+    </style>
+
+    <style name="CategoryLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">#deffffff</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
+    </style>
+
+</resources>
