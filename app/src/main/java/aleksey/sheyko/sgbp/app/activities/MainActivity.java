@@ -128,6 +128,40 @@ public class MainActivity extends FragmentActivity {
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
+    public void openCategory(View view) {
+        int position = -1;
+        switch (view.getId()) {
+            case R.id.mobile:
+                position = 0;
+                break;
+            case R.id.edu:
+                position = 1;
+                break;
+            case R.id.auto:
+                position = 2;
+                break;
+            case R.id.food:
+                position = 3;
+                break;
+            case R.id.services:
+                position = 4;
+                break;
+            case R.id.shop:
+                position = 5;
+                break;
+            case R.id.sports:
+                position = 6;
+                break;
+        }
+
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
+        Intent intent = new Intent(this, CategoryActivity.class);
+        String category = new Constants().categories.get(position + "");
+        intent.putExtra("category", category);
+        startActivity(intent);
+    }
+
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {

@@ -21,8 +21,8 @@ public class Constants {
 
     public Constants() {
         categories = new HashMap<>();
-        categories.put("0", Constants.CATEGORY_EDUCATION);
-        categories.put("1", Constants.CATEGORY_MOBILE);
+        categories.put("0", Constants.CATEGORY_MOBILE);
+        categories.put("1", Constants.CATEGORY_EDUCATION);
         categories.put("2", Constants.CATEGORY_AUTO);
         categories.put("3", Constants.CATEGORY_FOOD);
         categories.put("4", Constants.CATEGORY_SERVICES);

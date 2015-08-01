@@ -29,21 +29,7 @@ public class CategoriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
-
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                PreferenceManager.getDefaultSharedPreferences(getActivity())
-//                        .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
-//                Intent intent = new Intent(getActivity(), CategoryActivity.class);
-//                String category = new Constants().categories.get(position + "");
-//                intent.putExtra("category", category);
-//                startActivity(intent);
-//            }
-//        });
-        return rootView;
+        return inflater.inflate(R.layout.fragment_categories, container, false);
     }
 
     @Override
