@@ -14,7 +14,7 @@ public class UserXmlParser {
     // We don't use namespaces
     private static final String ns = null;
 
-    public List parse(InputStream in) throws XmlPullParserException, IOException {
+    public User parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -26,8 +26,8 @@ public class UserXmlParser {
         }
     }
 
-    private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List entries = new ArrayList();
+    private User readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
+        List<User> userList = new ArrayList<>();
 
         parser.require(XmlPullParser.START_TAG, ns, "SGBP_User_Reg_Info_List");
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -45,7 +45,7 @@ public class UserXmlParser {
                     String tag = parser.getName();
                     // Starts by looking for the entry tag
                     if (tag.equals("SGBP_User_Reg_Info")) {
-                        entries.add(readUser(parser));
+                        userList.add(readUser(parser));
                     } else {
                         return null;
                     }
@@ -55,7 +55,13 @@ public class UserXmlParser {
                 skip(parser);
             }
         }
-        return entries;
+        if (userList.size() > 0) {
+            // user exists
+            return userList.get(0);
+        } else {
+            // not found, need to register
+            return null;
+        }
     }
 
     public static class User {
@@ -104,28 +110,40 @@ public class UserXmlParser {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals("User_Reg_Info_Id")) {
-                userId = readUserId(parser);
-            } else if (tag.equals("First_Name")) {
-                firstName = readFirstName(parser);
-            } else if (tag.equals("Last_Name")) {
-                lastName = readLastName(parser);
-            } else if (tag.equals("School_Id")) {
-                schoolId = readSchoolId(parser);
-            } else if (tag.equals("Has_Multiple_Child")) {
-                multipleGrade = readGradeLevel(parser);
-            } else if (tag.equals("Is_Coupon_Allowed")) {
-                coupons = readCoupons(parser);
-            } else if (tag.equals("Is_Notification_Allowed")) {
-                notifications = readNotifications(parser);
-            } else if (tag.equals("Is_Location_Service_Allowed")) {
-                location = readLocation(parser);
-            } else if (tag.equals("Is_User_Over_18_Year")) {
-                is18 = readAge(parser);
-            } else if (tag.equals("User_Email")) {
-                email = readEmail(parser);
-            } else {
-                skip(parser);
+            switch (tag) {
+                case "User_Reg_Info_Id":
+                    userId = readUserId(parser);
+                    break;
+                case "First_Name":
+                    firstName = readFirstName(parser);
+                    break;
+                case "Last_Name":
+                    lastName = readLastName(parser);
+                    break;
+                case "School_Id":
+                    schoolId = readSchoolId(parser);
+                    break;
+                case "Has_Multiple_Child":
+                    multipleGrade = readGradeLevel(parser);
+                    break;
+                case "Is_Coupon_Allowed":
+                    coupons = readCoupons(parser);
+                    break;
+                case "Is_Notification_Allowed":
+                    notifications = readNotifications(parser);
+                    break;
+                case "Is_Location_Service_Allowed":
+                    location = readLocation(parser);
+                    break;
+                case "Is_User_Over_18_Year":
+                    is18 = readAge(parser);
+                    break;
+                case "User_Email":
+                    email = readEmail(parser);
+                    break;
+                default:
+                    skip(parser);
+                    break;
             }
         }
         return new User(userId, firstName, lastName, schoolId, multipleGrade, coupons, notifications, location, is18, email);

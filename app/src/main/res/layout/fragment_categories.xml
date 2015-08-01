@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    style="@style/Container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Container"
     android:orientation="vertical"
     android:padding="4dp"
     tools:context=".MainActivity">
 
     <FrameLayout
+        android:id="@+id/mobile"
         android:layout_width="match_parent"
         android:layout_height="@dimen/mobile_section_height"
+        android:layout_marginBottom="2dp"
         android:clickable="true"
-        android:onClick="openCategory"
-        android:id="@+id/mobile"
+        android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:paddingBottom="2dp">
+        android:onClick="openCategory">
 
         <ImageView
             android:layout_width="match_parent"
@@ -25,23 +26,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:background="#30000000"
+            android:gravity="center"
             android:orientation="vertical">
 
             <View
+                style="@style/TextDivider"
                 android:layout_width="200dp"
-                android:layout_gravity="center_horizontal"
-                style="@style/TextDivider"/>
+                android:layout_gravity="center_horizontal"/>
 
             <TextView
                 style="@style/CategoryLabel"
                 android:text="M\u200ao\u200ab\u2009i\u2009l\u200ae\u2009\u200a B\u200au\u200as\u200ai\u200an\u200ae\u200as\u200as\u200ae\u200as"/>
 
             <View
+                style="@style/TextDivider"
                 android:layout_width="200dp"
-                android:layout_gravity="center_horizontal"
-                style="@style/TextDivider"/>
+                android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>
 
@@ -56,14 +57,15 @@
         android:paddingTop="2dp">
 
         <FrameLayout
+            android:id="@+id/edu"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="2dp"
             android:layout_weight="1"
             android:clickable="true"
-            android:onClick="openCategory"
-            android:id="@+id/edu"
-            android:foreground="?android:attr/selectableItemBackground">
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="openCategory">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -75,8 +77,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:background="#22000000"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <View
@@ -94,14 +96,15 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/auto"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"
             android:layout_weight="1"
             android:clickable="true"
-            android:onClick="openCategory"
-            android:id="@+id/auto"
-            android:foreground="?android:attr/selectableItemBackground">
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="openCategory">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -113,8 +116,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:background="#00000000"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <View
@@ -142,14 +145,15 @@
         android:paddingTop="2dp">
 
         <FrameLayout
+            android:id="@+id/food"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="2dp"
             android:layout_weight="1"
             android:clickable="true"
-            android:onClick="openCategory"
-            android:id="@+id/food"
-            android:foreground="?android:attr/selectableItemBackground">
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="openCategory">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -161,8 +165,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:background="#30000000"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <View
@@ -180,14 +184,15 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/services"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"
             android:layout_weight="1"
             android:clickable="true"
-            android:onClick="openCategory"
-            android:id="@+id/services"
-            android:foreground="?android:attr/selectableItemBackground">
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="openCategory">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -199,8 +204,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:background="#79000000"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <View
@@ -232,6 +237,7 @@
             android:layout_marginRight="2dp"
             android:layout_weight="1"
             android:clickable="true"
+            android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground">
 
             <ImageView
@@ -242,12 +248,12 @@
 
 
             <LinearLayout
+                android:id="@+id/shop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#27000000"
                 android:gravity="center"
                 android:onClick="openCategory"
-                android:id="@+id/shop"
-                android:background="#27000000"
                 android:orientation="vertical">
 
                 <View
@@ -270,6 +276,7 @@
             android:layout_marginLeft="2dp"
             android:layout_weight="1"
             android:clickable="true"
+            android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground">
 
             <ImageView
@@ -280,12 +287,12 @@
 
 
             <LinearLayout
+                android:id="@+id/sports"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#64000000"
                 android:gravity="center"
                 android:onClick="openCategory"
-                android:id="@+id/sports"
-                android:background="#64000000"
                 android:orientation="vertical">
 
                 <View

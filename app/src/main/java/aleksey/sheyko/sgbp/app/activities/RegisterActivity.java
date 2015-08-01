@@ -44,14 +44,14 @@ import aleksey.sheyko.sgbp.rest.DeviceXmlParser;
 import aleksey.sheyko.sgbp.rest.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
+import aleksey.sheyko.sgbp.rest.UserXmlParser;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class RegisterActivity extends Activity
-        implements MultiSpinnerListener {
+public class RegisterActivity extends Activity implements MultiSpinnerListener {
 
     @InjectView(R.id.firstName)
     EditText mFirstNameField;
@@ -78,7 +78,7 @@ public class RegisterActivity extends Activity
     private SharedPreferences mSharedPrefs;
     private ArrayAdapter<String> mSchoolAdapter;
 
-    public static boolean isValidEmail(CharSequence target) {
+    public boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
@@ -88,6 +88,9 @@ public class RegisterActivity extends Activity
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         getActionBar().setTitle(getString(R.string.title_activity_register));
 
+        setContentView(R.layout.activity_register);
+        ButterKnife.inject(this);
+
         mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRegistered = mSharedPrefs.getBoolean("registered", false);
         if (isRegistered) {
@@ -95,8 +98,6 @@ public class RegisterActivity extends Activity
         } else {
             checkRegistration();
         }
-        setContentView(R.layout.activity_register);
-        ButterKnife.inject(this);
 
         findViewById(R.id.multigrade_container).setOnClickListener(new OnClickListener() {
             @Override
@@ -137,7 +138,6 @@ public class RegisterActivity extends Activity
                     disableNameFields();
                 } else {
                     enableNameFields();
-                    Toast.makeText(RegisterActivity.this, getResources().getString(R.string.age_dialog_message), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -199,40 +199,40 @@ public class RegisterActivity extends Activity
         service.checkRegistration(getDeviceId(), new ResponseCallback() {
             @Override
             public void success(Response response) {
-                // TODO: Wait for web developer to fix login webservice and uncomment user set code
-
                 setProgressBarIndeterminateVisibility(false);
-//                try {
-//                    InputStream in = response.getBody().in();
-//                    UserXmlParser userInfoXmlParser = new UserXmlParser();
-//                    List<User> userList = userInfoXmlParser.parse(in);
-//                    if (userList == null) {
-//                        return;
-//                    }
-//                    User user = userList.get(0);
-//                    mSharedPrefs.edit()
-//                            .putBoolean("registered", true)
-//                            .putString("device_id", getDeviceId())
-//                            .putInt("user_id", user.id)
-//                            .putString("first_name", user.firstName)
-//                            .putString("last_name", user.lastName)
-//                            .putString("email", user.email)
-//                            .putBoolean("multipleLevel", user.multipleGrade)
-//                            .putBoolean("notifications", user.notifications)
-//                            .putBoolean("location", user.location)
-//                            .putBoolean("coupons", user.coupons)
-//                            .apply();
-//                    setProgressBarIndeterminateVisibility(false);
+
+                try {
+                    InputStream in = response.getBody().in();
+                    UserXmlParser userInfoXmlParser = new UserXmlParser();
+                    UserXmlParser.User user = userInfoXmlParser.parse(in);
+                    if (user == null) {
+                        // user not found, stay on register screen
+                        return;
+                    }
+
+                    mSharedPrefs.edit()
+                            .putBoolean("registered", true)
+                            .putString("device_id", getDeviceId())
+                            .putInt("user_id", user.id)
+                            .putString("first_name", user.firstName)
+                            .putString("last_name", user.lastName)
+                            .putString("email", user.email)
+                            .putBoolean("multipleLevel", user.multipleGrade)
+                            .putBoolean("notifications", user.notifications)
+                            .putBoolean("location", user.location)
+                            .putBoolean("coupons", user.coupons)
+                            .apply();
+                    setProgressBarIndeterminateVisibility(false);
                     navigateToMainScreen();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void failure(RetrofitError e) {
                 e.printStackTrace();
-                Toast.makeText(RegisterActivity.this, "Failed to check registration. Check your network connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Failed to check registration. Check your network connection.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -404,9 +404,9 @@ public class RegisterActivity extends Activity
     private void register() {
         hideKeyboard();
 
-        String firstName = mFirstNameField.getText().toString();
-        String lastName = mLastNameField.getText().toString();
-        String email = mEmailField.getText().toString();
+        String firstName = mFirstNameField.getText().toString().trim();
+        String lastName = mLastNameField.getText().toString().trim();
+        String email = mEmailField.getText().toString().toLowerCase().trim();
         int schoolId = mSchoolSpinner.getSelectedItemPosition();
         int gradeId = mGradeSpinner.getSelectedItemPosition();
 
@@ -418,11 +418,12 @@ public class RegisterActivity extends Activity
             Toast.makeText(this, "Connect to a network to load school list", Toast.LENGTH_SHORT).show();
         }
         if (mSchoolSpinner.getSelectedItem().equals("School")) {
-            Toast.makeText(this, "Please select your school", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please select your school", Toast.LENGTH_LONG).show();
             return;
         }
         if (mGradeSpinner.getSelectedItem().equals("Grade level")) {
-            Toast.makeText(this, "Please select your grade level", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please select your grade level", Toast.LENGTH_LONG).show();
+            mGradeSpinner.performClick();
             return;
         }
         if (email.isEmpty()) {
