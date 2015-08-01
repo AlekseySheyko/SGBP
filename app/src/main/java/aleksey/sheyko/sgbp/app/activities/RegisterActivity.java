@@ -480,7 +480,8 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
                             String errorMessage = mSharedPrefs.getString("DeviceXmlParser_error_msg", null);
                             if (errorMessage != null) {
                                 mSharedPrefs.edit().putString("DeviceXmlParser_error_msg", null).apply();
-                                if (errorMessage.contains("already register")) {
+                                if (errorMessage.contains("already register")
+                                        || errorMessage.toLowerCase().contains("successful")) {
                                     // continue to user registration
                                 } else {
                                     Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
