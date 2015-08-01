@@ -479,9 +479,13 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
 
                             String errorMessage = mSharedPrefs.getString("DeviceXmlParser_error_msg", null);
                             if (errorMessage != null) {
-                                Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                                 mSharedPrefs.edit().putString("DeviceXmlParser_error_msg", null).apply();
-                                return;
+                                if (errorMessage.contains("already register")) {
+                                    // continue to user registration
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                             }
 
                             mSharedPrefs.edit().putInt("device_info_id", deviceInfoId).apply();
