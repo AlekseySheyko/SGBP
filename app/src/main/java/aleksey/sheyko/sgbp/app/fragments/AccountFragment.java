@@ -22,7 +22,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -91,27 +90,32 @@ public class AccountFragment extends Fragment
         ButterKnife.inject(this, view);
 
         view.findViewById(R.id.multigrade_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxLevel.setChecked(!mCheckBoxLevel.isChecked());
             }
         });
         view.findViewById(R.id.age_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxAge.setChecked(!mCheckBoxAge.isChecked());
             }
         });
         view.findViewById(R.id.notifications_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxNotifications.setChecked(!mCheckBoxNotifications.isChecked());
             }
         });
         view.findViewById(R.id.location_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxLocation.setChecked(!mCheckBoxLocation.isChecked());
             }
         });
         view.findViewById(R.id.coupons_container).setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 mCheckBoxCoupons.setChecked(!mCheckBoxCoupons.isChecked());
             }
         });
@@ -228,25 +232,20 @@ public class AccountFragment extends Fragment
     private void update() {
         hideKeyboard();
 
-        String firstName = mFirstNameField.getText().toString();
-        String lastName = mLastNameField.getText().toString();
-        String email = mEmailField.getText().toString();
+        String firstName = mFirstNameField.getText().toString().trim();
+        String lastName = mLastNameField.getText().toString().trim();
+        String email = mEmailField.getText().toString().trim().toLowerCase();
         int schoolId = mSchoolSpinner.getSelectedItemPosition();
 
-        try {
-            update(firstName, lastName, schoolId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Failed to update values", Toast.LENGTH_SHORT).show();
-        }
+        update(firstName, lastName, schoolId);
     }
 
-    public void update(String firstName, String lastName, int schoolId) throws Exception {
+    public void update(String firstName, String lastName, int schoolId) {
 
         final boolean IS_REGISTERED = true;
 
-        String deviceId = mSharedPrefs.getString("device_id", "");
-        int userId = mSharedPrefs.getInt("user_id", -1);
+        String deviceId = mSharedPrefs.getString("device_id", null);
+        String userId = mSharedPrefs.getString("user_id", null);
         boolean is18 = mCheckBoxAge.isChecked();
         boolean isMultiGrade = mCheckBoxLevel.isChecked();
         boolean getNotifications = mCheckBoxNotifications.isChecked();
@@ -255,18 +254,21 @@ public class AccountFragment extends Fragment
 
         ApiService service = new RestClient().getApiService();
         service.update(deviceId, firstName, lastName, schoolId, isMultiGrade, IS_REGISTERED,
-                receiveCoupons, getNotifications, trackLocation, is18, userId, new ResponseCallback() {
-                    @Override public void success(Response response) {
+                receiveCoupons, getNotifications, trackLocation, is18, Integer.parseInt(userId), new ResponseCallback() {
+                    @Override
+                    public void success(Response response) {
                         navigateToMainScreen();
                     }
 
-                    @Override public void failure(RetrofitError e) {
+                    @Override
+                    public void failure(RetrofitError e) {
                         e.printStackTrace();
                     }
                 });
     }
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         super.onResume();
         String firstName = mSharedPrefs.getString("first_name", "");
         String lastName = mSharedPrefs.getString("last_name", "");
@@ -293,7 +295,8 @@ public class AccountFragment extends Fragment
         mCheckBoxCoupons.setChecked(coupons);
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         super.onPause();
 
         String firstName = mFirstNameField.getText().toString();

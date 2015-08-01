@@ -451,9 +451,9 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
         final boolean IS_REGISTERED = true;
 
         final String deviceId = getDeviceId();
-        final String userId = deviceId.replaceAll("[^0-9]", "")
+        final int userId = Integer.parseInt(deviceId.replaceAll("[^0-9]", "")
                 .substring(0, Math.min(
-                        deviceId.replaceAll("[^0-9]", "").length(), 5));
+                        deviceId.replaceAll("[^0-9]", "").length(), 5)));
         ;
 
         final boolean is18 = mCheckBoxAge.isChecked();
@@ -464,11 +464,11 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
 
         ApiService service = new RestClient().getApiService();
         Device device = new Device(this);
-        service.registerDevice(userId, deviceId, device.getModelName(), device.getDeviceType(), device.getManufacturer(),
+        service.registerDevice(userId + "", deviceId, device.getModelName(), device.getDeviceType(), device.getManufacturer(),
                 device.getModelName(), device.getModelNumber(), device.getModelNumber(), device.getSystemName(),
                 device.getSoftwareVersion(), device.getAndroidVersion(), device.getAndroidVersion(),
                 device.getDeviceOs(), device.getTimeZone(), device.getLocale(), device.isCameraAvailable(), false, true,
-                userId, IS_REGISTERED, userId, new ResponseCallback() {
+                userId + "", IS_REGISTERED, userId + "", new ResponseCallback() {
                     @Override
                     public void success(Response response) {
                         setProgressBarIndeterminateVisibility(false);
@@ -489,7 +489,7 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
                             }
 
                             mSharedPrefs.edit().putInt("device_info_id", deviceInfoId).apply();
-                            registerUser(userId, deviceInfoId, firstName, lastName, deviceId, schoolId, gradeId, email, USER_TYPE, isMultiGrade,
+                            registerUser(userId + "", deviceInfoId, firstName, lastName, deviceId, schoolId, gradeId, email, USER_TYPE, isMultiGrade,
                                     IS_REGISTERED, receiveCoupons, getNotifications, trackLocation, is18, IS_REGISTERED);
                         } catch (Exception e) {
                             e.printStackTrace();

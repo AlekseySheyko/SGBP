@@ -134,11 +134,11 @@ public class DetailActivity extends Activity {
                 int storeId = mSharedPrefs.getInt("storeId", -1);
                 String dateTime = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'").format(new Date());
                 String deviceId = mSharedPrefs.getString("device_id", "");
-                int userId = mSharedPrefs.getInt("user_id", -1);
+                String userId = mSharedPrefs.getString("user_id", "");
                 int schoolId = mSharedPrefs.getInt("school_id", -1);
 
                 ApiService service = new RestClient().getApiService();
-                service.participate(userId + "", userId, deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
+                service.participate(userId + "", Integer.parseInt(userId), deviceId, schoolId, storeId, dateTime, true, new ResponseCallback() {
                     @Override public void success(Response response) {
                         currentStore.setParticipated(true);
 
