@@ -62,6 +62,7 @@
     <string name="coupons_dialog_title">Receive Coupon Codes</string>
     <string name="coupons_dialog_message">When Receive Coupon Codes is checked, the School Give Back Program can send you great saving offers from the participating businesses. These coupon codes are only available thought the School Give Back Program.</string>
     <string name="age_dialog_message">Now please enter your First &amp; Last name</string>
+    <string name="coupons_empty">No active coupon codes</string>
 
 
 </resources>

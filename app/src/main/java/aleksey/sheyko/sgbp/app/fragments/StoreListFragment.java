@@ -345,6 +345,9 @@ public class StoreListFragment extends ListFragment
         if (mViewMode == Constants.VIEW_NOTIFICATIONS) {
             getListView().setEmptyView(
                     noItems(getResources().getString(R.string.notifications_empty)));
+        } else if (mViewMode == Constants.VIEW_COUPONS) {
+            getListView().setEmptyView(
+                    noItems(getResources().getString(R.string.coupons_empty)));
         }
     }
 

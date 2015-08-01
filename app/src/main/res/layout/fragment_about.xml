@@ -26,6 +26,8 @@
 
         <TextView
             style="@style/TextHeader"
+            android:textColor="#6b6b6b"
+            android:textSize="18sp"
             android:text="@string/header2"/>
 
         <TextView
