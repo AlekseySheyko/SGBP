@@ -30,11 +30,11 @@
 
         <TextView
             style="@style/TextBody"
-            android:text="• Our Schools - Our Children!"/>
+            android:text="• Our Schools – Our Children!"/>
 
         <TextView
             style="@style/TextBody"
-            android:text="• Our Community - Local Business!"/>
+            android:text="• Our Community – Local Business!"/>
 
         <TextView
             style="@style/TextBody"

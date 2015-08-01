@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -14,13 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.SearchView;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.app.activities.CategoryActivity;
-import aleksey.sheyko.sgbp.app.adapters.CategoriesAdapter;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
 
 public class CategoriesFragment extends Fragment {
@@ -37,21 +32,17 @@ public class CategoriesFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
 
-        GridView gridView = (GridView)
-                rootView.findViewById(R.id.categoriesGrid);
-        gridView.setAdapter(new CategoriesAdapter(this.getActivity()));
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                PreferenceManager.getDefaultSharedPreferences(getActivity())
-                        .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
-                Intent intent = new Intent(getActivity(), CategoryActivity.class);
-                String category = new Constants().categories.get(position + "");
-                intent.putExtra("category", category);
-                startActivity(intent);
-            }
-        });
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                PreferenceManager.getDefaultSharedPreferences(getActivity())
+//                        .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
+//                Intent intent = new Intent(getActivity(), CategoryActivity.class);
+//                String category = new Constants().categories.get(position + "");
+//                intent.putExtra("category", category);
+//                startActivity(intent);
+//            }
+//        });
         return rootView;
     }
 

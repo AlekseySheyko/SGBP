@@ -1,13 +1,298 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:verticalSpacing="4dp"
-          android:horizontalSpacing="4dp"
-          android:stretchMode="columnWidth"
-          android:scrollbars="none"
-          android:numColumns="2"
-          android:padding="4dp"
-          android:id="@+id/categoriesGrid">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="4dp"
+    tools:context=".MainActivity">
 
-</GridView>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:paddingBottom="2dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/category_mobile"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="#30000000"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="180dp"
+                android:layout_gravity="center_horizontal"
+                style="@style/TextDivider"/>
+
+            <TextView
+                style="@style/CategoryLabel"
+                android:textSize="15sp"
+                android:text="M\u200ao\u200ab\u2009i\u2009l\u200ae\u2009\u200a B\u200au\u200as\u200ai\u200an\u200ae\u200as\u200as\u200ae\u200as"/>
+
+            <View
+                android:layout_width="180dp"
+                android:layout_gravity="center_horizontal"
+                style="@style/TextDivider"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/category_education"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="#22000000"
+                android:orientation="vertical">
+
+                <View
+                    style="@style/TextDivider"/>
+
+                <TextView
+                    style="@style/CategoryLabel"
+                    android:text="A\u200ar\u200at\u200as\u200a /\nE\u200ad\u200au\u200ac\u200aa\u200at\u200ai\u200ao\u200an"/>
+
+                <View
+                    style="@style/TextDivider"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/category_auto"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="#00000000"
+                android:orientation="vertical">
+
+                <View
+                    style="@style/TextDivider"/>
+
+                <TextView
+                    style="@style/CategoryLabel"
+                    android:textSize="15sp"
+                    android:text="A\u200au\u200at\u200ao\u200am\u200ao\u200at\u200ai\u200av\u200ae"/>
+
+                <View
+                    style="@style/TextDivider"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/category_food"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="#30000000"
+                android:orientation="vertical">
+
+                <View
+                    style="@style/TextDivider"/>
+
+                <TextView
+                    style="@style/CategoryLabel"
+                    android:text="R\u200ae\u200as\u200at\u200aa\u200au\u200ar\u200aa\u200an\u200at\u200as\u200a /\nF\u200ao\u200ao\u200ad"/>
+
+                <View
+                    style="@style/TextDivider"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/category_services"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="#27000000"
+                android:orientation="vertical">
+
+                <View
+                    style="@style/TextDivider"/>
+
+                <TextView
+                    style="@style/CategoryLabel"
+                    android:textSize="15sp"
+                    android:text="S\u200ae\u200ar\u200av\u200ai\u200ac\u200ae\u200as"/>
+
+                <View
+                    style="@style/TextDivider"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:paddingTop="2dp">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/category_shopping"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="#27000000"
+                android:orientation="vertical">
+
+                <View
+                    style="@style/TextDivider"/>
+
+                <TextView
+                    style="@style/CategoryLabel"
+                    android:textSize="15sp"
+                    android:text="S\u200ah\u200ao\u200ap\u200ap\u200ai\u200an\u200ag"/>
+
+                <View
+                    style="@style/TextDivider"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/category_sport"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="#29000000"
+                android:orientation="vertical">
+
+                <View
+                    style="@style/TextDivider"/>
+
+                <TextView
+                    style="@style/CategoryLabel"
+                    android:text="S\u200ap\u200ao\u200ar\u200at\u200as\u2009/\nE\u200an\u200at\u200ae\u200ar\u200at\u200aa\u200ai\u200an\u200am\u200ae\u200an\u200at"/>
+
+                <View
+                    style="@style/TextDivider"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
