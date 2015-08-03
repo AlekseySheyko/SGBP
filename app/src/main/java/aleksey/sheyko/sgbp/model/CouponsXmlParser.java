@@ -1,4 +1,4 @@
-package aleksey.sheyko.sgbp.rest;
+package aleksey.sheyko.sgbp.model;
 
 import android.util.Xml;
 

@@ -25,7 +25,7 @@ import java.util.List;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
-import aleksey.sheyko.sgbp.rest.StoresXmlParser;
+import aleksey.sheyko.sgbp.model.StoresXmlParser;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;

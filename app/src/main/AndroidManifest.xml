@@ -52,7 +52,7 @@
         <activity
             android:name=".app.activities.RegisterActivity"
             android:noHistory="true"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

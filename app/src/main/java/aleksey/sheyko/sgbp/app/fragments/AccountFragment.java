@@ -33,7 +33,7 @@ import aleksey.sheyko.sgbp.app.helpers.MultiSpinner;
 import aleksey.sheyko.sgbp.model.Grade;
 import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
-import aleksey.sheyko.sgbp.rest.GradesXmlParser;
+import aleksey.sheyko.sgbp.model.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import butterknife.ButterKnife;
 import butterknife.InjectView;

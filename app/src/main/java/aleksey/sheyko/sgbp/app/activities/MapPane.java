@@ -27,7 +27,7 @@ import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.model.Store;
 import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.rest.RestClient;
-import aleksey.sheyko.sgbp.rest.StoresXmlParser;
+import aleksey.sheyko.sgbp.model.StoresXmlParser;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -59,14 +59,18 @@ public class MapPane extends Activity {
             } else {
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
                 String name = sharedPrefs.getString("name", "");
-                Double latitude = Double.parseDouble(
-                        sharedPrefs.getString("latitude", ""));
-                Double longitude = Double.parseDouble(
-                        sharedPrefs.getString("longitude", ""));
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude, longitude))
-                        .title(name)).showInfoWindow();
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
+                try {
+                    Double latitude = Double.parseDouble(
+                            sharedPrefs.getString("latitude", ""));
+                    Double longitude = Double.parseDouble(
+                            sharedPrefs.getString("longitude", ""));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(latitude, longitude))
+                            .title(name)).showInfoWindow();
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 13));
+                } catch (NumberFormatException e) {
+                    // lat or lng were incorrectly specified
+                }
                 return;
             }
         }

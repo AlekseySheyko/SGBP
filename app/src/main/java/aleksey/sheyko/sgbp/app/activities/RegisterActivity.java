@@ -40,11 +40,11 @@ import aleksey.sheyko.sgbp.model.Device;
 import aleksey.sheyko.sgbp.model.Grade;
 import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
-import aleksey.sheyko.sgbp.rest.DeviceXmlParser;
-import aleksey.sheyko.sgbp.rest.GradesXmlParser;
+import aleksey.sheyko.sgbp.model.DeviceXmlParser;
+import aleksey.sheyko.sgbp.model.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
-import aleksey.sheyko.sgbp.rest.SchoolsXmlParser;
-import aleksey.sheyko.sgbp.rest.UserXmlParser;
+import aleksey.sheyko.sgbp.model.SchoolsXmlParser;
+import aleksey.sheyko.sgbp.model.UserXmlParser;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.ResponseCallback;
@@ -96,6 +96,7 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
         if (isRegistered) {
             navigateToMainScreen();
         } else {
+            findViewById(R.id.loading).setVisibility(View.VISIBLE);
             checkRegistration();
         }
 
@@ -199,31 +200,28 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
         service.checkRegistration(getDeviceId(), new ResponseCallback() {
             @Override
             public void success(Response response) {
+                findViewById(R.id.loading).setVisibility(View.VISIBLE);
                 setProgressBarIndeterminateVisibility(false);
 
                 try {
                     InputStream in = response.getBody().in();
                     UserXmlParser userInfoXmlParser = new UserXmlParser();
                     UserXmlParser.User user = userInfoXmlParser.parse(in);
-                    if (user == null) {
-                        // user not found, stay on register screen
-                        return;
+                    if (user != null) {
+                        mSharedPrefs.edit()
+                                .putBoolean("registered", true)
+                                .putString("device_id", getDeviceId())
+                                .putInt("user_id", user.id)
+                                .putString("first_name", user.firstName)
+                                .putString("last_name", user.lastName)
+                                .putString("email", user.email)
+                                .putBoolean("multipleLevel", user.multipleGrade)
+                                .putBoolean("notifications", user.notifications)
+                                .putBoolean("location", user.location)
+                                .putBoolean("coupons", user.coupons)
+                                .apply();
+                        navigateToMainScreen();
                     }
-
-                    mSharedPrefs.edit()
-                            .putBoolean("registered", true)
-                            .putString("device_id", getDeviceId())
-                            .putInt("user_id", user.id)
-                            .putString("first_name", user.firstName)
-                            .putString("last_name", user.lastName)
-                            .putString("email", user.email)
-                            .putBoolean("multipleLevel", user.multipleGrade)
-                            .putBoolean("notifications", user.notifications)
-                            .putBoolean("location", user.location)
-                            .putBoolean("coupons", user.coupons)
-                            .apply();
-                    setProgressBarIndeterminateVisibility(false);
-                    navigateToMainScreen();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
