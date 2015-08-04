@@ -3,23 +3,22 @@ package aleksey.sheyko.sgbp.model;
 import com.orm.SugarRecord;
 
 public class Store extends SugarRecord<Store> {
-    int storeid;
-    String name;
-    String address;
-    String phone;
-    String latitude;
-    String longitude;
-    String category;
-    String isMobile;
-    String geofenceId;
-    float distance;
-    boolean isParticipated;
-    long timeAllowNext;
+    private int storeid;
+    private String name;
+    private String address;
+    private String phone;
+    private String latitude;
+    private String longitude;
+    private String category;
+    private String geofenceId;
+    private float distance;
+    private boolean isParticipated;
+    private long timeAllowNext;
 
     public Store() {
     }
 
-    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category, String isMobile) {
+    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category) {
         this.storeid = storeid;
         this.name = name;
         this.address = address;
@@ -27,7 +26,6 @@ public class Store extends SugarRecord<Store> {
         this.latitude = latitude;
         this.longitude = longitude;
         this.category = category;
-        this.isMobile = isMobile;
     }
 
     public int getStoreId() {
@@ -60,10 +58,6 @@ public class Store extends SugarRecord<Store> {
 
     public String getCategory() {
         return category;
-    }
-
-    public String isMobile() {
-        return isMobile;
     }
 
     public String getGeofenceId() {

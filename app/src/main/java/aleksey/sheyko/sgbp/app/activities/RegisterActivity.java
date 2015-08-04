@@ -195,14 +195,10 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
     }
 
     private void checkRegistration() {
-        setProgressBarIndeterminateVisibility(true);
         ApiService service = new RestClient().getApiService();
         service.checkRegistration(getDeviceId(), new ResponseCallback() {
             @Override
             public void success(Response response) {
-                findViewById(R.id.loading).setVisibility(View.VISIBLE);
-                setProgressBarIndeterminateVisibility(false);
-
                 try {
                     InputStream in = response.getBody().in();
                     UserXmlParser userInfoXmlParser = new UserXmlParser();
@@ -225,6 +221,7 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                findViewById(R.id.loading).setVisibility(View.GONE);
             }
 
             @Override

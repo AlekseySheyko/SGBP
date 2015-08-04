@@ -134,8 +134,31 @@ public class StoreListFragment extends ListFragment
         }
 
         if (isOnline() && mSearchQuery == null) {
-            loadStoresFromNetwork();
-            return;
+            if (Store.listAll(Store.class).size() > 0) {
+                mStores = Store.listAll(Store.class);
+                if (mCategory != null) {
+                    switch (mCategory) {
+                        case "Participating Physical Store":
+                            mStores = Store.find(Store.class, "is_mobile = ?", "false");
+                            break;
+                        case "Participating Mobile Business":
+                            mStores = Store.find(Store.class, "is_mobile = ?", "true");
+                            break;
+                        default:
+                            mStores = Store.find(Store.class, "category = ?", mCategory);
+                            break;
+                    }
+                } else if (mSearchQuery != null) {
+                    mStores = Store.findWithQuery(Store.class,
+                            "Select * from Store where " +
+                                    "name like '%" + mSearchQuery + "%' or " +
+                                    "address like '%" + mSearchQuery + "%' or " +
+                                    "category like '%" + mSearchQuery + "%'");
+                }
+            } else {
+                loadStoresFromNetwork();
+                return;
+            }
         }
 
         for (Store store : mStores) {
@@ -146,8 +169,7 @@ public class StoreListFragment extends ListFragment
                     store.getPhone(),
                     store.getLatitude(),
                     store.getLongitude(),
-                    store.getCategory(),
-                    store.isMobile()));
+                    store.getCategory()));
         }
     }
 
@@ -205,8 +227,7 @@ public class StoreListFragment extends ListFragment
                             store.getPhone(),
                             store.getLatitude(),
                             store.getLongitude(),
-                            store.getCategory(),
-                            store.isMobile()));
+                            store.getCategory()));
                     mSharedPrefs.edit().putFloat(store.getStoreId() + "", store.getDistance()).apply();
                 }
                 StoresAdapter adapter = new StoresAdapter(getActivity(),
@@ -294,8 +315,7 @@ public class StoreListFragment extends ListFragment
                     store.getPhone(),
                     store.getLatitude(),
                     store.getLongitude(),
-                    store.getCategory(),
-                    store.isMobile()));
+                    store.getCategory()));
             mSharedPrefs.edit().putFloat(store.getStoreId() + "", store.getDistance()).apply();
         }
         StoresAdapter adapter = new StoresAdapter(getActivity(),

@@ -8,6 +8,8 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import aleksey.sheyko.sgbp.app.helpers.Constants;
+
 public class StoresXmlParser {
     // We don't use namespaces
     private static final String ns = null;
@@ -26,12 +28,10 @@ public class StoresXmlParser {
 
     private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, "SGBP_Store_Info_List");
-        Store.deleteAll(Store.class);
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
-
             String name = parser.getName();
             // Starts by looking for the entry tag
             if (name.equals("StoreInfo")) {
@@ -43,10 +43,7 @@ public class StoresXmlParser {
                     String tag = parser.getName();
                     // Starts by looking for the entry tag
                     if (tag.equals("SGBP_Store_Info")) {
-                        Store store = readStore(parser);
-                        if (store != null) {
-                            store.save();
-                        }
+                        readStore(parser).save();
 //                        String tempName = readStore(parser).getName();
 //                        List<Store> existingStores = Store.find(Store.class, "name = ?", tempName);
 //                        if (existingStores.size() == 0) {
@@ -72,63 +69,69 @@ public class StoresXmlParser {
         String latitude = null;
         String longitude = null;
         String category = null;
-        boolean isMobile = false;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tag = parser.getName();
-            switch (tag) {
-                case "Store_Id":
-                    id = readId(parser);
-                    break;
-                case "Store_Name":
-                    name = readName(parser);
-                    break;
-                case "Store_Address_Line1":
-                    address = readAddress(parser);
-                    break;
-                case "Store_Phone":
-                    phone = readPhone(parser);
-                    break;
-                case "Store_Address_Latitude":
-                    latitude = readLatitude(parser);
-                    break;
-                case "Store_Address_Longitude":
-                    longitude = readLongitude(parser);
-                    break;
-                case "Is_Store_Location_Physical":
-                    isMobile = Boolean.parseBoolean(readIsMobile(parser));
-                    break;
-                case "Store_Group_Name":
-                    category = readText(parser);
-                    break;
-                default:
-                    skip(parser);
-                    break;
-            }
+            if (tag.equals("Store_Id")) {
+                id = readId(parser);
+            } else if (tag.equals("Store_Name")) {
+                name = readName(parser);
+                switch (name) {
+                    case "AR Performance":
+//                        category = Constants.CATEGORY_SOUND;
+                        break;
+                    case "Import Garage":
+                        category = Constants.CATEGORY_AUTO;
+                        break;
+                    case "Starbucks":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "Thai Chilli":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "Maharani India Restaurant":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "Mike's Sound Solutions":
+//                        category = Constants.CATEGORY_SOUND;
+                        break;
+                    case "Chuck E Cheese's":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "La Fuente":
+//                        category = Constants.CATEGORY_HOTELS;
+                        break;
+                    case "O’Reilly Auto Parts":
+                        category = Constants.CATEGORY_AUTO;
+                        break;
+                    case "Bubbles Car Wash":
+                        category = Constants.CATEGORY_AUTO;
+                        break;
+                    default:
+                        category = "";
+                        break;
+                }
 
-            if (isMobile && category == null) return null;
-
-            switch (category) {
-                case "HOTELS":
-                    category = "Services";
-                    break;
-                case "FOOD & DRINK":
-                    category = "Restaurants/Food";
-                    break;
-                case "AUTO SERVICES":
-                    category = "Automotive";
-                    break;
-                case "SOUND SYSTEMS":
-                    category = "Arts + Education";
-                    break;
-            }
-            if (isMobile) {
-                category = "Mobile Businesses";
+            } else if (tag.equals("Store_Address_Line1")) {
+                address = readAddress(parser);
+            } else if (tag.equals("Store_Phone")) {
+                phone = readPhone(parser);
+            } else if (tag.equals("Store_Address_Latitude")) {
+                latitude = readLatitude(parser);
+            } else if (tag.equals("Store_Address_Longitude")) {
+                longitude = readLongitude(parser);
+            } else if (tag.equals("Is_Store_Location_Physical")) {
+                boolean isMobile = readIsMobile(parser);
+                if (isMobile) {
+                    category = Constants.CATEGORY_MOBILE;
+                }
+            } else {
+                skip(parser);
             }
         }
-        return new Store(id, name, address, phone, latitude, longitude, category, isMobile + "");
+        return new Store(id, name, address, phone, latitude, longitude, category);
     }
 
     // Processes id tags in the feed.
@@ -182,11 +185,11 @@ public class StoresXmlParser {
     }
 
     // Processes mobile tags in the feed.
-    private String readIsMobile(XmlPullParser parser) throws IOException, XmlPullParserException {
+    private boolean readIsMobile(XmlPullParser parser) throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, ns, "Is_Store_Location_Physical");
         boolean isMobile = !Boolean.parseBoolean(readText(parser));
         parser.require(XmlPullParser.END_TAG, ns, "Is_Store_Location_Physical");
-        return isMobile + "";
+        return isMobile;
     }
 
     // For the tags title and summary, extracts their text values.
