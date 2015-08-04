@@ -80,7 +80,7 @@ public class StoresXmlParser {
                 name = readName(parser);
                 switch (name) {
                     case "AR Performance":
-//                        category = Constants.CATEGORY_SOUND;
+                        category = Constants.CATEGORY_EDUCATION;
                         break;
                     case "Import Garage":
                         category = Constants.CATEGORY_AUTO;
@@ -101,7 +101,7 @@ public class StoresXmlParser {
                         category = Constants.CATEGORY_FOOD;
                         break;
                     case "La Fuente":
-//                        category = Constants.CATEGORY_HOTELS;
+                        category = Constants.CATEGORY_FOOD;
                         break;
                     case "O’Reilly Auto Parts":
                         category = Constants.CATEGORY_AUTO;
@@ -109,8 +109,17 @@ public class StoresXmlParser {
                     case "Bubbles Car Wash":
                         category = Constants.CATEGORY_AUTO;
                         break;
+                    case "Wion’s Body Shop":
+                        category = Constants.CATEGORY_SHOPPING;
+                        break;
+                    case "Pizza Bell":
+                        category = Constants.CATEGORY_FOOD;
+                        break;
+                    case "Test Business":
+                        category = Constants.CATEGORY_SPORTS;
+                        break;
                     default:
-                        category = "";
+                        category = Constants.CATEGORY_SERVICES;
                         break;
                 }
 
