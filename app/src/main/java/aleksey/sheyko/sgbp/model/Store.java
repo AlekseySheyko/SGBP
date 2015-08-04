@@ -3,18 +3,18 @@ package aleksey.sheyko.sgbp.model;
 import com.orm.SugarRecord;
 
 public class Store extends SugarRecord<Store> {
-    private int storeid;
-    private String name;
-    private String address;
-    private String phone;
-    private String latitude;
-    private String longitude;
-    private String category;
-    private String isMobile;
-    private String geofenceId;
-    private float distance;
-    private boolean isParticipated;
-    private long timeAllowNext;
+    int storeid;
+    String name;
+    String address;
+    String phone;
+    String latitude;
+    String longitude;
+    String category;
+    String isMobile;
+    String geofenceId;
+    float distance;
+    boolean isParticipated;
+    long timeAllowNext;
 
     public Store() {
     }

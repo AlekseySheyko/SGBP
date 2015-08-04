@@ -2,14 +2,11 @@ package aleksey.sheyko.sgbp.model;
 
 import android.util.Xml;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import aleksey.sheyko.sgbp.model.Store;
 
 public class StoresXmlParser {
     // We don't use namespaces
@@ -46,7 +43,10 @@ public class StoresXmlParser {
                     String tag = parser.getName();
                     // Starts by looking for the entry tag
                     if (tag.equals("SGBP_Store_Info")) {
-                        readStore(parser).save();
+                        Store store = readStore(parser);
+                        if (store != null) {
+                            store.save();
+                        }
 //                        String tempName = readStore(parser).getName();
 //                        List<Store> existingStores = Store.find(Store.class, "name = ?", tempName);
 //                        if (existingStores.size() == 0) {
@@ -72,34 +72,63 @@ public class StoresXmlParser {
         String latitude = null;
         String longitude = null;
         String category = null;
-        String isMobile = null;
+        boolean isMobile = false;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tag = parser.getName();
-            if (tag.equals("Store_Id")) {
-                id = readId(parser);
-            } else if (tag.equals("Store_Name")) {
-                name = readName(parser);
-            } else if (tag.equals("Store_Address_Line1")) {
-                address = readAddress(parser);
-            } else if (tag.equals("Store_Phone")) {
-                phone = readPhone(parser);
-            } else if (tag.equals("Store_Address_Latitude")) {
-                latitude = readLatitude(parser);
-            } else if (tag.equals("Store_Address_Longitude")) {
-                longitude = readLongitude(parser);
-            } else if (tag.equals("Is_Store_Location_Physical")) {
-                isMobile = readIsMobile(parser);
-            } else if (tag.equals("Store_Group_Name")) {
-                category = WordUtils.capitalizeFully(
-                        readText(parser));
-            } else {
-                skip(parser);
+            switch (tag) {
+                case "Store_Id":
+                    id = readId(parser);
+                    break;
+                case "Store_Name":
+                    name = readName(parser);
+                    break;
+                case "Store_Address_Line1":
+                    address = readAddress(parser);
+                    break;
+                case "Store_Phone":
+                    phone = readPhone(parser);
+                    break;
+                case "Store_Address_Latitude":
+                    latitude = readLatitude(parser);
+                    break;
+                case "Store_Address_Longitude":
+                    longitude = readLongitude(parser);
+                    break;
+                case "Is_Store_Location_Physical":
+                    isMobile = Boolean.parseBoolean(readIsMobile(parser));
+                    break;
+                case "Store_Group_Name":
+                    category = readText(parser);
+                    break;
+                default:
+                    skip(parser);
+                    break;
+            }
+
+            if (isMobile && category == null) return null;
+
+            switch (category) {
+                case "HOTELS":
+                    category = "Services";
+                    break;
+                case "FOOD & DRINK":
+                    category = "Restaurants/Food";
+                    break;
+                case "AUTO SERVICES":
+                    category = "Automotive";
+                    break;
+                case "SOUND SYSTEMS":
+                    category = "Arts + Education";
+                    break;
+            }
+            if (isMobile) {
+                category = "Mobile Businesses";
             }
         }
-        return new Store(id, name, address, phone, latitude, longitude, category, isMobile);
+        return new Store(id, name, address, phone, latitude, longitude, category, isMobile + "");
     }
 
     // Processes id tags in the feed.
