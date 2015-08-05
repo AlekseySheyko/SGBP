@@ -1,9 +1,11 @@
 package aleksey.sheyko.sgbp.app.fragments;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -156,6 +159,55 @@ public class AccountFragment extends Fragment
         mCheckBoxLocation.setChecked(location);
         mCheckBoxCoupons.setChecked(coupons);
         mCheckBoxLevel.setChecked(isMultiGrade);
+
+        CompoundButton.OnCheckedChangeListener checkBoxListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton checkBox, boolean isChecked) {
+                showInfoDialog(checkBox);
+            }
+        };
+
+        mCheckBoxAge.setOnCheckedChangeListener(checkBoxListener);
+        mCheckBoxLevel.setOnCheckedChangeListener(checkBoxListener);
+        mCheckBoxLocation.setOnCheckedChangeListener(checkBoxListener);
+        mCheckBoxNotifications.setOnCheckedChangeListener(checkBoxListener);
+        mCheckBoxCoupons.setOnCheckedChangeListener(checkBoxListener);
+    }
+
+    private void showInfoDialog(CompoundButton checkBox) {
+        String title = null;
+        String message = null;
+        switch (checkBox.getId()) {
+            case R.id.multipleGrade:
+                title = getResources().getString(R.string.multigrade_dialog_title);
+                message = getResources().getString(R.string.multigrade_dialog_message);
+                break;
+            case R.id.notifications:
+                title = getResources().getString(R.string.notifications_dialog_title);
+                message = getResources().getString(R.string.notifications_dialog_message);
+                break;
+            case R.id.location:
+                title = getResources().getString(R.string.location_dialog_title);
+                message = getResources().getString(R.string.location_dialog_message);
+                break;
+            case R.id.coupons:
+                title = getResources().getString(R.string.coupons_dialog_title);
+                message = getResources().getString(R.string.coupons_dialog_message);
+                break;
+            case R.id.age:
+                title = "About Age";
+                message = "If you are over 18 years enter your first name and last name";
+                break;
+        }
+        new AlertDialog.Builder(getActivity())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 
     private void setupSpinners() {
