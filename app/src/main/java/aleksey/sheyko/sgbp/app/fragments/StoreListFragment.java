@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aleksey.sheyko.sgbp.R;
-import aleksey.sheyko.sgbp.app.activities.DetailActivity;
+import aleksey.sheyko.sgbp.app.activities.DetailPopupActivity;
 import aleksey.sheyko.sgbp.app.activities.MainActivity;
 import aleksey.sheyko.sgbp.app.activities.MapPane;
 import aleksey.sheyko.sgbp.app.adapters.CouponAdapter;
@@ -393,7 +393,7 @@ public class StoreListFragment extends ListFragment
             } else {
                 mSharedPrefs.edit().putBoolean("isMobile", false).apply();
             }
-            startActivity(new Intent(this.getActivity(), DetailActivity.class));
+            startActivity(new Intent(this.getActivity(), DetailPopupActivity.class));
         } else if (mViewMode == Constants.VIEW_COUPONS) {
             int storeId = mCouponList.get(position).getStoreid();
             Store selectedStore = Store.find(Store.class, "storeid = ?", String.valueOf(storeId)).get(0);

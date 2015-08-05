@@ -104,6 +104,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="aleksey.sheyko.sgbp.app.activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".app.activities.DetailPopupActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".app.activities.MainActivity"
+            android:theme="@style/DialogTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="aleksey.sheyko.sgbp.app.activities.MainActivity" />
+        </activity>
 
         <service
             android:name=".app.service.LocationService"

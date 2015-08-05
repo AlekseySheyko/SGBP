@@ -8,6 +8,10 @@
         <item name="android:actionBarSize">52dp</item>
     </style>
 
+    <style name="DialogTheme" parent="android:style/Theme.Holo.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@drawable/actionbar_background</item>
         <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
