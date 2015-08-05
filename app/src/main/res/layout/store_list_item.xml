@@ -3,43 +3,52 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:paddingLeft="44dp"
-              android:paddingRight="16dp"
-              android:orientation="horizontal"
+              android:descendantFocusability="blocksDescendants"
               android:gravity="center_vertical"
-              android:minHeight="?android:attr/listPreferredItemHeight">
+              android:minHeight="?android:attr/listPreferredItemHeight"
+              android:orientation="horizontal"
+              android:paddingLeft="52dp"
+              android:paddingRight="4dp">
 
     <LinearLayout
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/nameLabel"
-        android:textSize="16sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Import Garage">
-    </TextView>
+        <TextView
+            android:id="@+id/nameLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="Import Garage">
+        </TextView>
 
-    <TextView
-        android:id="@+id/secondaryLabel"
-        android:textSize="12sp"
-        android:singleLine="true"
-        android:textColor="#8c8989"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="9901 Kent Street"/>
+        <TextView
+            android:id="@+id/secondaryLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="#8c8989"
+            android:textSize="12sp"
+            tools:text="9901 Kent Street"/>
 
     </LinearLayout>
 
     <ImageButton
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        style="?android:attr/borderlessButtonStyle"
-        android:src="@drawable/ic_coupons"
+        android:onClick="onClickCoupon"
         android:padding="8dp"
-        android:onClick="onClickCoupon"/>
+        android:src="@drawable/ic_coupons"/>
+
+    <ImageButton
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:onClick="onClickDirections"
+        android:padding="8dp"
+        android:src="@drawable/ic_directions"/>
 
 </LinearLayout>

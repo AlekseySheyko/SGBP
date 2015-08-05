@@ -373,7 +373,6 @@ public class StoreListFragment extends ListFragment
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
         if (mViewMode == Constants.VIEW_NEAREST || mViewMode == Constants.VIEW_CATEGORIES) {
             int storeId = mStoreList.get(position).getStoreId();
             String name = mStoreList.get(position).getName();
