@@ -91,8 +91,8 @@ public class LocationService extends Service
                     Geofence geofence = createGeofence(
                             "aleksey.sheyko.sgbp.GEOFENCE_" + store.getId(),
                             Double.parseDouble(store.getLatitude()),
-                            Double.parseDouble(store.getLongitude())
-                    );
+                            Double.parseDouble(store.getLongitude()),
+                            store.getParticipateDistance());
                     mGeofenceList.add(geofence);
                     String id = geofence.getRequestId();
                     store.setGeofenceId(id);
@@ -103,7 +103,8 @@ public class LocationService extends Service
             } else {
                 Geofence geofence = createGeofence(store.getGeofenceId(),
                         Double.parseDouble(store.getLatitude()),
-                        Double.parseDouble(store.getLongitude())
+                        Double.parseDouble(store.getLongitude()),
+                        store.getParticipateDistance()
                 );
                 mGeofenceList.add(geofence);
             }
@@ -117,13 +118,13 @@ public class LocationService extends Service
                 });
     }
 
-    private Geofence createGeofence(String id, double latitude, double longitude) {
+    private Geofence createGeofence(String id, double latitude, double longitude, int participateDistance) {
         Geofence geofence = new Builder()
                 .setRequestId(id)
                 .setCircularRegion(
                         latitude,
                         longitude,
-                        100 // radius in meters (150)
+                        participateDistance
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setLoiteringDelay(5 * 60 * 1000) // 5 min
@@ -132,6 +133,7 @@ public class LocationService extends Service
                         Geofence.GEOFENCE_TRANSITION_DWELL |
                         Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
+        Log.d("LocationService", "Participate distance: " + participateDistance);
         return geofence;
     }
 

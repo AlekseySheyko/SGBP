@@ -69,6 +69,7 @@ public class StoresXmlParser {
         String latitude = null;
         String longitude = null;
         String category = null;
+        int participateDistance = -1;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -136,11 +137,13 @@ public class StoresXmlParser {
                 if (isMobile) {
                     category = Constants.CATEGORY_MOBILE;
                 }
+            } else if (tag.equals("Store_ParticipationDistance")) {
+                participateDistance = readPartDistance(parser);
             } else {
                 skip(parser);
             }
         }
-        return new Store(id, name, address, phone, latitude, longitude, category);
+        return new Store(id, name, address, phone, latitude, longitude, category, participateDistance);
     }
 
     // Processes id tags in the feed.
@@ -199,6 +202,14 @@ public class StoresXmlParser {
         boolean isMobile = !Boolean.parseBoolean(readText(parser));
         parser.require(XmlPullParser.END_TAG, ns, "Is_Store_Location_Physical");
         return isMobile;
+    }
+
+    // Processes mobile tags in the feed.
+    private int readPartDistance(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "Store_ParticipationDistance");
+        int distance = Integer.parseInt(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "Store_ParticipationDistance");
+        return distance;
     }
 
     // For the tags title and summary, extracts their text values.

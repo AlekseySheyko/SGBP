@@ -14,11 +14,12 @@ public class Store extends SugarRecord<Store> {
     private float distance;
     private boolean isParticipated;
     private long timeAllowNext;
+    private int participateDistance;
 
     public Store() {
     }
 
-    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category) {
+    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category, int participateDistance) {
         this.storeid = storeid;
         this.name = name;
         this.address = address;
@@ -90,5 +91,9 @@ public class Store extends SugarRecord<Store> {
 
     public void setTimeAllowNext(long timeAllowNext) {
         this.timeAllowNext = timeAllowNext;
+    }
+
+    public int getParticipateDistance() {
+        return participateDistance;
     }
 }
