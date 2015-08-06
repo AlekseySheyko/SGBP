@@ -26,7 +26,9 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.app.adapters.SpinnerAdapter;
@@ -36,6 +38,7 @@ import aleksey.sheyko.sgbp.app.fragments.CategoriesFragment;
 import aleksey.sheyko.sgbp.app.fragments.StoreListFragment;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
 import aleksey.sheyko.sgbp.app.service.LocationService;
+import aleksey.sheyko.sgbp.model.Store;
 
 
 public class MainActivity extends FragmentActivity {
@@ -158,6 +161,9 @@ public class MainActivity extends FragmentActivity {
                 .edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
         Intent intent = new Intent(this, CategoryActivity.class);
         String category = new Constants().categories.get(position + "");
+        if (position == 0) {
+            category = "Mobile businesses";
+        }
         intent.putExtra("category", category);
         startActivity(intent);
     }
@@ -173,7 +179,6 @@ public class MainActivity extends FragmentActivity {
      * Swaps fragments in the main content view
      */
     private void selectItem(int position) {
-        // Create a new fragment and specify the planet to show based on position
         Fragment fragment = null;
         switch (position) {
             case 0:
@@ -184,7 +189,7 @@ public class MainActivity extends FragmentActivity {
                 break;
             case 1:
                 Intent intent = new Intent(this, CategoryActivity.class);
-                intent.putExtra("category", Constants.CATEGORY_MOBILE);
+                intent.putExtra("category", "mobile");
                 mSharedPrefs.edit().putInt("view_mode", Constants.VIEW_CATEGORIES).apply();
                 startActivity(intent);
                 return;
@@ -364,5 +369,45 @@ public class MainActivity extends FragmentActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void onClickCoupon(View view) {
+        Fragment fragment = new StoreListFragment();
+        PreferenceManager.getDefaultSharedPreferences(this).edit()
+                .putInt("view_mode", Constants.VIEW_COUPONS).apply();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(getResources()
+                .getString(R.string.action_coupons));
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+    }
+
+    public void onClickDirections(View view) {
+        LinearLayout itemContainer = (LinearLayout) view.getParent();
+        LinearLayout labelsContainer = (LinearLayout) itemContainer.getChildAt(0);
+        TextView storeNameView = (TextView) labelsContainer.getChildAt(0);
+        String storeName = storeNameView.getText().toString();
+
+        Store selectedStore = Store.find(Store.class, "name = ?", storeName).get(0);
+
+            int storeId = selectedStore.getStoreId();
+            String name = selectedStore.getName();
+            String address = selectedStore.getAddress();
+            String phone = selectedStore.getPhone();
+            String latitude = selectedStore.getLatitude();
+            String longitude = selectedStore.getLongitude();
+            mSharedPrefs.edit()
+                    .putInt("storeId", storeId)
+                    .putString("name", name)
+                    .putString("address", address)
+                    .putString("phone", phone)
+                    .putString("latitude", latitude)
+                    .putString("longitude", longitude)
+                    .apply();
+            startActivity(new Intent(this, DetailActivity.class));
     }
 }

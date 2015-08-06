@@ -20,7 +20,7 @@ public class MultiSpinner extends Spinner implements
 
     private SharedPreferences mSharedPrefs;
     private List<String> items;
-    private boolean[] selected;
+    public boolean[] selected;
     private String defaultText;
     private MultiSpinnerListener listener;
     private String spinnerText;
@@ -137,5 +137,13 @@ public class MultiSpinner extends Spinner implements
 
     public String getSpinnerText() {
         return spinnerText;
+    }
+
+    public void resetSelection() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_item, new String[]{"Grade level"});
+        setAdapter(adapter);
+
+        selected = new boolean[items.size()];
     }
 }

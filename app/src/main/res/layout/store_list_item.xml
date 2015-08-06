@@ -38,7 +38,7 @@
     <ImageButton
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
         android:onClick="onClickCoupon"
         android:padding="8dp"
         android:src="@drawable/ic_coupons"/>
@@ -46,7 +46,7 @@
     <ImageButton
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
         android:onClick="onClickDirections"
         android:padding="8dp"
         android:src="@drawable/ic_directions"/>

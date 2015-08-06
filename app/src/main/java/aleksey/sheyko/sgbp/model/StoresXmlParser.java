@@ -70,6 +70,7 @@ public class StoresXmlParser {
         String longitude = null;
         String category = null;
         int participateDistance = -1;
+        boolean isMobile = false;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -79,51 +80,6 @@ public class StoresXmlParser {
                 id = readId(parser);
             } else if (tag.equals("Store_Name")) {
                 name = readName(parser);
-                switch (name) {
-                    case "AR Performance":
-                        category = Constants.CATEGORY_EDUCATION;
-                        break;
-                    case "Import Garage":
-                        category = Constants.CATEGORY_AUTO;
-                        break;
-                    case "Starbucks":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "Thai Chilli":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "Maharani India Restaurant":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "Mike's Sound Solutions":
-//                        category = Constants.CATEGORY_SOUND;
-                        break;
-                    case "Chuck E Cheese's":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "La Fuente":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "O’Reilly Auto Parts":
-                        category = Constants.CATEGORY_AUTO;
-                        break;
-                    case "Bubbles Car Wash":
-                        category = Constants.CATEGORY_AUTO;
-                        break;
-                    case "Wion’s Body Shop":
-                        category = Constants.CATEGORY_SHOPPING;
-                        break;
-                    case "Pizza Bell":
-                        category = Constants.CATEGORY_FOOD;
-                        break;
-                    case "Test Business":
-                        category = Constants.CATEGORY_SPORTS;
-                        break;
-                    default:
-                        category = Constants.CATEGORY_SERVICES;
-                        break;
-                }
-
             } else if (tag.equals("Store_Address_Line1")) {
                 address = readAddress(parser);
             } else if (tag.equals("Store_Phone")) {
@@ -133,17 +89,16 @@ public class StoresXmlParser {
             } else if (tag.equals("Store_Address_Longitude")) {
                 longitude = readLongitude(parser);
             } else if (tag.equals("Is_Store_Location_Physical")) {
-                boolean isMobile = readIsMobile(parser);
-                if (isMobile) {
-                    category = Constants.CATEGORY_MOBILE;
-                }
+                isMobile = readIsMobile(parser);
             } else if (tag.equals("Store_ParticipationDistance")) {
                 participateDistance = readPartDistance(parser);
+            } else if (tag.equals("Store_Group_Name")) {
+                category = readCategory(parser);
             } else {
                 skip(parser);
             }
         }
-        return new Store(id, name, address, phone, latitude, longitude, category, participateDistance);
+        return new Store(id, name, address, phone, latitude, longitude, category, participateDistance, isMobile);
     }
 
     // Processes id tags in the feed.
@@ -210,6 +165,27 @@ public class StoresXmlParser {
         int distance = Integer.parseInt(readText(parser));
         parser.require(XmlPullParser.END_TAG, ns, "Store_ParticipationDistance");
         return distance;
+    }
+
+    // Processes mobile tags in the feed.
+    private String readCategory(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, ns, "Store_Group_Name");
+        String category = String.valueOf(readText(parser));
+        parser.require(XmlPullParser.END_TAG, ns, "Store_Group_Name");
+        switch (category) {
+            case "ARTS & EDUCATION":
+                return Constants.CATEGORY_EDUCATION;
+            case "AUTOMOTIVE":
+                return Constants.CATEGORY_AUTO;
+            case "SPORTS/ENTERTAINMENT":
+                return Constants.CATEGORY_SPORTS;
+            case "SHOPPING":
+                return Constants.CATEGORY_SHOPPING;
+            case "RESTAURANTS/FOOD":
+                return Constants.CATEGORY_FOOD;
+            default:
+                return Constants.CATEGORY_SERVICES;
+        }
     }
 
     // For the tags title and summary, extracts their text values.

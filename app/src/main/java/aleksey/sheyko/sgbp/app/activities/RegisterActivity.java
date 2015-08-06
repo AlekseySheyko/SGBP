@@ -352,9 +352,17 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
         int selectedSchool = mSharedPrefs.getInt("school_id", mSchoolAdapter.getCount());
         mSchoolSpinner.setSelection(selectedSchool);
 
+        final int previousSelection = mSchoolSpinner.getSelectedItemPosition();
+
         mSchoolSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int currentSelection, long id) {
+//                if (currentSelection != previousSelection) {
+//                    int hintPosition = mGradeSpinner.getChildCount() - 1;
+//                    mGradeSpinner.setSelection(hintPosition);
+//                    mGradeSpinner.resetSelection();
+//                }
+
                 if (mSchoolSpinner.getSelectedItemPosition() == mSchoolAdapter.getCount()) {
                     mGradeSpinner.setEnabled(false);
                 } else {
@@ -362,7 +370,7 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
 
                     ApiService service = new RestClient().getApiService();
                     String userId = getDeviceId().replaceAll("[^0-9]", "");
-                    service.getGrade(userId, position + 1, new ResponseCallback() {
+                    service.getGrade(userId, currentSelection + 1, new ResponseCallback() {
                         @Override
                         public void success(Response response) {
                             try {
@@ -512,7 +520,7 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
                         mSharedPrefs.edit()
                                 .putBoolean("registered", true)
                                 .putString("device_id", deviceId)
-                                .putString("user_id", userId)
+                                .putInt("user_id", Integer.parseInt(userId))
                                 .apply();
                         setProgressBarIndeterminateVisibility(false);
 

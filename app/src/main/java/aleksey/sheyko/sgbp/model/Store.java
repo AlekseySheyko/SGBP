@@ -15,11 +15,12 @@ public class Store extends SugarRecord<Store> {
     private boolean isParticipated;
     private long timeAllowNext;
     private int participateDistance;
+    private String isMobile;
 
     public Store() {
     }
 
-    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category, int participateDistance) {
+    public Store(int storeid, String name, String address, String phone, String latitude, String longitude, String category, int participateDistance, boolean isMobile) {
         this.storeid = storeid;
         this.name = name;
         this.address = address;
@@ -27,6 +28,8 @@ public class Store extends SugarRecord<Store> {
         this.latitude = latitude;
         this.longitude = longitude;
         this.category = category;
+        this.participateDistance = participateDistance;
+        this.isMobile = isMobile + "";
     }
 
     public int getStoreId() {
@@ -94,6 +97,14 @@ public class Store extends SugarRecord<Store> {
     }
 
     public int getParticipateDistance() {
-        return participateDistance;
+        if (participateDistance > 0) {
+            return participateDistance;
+        } else {
+            return 50;
+        }
+    }
+
+    public boolean isMobile() {
+        return Boolean.parseBoolean(isMobile);
     }
 }

@@ -81,7 +81,7 @@ public class StoreListFragment extends ListFragment
         if (getActivity().getIntent() != null) {
             if (getActivity().getIntent().hasExtra("category")) {
                 mCategory = getActivity().getIntent().getStringExtra("category");
-                if (mCategory.equals(Constants.CATEGORY_MOBILE)) {
+                if (mCategory.equals("Mobile businesses")) {
                     setHasOptionsMenu(false);
                 }
             } else if (getActivity().getIntent().hasExtra(SearchManager.QUERY)) {
@@ -91,10 +91,7 @@ public class StoreListFragment extends ListFragment
 
         if (mCategory != null) {
             switch (mCategory) {
-                case "Participating Physical Store":
-                    mStores = Store.find(Store.class, "is_mobile = ?", "false");
-                    break;
-                case "Participating Mobile Business":
+                case "Mobile businesses":
                     mStores = Store.find(Store.class, "is_mobile = ?", "true");
                     break;
                 default:
@@ -138,10 +135,7 @@ public class StoreListFragment extends ListFragment
                 mStores = Store.listAll(Store.class);
                 if (mCategory != null) {
                     switch (mCategory) {
-                        case "Participating Physical Store":
-                            mStores = Store.find(Store.class, "is_mobile = ?", "false");
-                            break;
-                        case "Participating Mobile Business":
+                        case "Mobile businesses":
                             mStores = Store.find(Store.class, "is_mobile = ?", "true");
                             break;
                         default:
@@ -169,7 +163,9 @@ public class StoreListFragment extends ListFragment
                     store.getPhone(),
                     store.getLatitude(),
                     store.getLongitude(),
-                    store.getCategory()));
+                    store.getCategory(),
+                    store.getParticipateDistance(),
+                    store.isMobile()));
         }
     }
 
@@ -227,7 +223,9 @@ public class StoreListFragment extends ListFragment
                             store.getPhone(),
                             store.getLatitude(),
                             store.getLongitude(),
-                            store.getCategory()));
+                            store.getCategory(),
+                            store.getParticipateDistance(),
+                            store.isMobile()));
                     mSharedPrefs.edit().putFloat(store.getStoreId() + "", store.getDistance()).apply();
                 }
                 StoresAdapter adapter = new StoresAdapter(getActivity(),
@@ -315,7 +313,9 @@ public class StoreListFragment extends ListFragment
                     store.getPhone(),
                     store.getLatitude(),
                     store.getLongitude(),
-                    store.getCategory()));
+                    store.getCategory(),
+                    store.getParticipateDistance(),
+                    store.isMobile()));
             mSharedPrefs.edit().putFloat(store.getStoreId() + "", store.getDistance()).apply();
         }
         StoresAdapter adapter = new StoresAdapter(getActivity(),
@@ -380,6 +380,7 @@ public class StoreListFragment extends ListFragment
             String phone = mStoreList.get(position).getPhone();
             String latitude = mStoreList.get(position).getLatitude();
             String longitude = mStoreList.get(position).getLongitude();
+            boolean isMobile = mStoreList.get(position).isMobile();
             mSharedPrefs.edit()
                     .putInt("storeId", storeId)
                     .putString("name", name)
@@ -387,9 +388,10 @@ public class StoreListFragment extends ListFragment
                     .putString("phone", phone)
                     .putString("latitude", latitude)
                     .putString("longitude", longitude)
+                    .putBoolean("isMobile", isMobile)
                     .apply();
             if (mViewMode != Constants.VIEW_NEAREST) {
-                mSharedPrefs.edit().putBoolean("isMobile", mCategory.equals(Constants.CATEGORY_MOBILE)).apply();
+                mSharedPrefs.edit().putBoolean("isMobile", isMobile).apply();
             } else {
                 mSharedPrefs.edit().putBoolean("isMobile", false).apply();
             }

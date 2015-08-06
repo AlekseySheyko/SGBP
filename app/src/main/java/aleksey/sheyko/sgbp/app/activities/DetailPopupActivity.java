@@ -37,10 +37,14 @@ public class DetailPopupActivity extends Activity {
         ((TextView) findViewById(R.id.phone)).setText(phone);
 
         if (address.isEmpty()) {
-            findViewById(R.id.address_container).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.address)).setText(getString(R.string.unspecified));
+            findViewById(R.id.button_map).setVisibility(View.GONE);
+            findViewById(R.id.address_container).setClickable(false);
         }
         if (phone.isEmpty()) {
-            findViewById(R.id.phone_container).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.phone)).setText(getString(R.string.unspecified));
+            findViewById(R.id.button_phone).setVisibility(View.GONE);
+            findViewById(R.id.phone_container).setClickable(false);
         }
     }
 

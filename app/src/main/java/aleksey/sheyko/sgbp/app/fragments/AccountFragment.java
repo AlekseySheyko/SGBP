@@ -297,7 +297,7 @@ public class AccountFragment extends Fragment
         final boolean IS_REGISTERED = true;
 
         String deviceId = mSharedPrefs.getString("device_id", null);
-        String userId = mSharedPrefs.getString("user_id", null);
+        int userId = mSharedPrefs.getInt("user_id", -1);
         boolean is18 = mCheckBoxAge.isChecked();
         boolean isMultiGrade = mCheckBoxLevel.isChecked();
         boolean getNotifications = mCheckBoxNotifications.isChecked();
@@ -306,7 +306,7 @@ public class AccountFragment extends Fragment
 
         ApiService service = new RestClient().getApiService();
         service.update(deviceId, firstName, lastName, schoolId, isMultiGrade, IS_REGISTERED,
-                receiveCoupons, getNotifications, trackLocation, is18, Integer.parseInt(userId), new ResponseCallback() {
+                receiveCoupons, getNotifications, trackLocation, is18, userId, new ResponseCallback() {
                     @Override
                     public void success(Response response) {
                         navigateToMainScreen();

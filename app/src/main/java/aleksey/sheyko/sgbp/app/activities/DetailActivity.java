@@ -119,10 +119,14 @@ public class DetailActivity extends Activity {
 
 
         if (address.isEmpty()) {
-            findViewById(R.id.address_container).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.address)).setText(getString(R.string.unspecified));
+            findViewById(R.id.button_map).setVisibility(View.GONE);
+            findViewById(R.id.address_container).setClickable(false);
         }
         if (phone.isEmpty()) {
-            findViewById(R.id.phone_container).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.phone)).setText(getString(R.string.unspecified));
+            findViewById(R.id.button_phone).setVisibility(View.GONE);
+            findViewById(R.id.phone_container).setClickable(false);
         }
     }
 
@@ -134,7 +138,7 @@ public class DetailActivity extends Activity {
                 int storeId = mSharedPrefs.getInt("storeId", -1);
                 String dateTime = new SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'").format(new Date());
                 String deviceId = mSharedPrefs.getString("device_id", "");
-                String userId = mSharedPrefs.getString("user_id", "");
+                String userId = mSharedPrefs.getInt("user_id", -1) + "";
                 int schoolId = mSharedPrefs.getInt("school_id", -1);
 
                 ApiService service = new RestClient().getApiService();
