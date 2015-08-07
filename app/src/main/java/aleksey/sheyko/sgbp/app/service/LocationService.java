@@ -133,7 +133,6 @@ public class LocationService extends Service
                         Geofence.GEOFENCE_TRANSITION_DWELL |
                         Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
-        Log.d("LocationService", "Participate distance: " + participateDistance);
         return geofence;
     }
 

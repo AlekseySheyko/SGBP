@@ -37,14 +37,14 @@ import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.app.helpers.MultiSpinner;
 import aleksey.sheyko.sgbp.app.helpers.MultiSpinner.MultiSpinnerListener;
 import aleksey.sheyko.sgbp.model.Device;
-import aleksey.sheyko.sgbp.model.Grade;
-import aleksey.sheyko.sgbp.model.School;
-import aleksey.sheyko.sgbp.rest.ApiService;
 import aleksey.sheyko.sgbp.model.DeviceXmlParser;
+import aleksey.sheyko.sgbp.model.Grade;
 import aleksey.sheyko.sgbp.model.GradesXmlParser;
-import aleksey.sheyko.sgbp.rest.RestClient;
+import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.model.SchoolsXmlParser;
 import aleksey.sheyko.sgbp.model.UserXmlParser;
+import aleksey.sheyko.sgbp.rest.ApiService;
+import aleksey.sheyko.sgbp.rest.RestClient;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.ResponseCallback;
@@ -356,21 +356,17 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
 
         mSchoolSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int currentSelection, long id) {
-//                if (currentSelection != previousSelection) {
-//                    int hintPosition = mGradeSpinner.getChildCount() - 1;
-//                    mGradeSpinner.setSelection(hintPosition);
-//                    mGradeSpinner.resetSelection();
-//                }
-
+            public void onItemSelected(AdapterView<?> parent, View view, final int currentSelection, long id) {
                 if (mSchoolSpinner.getSelectedItemPosition() == mSchoolAdapter.getCount()) {
                     mGradeSpinner.setEnabled(false);
                 } else {
                     mGradeSpinner.setEnabled(true);
 
+                    if (currentSelection == previousSelection) return;
+
                     ApiService service = new RestClient().getApiService();
                     String userId = getDeviceId().replaceAll("[^0-9]", "");
-                    service.getGrade(userId, currentSelection + 1, new ResponseCallback() {
+                    service.listGrades(userId, currentSelection + 1, new ResponseCallback() {
                         @Override
                         public void success(Response response) {
                             try {
@@ -395,6 +391,7 @@ public class RegisterActivity extends Activity implements MultiSpinnerListener {
                             e.printStackTrace();
                         }
                     });
+
                 }
             }
 

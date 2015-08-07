@@ -14,7 +14,7 @@ public interface ApiService {
     void listSchools(Callback<Response> callback);
 
     @GET("/GetGradebySchool")
-    void getGrade(@Query("Key") String key, @Query("School_Id") int schoolId, Callback<Response> callback);
+    void listGrades(@Query("Key") String key, @Query("School_Id") int schoolId, Callback<Response> callback);
 
     @GET("/GetStoresList")
     void listAllStores(Callback<Response> callback);
@@ -70,4 +70,7 @@ public interface ApiService {
                      @Field("Device_UID") String deviceId2, @Field("School_Id") int schoolId,
                      @Field("Store_Id") int storeId, @Field("Participation_DateTime") String dateTime,
                      @Field("Clicked_To_Participate") boolean isMobile, Callback<Response> callback);
+
+    @GET("/GetUserGradeinfoByDevice_UID")
+    void getCurrentGrade(@Query("Key") int key, @Query("Device_UID") String deviceId, Callback<Response> callback);
 }

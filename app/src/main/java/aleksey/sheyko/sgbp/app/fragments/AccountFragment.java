@@ -34,15 +34,17 @@ import aleksey.sheyko.sgbp.R;
 import aleksey.sheyko.sgbp.app.helpers.Constants;
 import aleksey.sheyko.sgbp.app.helpers.MultiSpinner;
 import aleksey.sheyko.sgbp.model.Grade;
+import aleksey.sheyko.sgbp.model.GradesXmlParser;
 import aleksey.sheyko.sgbp.model.School;
 import aleksey.sheyko.sgbp.rest.ApiService;
-import aleksey.sheyko.sgbp.model.GradesXmlParser;
 import aleksey.sheyko.sgbp.rest.RestClient;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
 import retrofit.ResponseCallback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 public class AccountFragment extends Fragment
         implements MultiSpinner.MultiSpinnerListener {
@@ -172,6 +174,26 @@ public class AccountFragment extends Fragment
         mCheckBoxLocation.setOnCheckedChangeListener(checkBoxListener);
         mCheckBoxNotifications.setOnCheckedChangeListener(checkBoxListener);
         mCheckBoxCoupons.setOnCheckedChangeListener(checkBoxListener);
+
+        ApiService service = new RestClient().getApiService();
+        service.getCurrentGrade(123, /*getDeviceId()*/ "3529350540858419898", new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                String responseString = new String(((TypedByteArray) response.getBody()).getBytes());
+                if (responseString.contains("Record found")) {
+                    int start = responseString.indexOf("<Grade_Id>") + "<Grade_Id>".length();
+                    int end = responseString.indexOf("</Grade_Id>");
+                    int grade = Integer.parseInt(responseString.substring(start, end));
+
+                    mGradeSpinner.setSelection(grade-1);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     private void showInfoDialog(CompoundButton checkBox) {
@@ -247,7 +269,7 @@ public class AccountFragment extends Fragment
 
                     ApiService service = new RestClient().getApiService();
                     String userId = getDeviceId().replaceAll("[^0-9]", "");
-                    service.getGrade(userId, position + 1, new ResponseCallback() {
+                    service.listGrades(userId, position + 1, new ResponseCallback() {
                         @Override
                         public void success(Response response) {
                             try {

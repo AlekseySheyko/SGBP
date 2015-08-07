@@ -107,8 +107,7 @@ public class MultiSpinner extends Spinner implements
         this.defaultText = allText;
         this.listener = listener;
 
-        Set<String> selectedGradePositions =
-                mSharedPrefs.getStringSet("selectedGradePositions", new HashSet<String>());
+        Set<String> selectedGradePositions = new HashSet<>();
 
         selected = new boolean[items.size()];
         if (selectedGradePositions.size() > 0) {
@@ -139,11 +138,7 @@ public class MultiSpinner extends Spinner implements
         return spinnerText;
     }
 
-    public void resetSelection() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_item, new String[]{"Grade level"});
-        setAdapter(adapter);
-
-        selected = new boolean[items.size()];
+    public List<String> getItems() {
+        return items;
     }
 }
